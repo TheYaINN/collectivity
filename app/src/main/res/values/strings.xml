@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Collectivity</string>
+
+
+    <!-- Action buttons -->
+    <string name="add_item">Add +</string>
+
+    <!-- add_item spinner -->
+    <string-array name="currency_array">
+        <item>€ (EUR)</item>
+        <item>$ (USD)</item>
+        <item>£ (GBP)</item>
+        <item>kr (DKK)</item>
+    </string-array>
+
+
+    <!-- add Item -->
+    <string name="edit_item_title_hint">Some figure</string>
+    <string name="edit_item_value_hint">50</string>
+    <string name="edit_item_date_hint">12.12.2019</string>
+    <string name="edit_item_scan_ean">Scan EAN</string>
+
+    <!-- Item Overview -->
+    <string name="fast_overview_title">Legofiguren</string>
+    <string name="add_item_menubar_save">Save</string>
+</resources>
