@@ -30,7 +30,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
         Item currentNode = items.get(position);
         holder.itemViewTitle.setText(currentNode.getTitle());
         holder.itemViewIcon.setImageBitmap(currentNode.getIcon());
-        holder.itemViewWorth.setText(String.valueOf(currentNode.getWorth()));
+        holder.itemViewWorth.setText(String.valueOf(currentNode.getPrice()));
     }
 
     @Override

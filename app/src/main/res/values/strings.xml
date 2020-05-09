@@ -23,4 +23,5 @@
     <!-- Item Overview -->
     <string name="fast_overview_title">Legofiguren</string>
     <string name="add_item_menubar_save">Save</string>
+    <string name="logo">Logo</string>
 </resources>

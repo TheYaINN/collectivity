@@ -20,7 +20,6 @@ public class Item {
     @NonNull
     private String title;
 
-    @ColumnInfo(name = "creation_date")
     @NonNull
     private OffsetDateTime creationDate;
 
@@ -35,15 +34,15 @@ public class Item {
     private OffsetDateTime buyDate;
 
     @Nullable
-    private String worth;
+    private String price;
 
-    public Item(@NonNull String title, @NonNull OffsetDateTime creationDate, @Nullable String ean, @Nullable Bitmap icon, @Nullable OffsetDateTime buyDate, String worth) {
+    public Item(@NonNull String title, @NonNull OffsetDateTime creationDate, @Nullable String ean, @Nullable Bitmap icon, @Nullable OffsetDateTime buyDate, String price) {
         this.title = title;
         this.creationDate = creationDate;
         this.ean = ean;
         this.icon = icon;
         this.buyDate = buyDate;
-        this.worth = worth;
+        this.price = price;
     }
 
     public void setId(int id) {
@@ -79,7 +78,7 @@ public class Item {
         return buyDate;
     }
 
-    public String getWorth() {
-        return worth;
+    public String getPrice() {
+        return price;
     }
 }

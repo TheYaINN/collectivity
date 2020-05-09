@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //updating recyclerview on change
-        itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
+        itemViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
         itemViewModel.getAllItems().observe(this, new Observer<List<Item>>() {
 
             @Override
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddItemAcitvity.class);
+                Intent intent = new Intent(MainActivity.this, AddItemActitvity.class);
                 startActivityForResult(intent, ADD_NOTE_REQUEST);
             }
         });
@@ -84,8 +85,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ADD_NOTE_REQUEST && resultCode == RESULT_OK) {
-            String title = data.getStringExtra(AddItemAcitvity.EXTRA_TITLE);
-            String value = data.getStringExtra(AddItemAcitvity.EXTRA_VALUE);
+            String title = data.getStringExtra(AddItemActitvity.EXTRA_TITLE);
+            String value = data.getStringExtra(AddItemActitvity.EXTRA_VALUE);
 
             //TODO: remove this and replace with reading from extra
             Bitmap bmp = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);

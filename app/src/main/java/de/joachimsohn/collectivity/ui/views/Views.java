@@ -7,5 +7,5 @@ import androidx.annotation.NonNull;
 
 interface Views {
 
-    RelativeLayout getview(@NonNull Context context);
+    RelativeLayout getView(@NonNull Context context);
 }

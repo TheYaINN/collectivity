@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 public class LoginView implements Views {
 
     @Override
-    public RelativeLayout getview(@NonNull Context context) {
+    public RelativeLayout getView(@NonNull Context context) {
         return createView(context);
     }
 
