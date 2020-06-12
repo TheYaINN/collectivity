@@ -11,7 +11,6 @@ import de.joachimsohn.collectivity.R;
 
 public class FastItemOverview extends Fragment {
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fast_overview, container, false);
