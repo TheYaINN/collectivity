@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "Tags")
 public class Tag {
 
-    @PrimaryKey(autoGenerate = true)
     @NonNull
-    private Long id;
+    @PrimaryKey(autoGenerate = true)
+    private Long tagId;
 
     @NonNull
     String content;

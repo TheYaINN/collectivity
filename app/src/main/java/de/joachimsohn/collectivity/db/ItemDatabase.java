@@ -19,8 +19,14 @@ import de.joachimsohn.collectivity.db.dao.impl.Item;
 public abstract class ItemDatabase extends RoomDatabase {
 
     private static ItemDatabase instance;
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
 
-    public abstract ItemDAO itemDAO();
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDBAsyncTask(instance).execute();
+        }
+    };
 
     public static synchronized ItemDatabase getInstance(Context context) {
         if (instance == null) {
@@ -34,14 +40,7 @@ public abstract class ItemDatabase extends RoomDatabase {
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
-
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-            new PopulateDBAsyncTask(instance).execute();
-        }
-    };
+    public abstract ItemDAO itemDAO();
 
     //FIXME: remove this in production adds item to DB on startup
     private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void> {

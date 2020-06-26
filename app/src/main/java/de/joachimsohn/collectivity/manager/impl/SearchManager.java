@@ -1,10 +1,11 @@
 package de.joachimsohn.collectivity.manager.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import de.joachimsohn.collectivity.manager.search.LinearSearch;
-import de.joachimsohn.collectivity.manager.search.SearchStrategy;
-import de.joachimsohn.collectivity.manager.search.SearchableObject;
+import de.joachimsohn.collectivity.db.dao.UIObject;
+import lombok.NonNull;
 
 public class SearchManager {
 
@@ -14,13 +15,25 @@ public class SearchManager {
         manager = new SearchManager();
     }
 
-    public List<SearchableObject> search(String searchValue) {
-        SearchStrategy search = new LinearSearch(CollectionManager.getManager().getCollection());
-        return search.getResultsFor(searchValue);
+    public static SearchManager getManager() {
+        return manager;
     }
 
-    public SearchManager getManager() {
-        return manager;
+    public @NonNull List<UIObject> search(String searchValue) {
+        @NonNull List<UIObject> items = searchForItems(searchValue);
+        @NonNull List<UIObject> storageLocations = searchForStorageLocation(searchValue);
+        return Stream.concat(items.stream(), storageLocations.stream())
+                .collect(Collectors.toList());
+    }
+
+    public @NonNull List<UIObject> searchForItems(String searchValue) {
+        //TODO
+        return null;
+    }
+
+    public @NonNull List<UIObject> searchForStorageLocation(String searchValue) {
+        //TODO
+        return null;
     }
 
 }

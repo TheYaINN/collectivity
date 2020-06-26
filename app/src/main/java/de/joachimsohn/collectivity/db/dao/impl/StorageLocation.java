@@ -1,20 +1,22 @@
 package de.joachimsohn.collectivity.db.dao.impl;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.util.List;
-import java.util.UUID;
 
-import de.joachimsohn.collectivity.manager.search.SearchableObject;
+import de.joachimsohn.collectivity.db.dao.UIObject;
 
 @Entity(tableName = "StorageLocations")
-public class StorageLocation extends SearchableObject {
+public class StorageLocation extends UIObject {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    private Long id;
+    @Embedded
+    private Long storageLocationId;
 
     @NonNull
     private String name;
@@ -23,9 +25,11 @@ public class StorageLocation extends SearchableObject {
     private String description;
 
     @NonNull
+    @Relation(parentColumn = "storageLocationId", entityColumn = "tagId")
     private List<Tag> tags;
 
     @NonNull
+    @Relation(parentColumn = "storageLocationId", entityColumn = "itemId")
     private List<Item> items;
 
 }

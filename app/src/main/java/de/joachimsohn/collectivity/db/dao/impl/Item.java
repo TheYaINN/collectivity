@@ -7,26 +7,65 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import de.joachimsohn.collectivity.db.dao.Condition;
-import de.joachimsohn.collectivity.manager.search.SearchableObject;
+import de.joachimsohn.collectivity.db.dao.UIObject;
 
 @Entity(tableName = "Items")
-public class Item extends SearchableObject {
+public class Item extends UIObject {
+
+    @PrimaryKey(autoGenerate = true)
+    @NonNull
+    private Long itemId;
+
+    @NonNull
+    private String name;
+
+    @NonNull
+    private int amount;
+
+    @NonNull
+    private String description;
+
+    @Nullable
+    private String ean;
+
+    @Nullable
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    private Bitmap icon;
+
+    @NonNull
+    private BigDecimal value;
+
+    @NonNull
+    private Date insertionDate;
+
+    @NonNull
+    private Date buyDate;
+
+    @NonNull
+    @Relation(parentColumn = "itemId", entityColumn = "tagId")
+    private List<Tag> tags;
+
+    @NonNull
+    private Condition condition;
+
+    @NonNull
+    private String position;
 
     @NonNull
     public Long getId() {
-        return id;
+        return itemId;
     }
 
     public void setId(@NonNull Long id) {
-        this.id = id;
+        this.itemId = id;
     }
 
     @NonNull
@@ -127,43 +166,5 @@ public class Item extends SearchableObject {
         this.position = position;
     }
 
-    @PrimaryKey(autoGenerate = true)
-    @NonNull
-    private Long id;
-
-    @NonNull
-    private String name;
-
-    @NonNull
-    private int amount;
-
-    @NonNull
-    private String description;
-
-    @Nullable
-    private String ean;
-
-    @Nullable
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    private Bitmap icon;
-
-    @NonNull
-    private BigDecimal value;
-
-    @NonNull
-    private Date insertionDate;
-
-    @NonNull
-    private Date buyDate;
-
-    @NonNull
-    @Ignore
-    private List<Tag> tags;
-
-    @NonNull
-    private Condition condition;
-
-    @NonNull
-    private String position;
 
 }

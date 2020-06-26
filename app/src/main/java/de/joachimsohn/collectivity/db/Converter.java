@@ -12,7 +12,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.UUID;
 
 import de.joachimsohn.collectivity.db.dao.Condition;
 

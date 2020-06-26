@@ -9,4 +9,4 @@
     app:layout_collapseMode="pin"
     app:layout_scrollFlags="scroll|enterAlways"
     app:logo="@drawable/logo"
-    app:theme="@style/MyToolbarTheme"  />
+    app:theme="@style/MyToolbarTheme" />

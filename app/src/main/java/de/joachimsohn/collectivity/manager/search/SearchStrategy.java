@@ -1,11 +1,11 @@
 package de.joachimsohn.collectivity.manager.search;
 
-import androidx.lifecycle.LiveData;
-
 import java.util.List;
+
+import de.joachimsohn.collectivity.db.dao.UIObject;
 
 public interface SearchStrategy {
 
     //TODO: when to display storageLocation and when to display Item?
-    List<SearchableObject> getResultsFor(String searchValue);
+    List<UIObject> getResultsFor(String searchValue);
 }

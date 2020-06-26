@@ -19,19 +19,37 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.List;
 
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.loader.CollectionLoader;
+import de.joachimsohn.collectivity.manager.impl.CollectionManager;
+import de.joachimsohn.collectivity.manager.impl.SearchManager;
 import de.joachimsohn.collectivity.ui.tabs.DetailedItemOverview;
 import de.joachimsohn.collectivity.ui.tabs.FastItemOverview;
 import de.joachimsohn.collectivity.ui.tabs.TabAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int ADD_NOTE_REQUEST = 1;
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-    public static final int ADD_NOTE_REQUEST = 1;
-
     private ItemViewModel itemViewModel;
+
+
+    private void startup() {
+        //Authentication of uer was successful
+
+        //On starting the app after logging in, the collections are loaded from DB and given to the CollectionManager
+        CollectionManager.getManager().setCollection(CollectionLoader.getInstance().loadAndGetCollection());
+    }
+
+    private void running() {
+        SearchManager.getManager().search("A");
+
+    }
+
+    private void shutdown() {
+        //Save the updated Objects from the CollectionManager to DB
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

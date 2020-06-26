@@ -1,26 +1,27 @@
 package de.joachimsohn.collectivity.db.dao.impl;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
 
 @Entity(tableName = "Collections")
 public class Collection {
 
     @NonNull
     @PrimaryKey(autoGenerate = true)
-    private Long id;
+    @Embedded
+    private Long collectionId;
 
     @NonNull
     private String name;
 
     @NonNull
-    @Getter
+    @Relation(parentColumn = "collectionId", entityColumn = "storageLocationId")
     private List<StorageLocation> storageLocations;
 
     public Collection(@NonNull String name) {
@@ -28,4 +29,30 @@ public class Collection {
         storageLocations = new ArrayList<>();
     }
 
+    @NonNull
+    public Long getId() {
+        return collectionId;
+    }
+
+    public void setId(@NonNull Long id) {
+        this.collectionId = id;
+    }
+
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
+
+    @NonNull
+    public List<StorageLocation> getStorageLocations() {
+        return storageLocations;
+    }
+
+    public void setStorageLocations(@NonNull List<StorageLocation> storageLocations) {
+        this.storageLocations = storageLocations;
+    }
 }

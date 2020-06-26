@@ -15,14 +15,14 @@ public class CollectionLoader {
         loader = new CollectionLoader();
     }
 
-    CollectionDAO collection;
+    private CollectionDAO collection;
 
     public static CollectionLoader getInstance() {
         return loader;
     }
 
     public @NonNull
-    List<Collection> loadCollections() {
+    List<Collection> loadAndGetCollection() {
         return collection.getAllItems();
     }
 
