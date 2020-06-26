@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -17,9 +16,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
+import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.ui.tabs.DetailedItemOverview;
 import de.joachimsohn.collectivity.ui.tabs.FastItemOverview;
 import de.joachimsohn.collectivity.ui.tabs.TabAdapter;
@@ -48,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
         //setupAddItemButton();
         //setupRecyclerView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void setupRecyclerView() {
@@ -92,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bmp = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
 
 
-            Item item = new Item(title, OffsetDateTime.now(), null, bmp, null, value);
-            itemViewModel.insert(item);
+            // Item item = new Item(title, OffsetDateTime.now(), null, bmp, null, value);
+            //itemViewModel.insert(item);
             Toast.makeText(this, "Item saved", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Item not saved", Toast.LENGTH_SHORT).show();

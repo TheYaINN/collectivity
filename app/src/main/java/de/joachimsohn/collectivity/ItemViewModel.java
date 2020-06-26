@@ -8,6 +8,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import de.joachimsohn.collectivity.db.ItemRepository;
+import de.joachimsohn.collectivity.db.dao.impl.Item;
+
 public class ItemViewModel extends AndroidViewModel {
 
     private ItemRepository repository;

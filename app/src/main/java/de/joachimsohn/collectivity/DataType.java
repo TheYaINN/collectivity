@@ -1,5 +1,6 @@
 package de.joachimsohn.collectivity;
 
+//TODO: propably refactor
 enum DataType {
 
     AMOUNT("amount"),

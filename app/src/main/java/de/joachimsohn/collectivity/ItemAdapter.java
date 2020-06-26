@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.joachimsohn.collectivity.db.dao.impl.Item;
+
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
 
 
@@ -28,9 +30,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item currentNode = items.get(position);
-        holder.itemViewTitle.setText(currentNode.getTitle());
+        //holder.itemViewTitle.setText(currentNode.getTitle());
         holder.itemViewIcon.setImageBitmap(currentNode.getIcon());
-        holder.itemViewWorth.setText(String.valueOf(currentNode.getPrice()));
+        //holder.itemViewWorth.setText(String.valueOf(currentNode.getPrice()));
     }
 
     @Override

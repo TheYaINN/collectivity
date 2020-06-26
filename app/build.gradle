@@ -18,7 +18,7 @@ android {
         }
     }
 }
-//TODO: cleanup and update!!
+
 dependencies {
     def lifecycle_version = "1.1.1"
     def old_version = "28.0.0"
@@ -30,6 +30,10 @@ dependencies {
     // Room Database
     implementation "android.arch.persistence.room:runtime:$lifecycle_version"
     annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
+
+    //Getter / setter
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     //Layouts
     implementation "com.android.support:recyclerview-v7:$old_version"

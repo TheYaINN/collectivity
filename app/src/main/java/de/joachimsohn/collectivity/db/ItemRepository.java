@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity;
+package de.joachimsohn.collectivity.db;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -6,6 +6,9 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+
+import de.joachimsohn.collectivity.db.dao.ItemDAO;
+import de.joachimsohn.collectivity.db.dao.impl.Item;
 
 public class ItemRepository {
 
@@ -15,7 +18,7 @@ public class ItemRepository {
     public ItemRepository(Application application) {
         ItemDatabase database = ItemDatabase.getInstance(application);
         itemDAO = database.itemDAO();
-        allItems = itemDAO.getAllItems();
+        allItems = (LiveData<List<Item>>) itemDAO.getAllItems();
     }
 
     public void insert(Item item) {

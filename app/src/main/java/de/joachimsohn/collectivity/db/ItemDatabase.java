@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity;
+package de.joachimsohn.collectivity.db;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,10 +11,11 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.time.OffsetDateTime;
+import de.joachimsohn.collectivity.db.dao.ItemDAO;
+import de.joachimsohn.collectivity.db.dao.impl.Item;
 
 @Database(entities = Item.class, version = 1)
-@TypeConverters({DatabaseConverters.class})
+@TypeConverters({Converter.class})
 public abstract class ItemDatabase extends RoomDatabase {
 
     private static ItemDatabase instance;
@@ -42,6 +43,7 @@ public abstract class ItemDatabase extends RoomDatabase {
         }
     };
 
+    //FIXME: remove this in production adds item to DB on startup
     private static class PopulateDBAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private ItemDAO itemDAO;
@@ -54,10 +56,10 @@ public abstract class ItemDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
 
             Bitmap bmp = Bitmap.createBitmap(250, 250, Bitmap.Config.ARGB_8888);
-            itemDAO.insert(new Item("Farrari xyz", OffsetDateTime.now(), null, bmp, null, "50 €"));
+            /*itemDAO.insert(new Item("Farrari xyz", OffsetDateTime.now(), null, bmp, null, "50 €"));
             itemDAO.insert(new Item("Farrari test", OffsetDateTime.now(), null, bmp, null, "10 €"));
             itemDAO.insert(new Item("Farrari 1", OffsetDateTime.now(), null, bmp, null, "50 €"));
-            itemDAO.insert(new Item("Farrari 2", OffsetDateTime.now(), null, bmp, null, "50 €"));
+            itemDAO.insert(new Item("Farrari 2", OffsetDateTime.now(), null, bmp, null, "50 €"));*/
             return null;
         }
     }
