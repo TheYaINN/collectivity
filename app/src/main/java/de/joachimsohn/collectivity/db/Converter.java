@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.Date;
 
 import de.joachimsohn.collectivity.db.dao.Condition;
+import de.joachimsohn.collectivity.db.dao.impl.Tag;
 
 public class Converter {
 
@@ -67,6 +68,16 @@ public class Converter {
     @TypeConverter
     public String fromCondition(Condition condition) {
         return condition.toString();
+    }
+
+    @TypeConverter
+    public String fromTag(Tag tag) {
+        return tag.toString();
+    }
+
+    @TypeConverter
+    public Tag toTag(String tag) {
+        return new Tag(tag);
     }
 
 }

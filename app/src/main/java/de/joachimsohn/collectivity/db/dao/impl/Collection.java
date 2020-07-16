@@ -1,27 +1,30 @@
 package de.joachimsohn.collectivity.db.dao.impl;
 
 import androidx.annotation.NonNull;
-import androidx.room.Embedded;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "Collections")
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity(tableName = "collections")
+@Getter
+@Setter
 public class Collection {
 
-    @NonNull
     @PrimaryKey(autoGenerate = true)
-    @Embedded
-    private Long collectionId;
+    @ColumnInfo(name = "id")
+    private Long id;
 
-    @NonNull
+    @ColumnInfo(name = "name")
     private String name;
 
-    @NonNull
-    @Relation(parentColumn = "collectionId", entityColumn = "storageLocationId")
+    @Ignore
     private List<StorageLocation> storageLocations;
 
     public Collection(@NonNull String name) {
@@ -29,30 +32,4 @@ public class Collection {
         storageLocations = new ArrayList<>();
     }
 
-    @NonNull
-    public Long getId() {
-        return collectionId;
-    }
-
-    public void setId(@NonNull Long id) {
-        this.collectionId = id;
-    }
-
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    public void setName(@NonNull String name) {
-        this.name = name;
-    }
-
-    @NonNull
-    public List<StorageLocation> getStorageLocations() {
-        return storageLocations;
-    }
-
-    public void setStorageLocations(@NonNull List<StorageLocation> storageLocations) {
-        this.storageLocations = storageLocations;
-    }
 }

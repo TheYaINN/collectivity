@@ -27,12 +27,12 @@ public class SearchManager {
     }
 
     public @NonNull List<UIObject> searchForItems(String searchValue) {
-        //TODO
+        //TODO: Find storageLocation and search in this location with property @Code searchValue given
         return null;
     }
 
     public @NonNull List<UIObject> searchForStorageLocation(String searchValue) {
-        //TODO
+        //TODO: Find Collection and search for Storage locations with property @Code searchValue given
         return null;
     }
 

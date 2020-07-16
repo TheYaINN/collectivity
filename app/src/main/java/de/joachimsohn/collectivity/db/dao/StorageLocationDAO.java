@@ -22,13 +22,13 @@ public interface StorageLocationDAO {
     @Delete
     void delete(StorageLocation storageLocation);
 
-    @Query("DELETE FROM StorageLocations")
-    void deleteAllItems();
+    @Query("DELETE FROM storagelocations")
+    void deleteAllStorageLocations();
 
-    @Query("SELECT * FROM StorageLocations")
-    List<StorageLocation> getAllItems();
+    @Query("SELECT * FROM storagelocations ")
+    List<StorageLocation> getAllStorageLocations();
 
     @Query("SELECT * FROM StorageLocations WHERE :col LIKE :term")
-    List<StorageLocation> getItemsWithParamLike(String col, String term);
+    List<StorageLocation> getStorageLocationsWithParamLike(String col, String term);
 
 }

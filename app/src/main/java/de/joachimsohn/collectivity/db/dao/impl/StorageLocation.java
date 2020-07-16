@@ -1,35 +1,41 @@
 package de.joachimsohn.collectivity.db.dao.impl;
 
-import androidx.annotation.NonNull;
-import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
 
 import java.util.List;
 
 import de.joachimsohn.collectivity.db.dao.UIObject;
+import lombok.Getter;
+import lombok.Setter;
 
-@Entity(tableName = "StorageLocations")
+@Entity(tableName = "storagelocations",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Collection.class,
+                        parentColumns = "id",
+                        childColumns = "id",
+                        onDelete = ForeignKey.CASCADE,
+                        onUpdate = ForeignKey.CASCADE)
+        }
+)
+@Getter
+@Setter
 public class StorageLocation extends UIObject {
 
-    @NonNull
     @PrimaryKey(autoGenerate = true)
-    @Embedded
-    private Long storageLocationId;
+    private Long id;
 
-    @NonNull
     private String name;
 
-    @NonNull
     private String description;
 
-    @NonNull
-    @Relation(parentColumn = "storageLocationId", entityColumn = "tagId")
+    @Ignore
     private List<Tag> tags;
 
-    @NonNull
-    @Relation(parentColumn = "storageLocationId", entityColumn = "itemId")
+    @Ignore
     private List<Item> items;
 
 }

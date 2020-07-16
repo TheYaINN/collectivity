@@ -31,7 +31,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item currentNode = items.get(position);
         //holder.itemViewTitle.setText(currentNode.getTitle());
-        holder.itemViewIcon.setImageBitmap(currentNode.getIcon());
+       // holder.itemViewIcon.setImageBitmap(currentNode.getIcon());
         //holder.itemViewWorth.setText(String.valueOf(currentNode.getPrice()));
     }
 

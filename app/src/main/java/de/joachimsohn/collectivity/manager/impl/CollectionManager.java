@@ -1,11 +1,9 @@
 package de.joachimsohn.collectivity.manager.impl;
 
-import androidx.annotation.NonNull;
-
-import java.util.List;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
-import de.joachimsohn.collectivity.loader.CollectionLoader;
 
 public class CollectionManager {
 
@@ -13,21 +11,23 @@ public class CollectionManager {
 
     static {
         manager = new CollectionManager();
-
     }
 
-    @NonNull
-    private List<Collection> collections = CollectionLoader.getInstance().loadAndGetCollection();
+    private @Nullable LiveData<Collection> collections;
 
     public static CollectionManager getManager() {
         return manager;
     }
 
-    public List<Collection> getCollection() {
+    public LiveData<Collection> getCollection() {
         return collections;
     }
 
-    public void setCollection(List<Collection> collections) {
+    public void setCollection(LiveData<Collection> collections) {
         this.collections = collections;
+    }
+
+    public void saveUserState() {
+
     }
 }

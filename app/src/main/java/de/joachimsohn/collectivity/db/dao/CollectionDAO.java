@@ -1,5 +1,6 @@
 package de.joachimsohn.collectivity.db.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -22,13 +23,13 @@ public interface CollectionDAO {
     @Delete
     void delete(Collection collection);
 
-    @Query("DELETE FROM Collections")
-    void deleteAllItems();
+    @Query("DELETE FROM collections")
+    void deleteAllCollections();
 
-    @Query("SELECT * FROM Collections")
-    List<Collection> getAllItems();
+    @Query("SELECT * FROM collections")
+    LiveData<Collection> getAllCollections();
 
-    @Query("SELECT * FROM Collections WHERE :col LIKE :term")
-    List<Collection> getItemsWithParamLike(String col, String term);
+    @Query("SELECT * FROM collections WHERE :col LIKE :term")
+    LiveData<Collection> getCollectionsWithParamLike(String col, String term);
 
 }

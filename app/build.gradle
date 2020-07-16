@@ -31,13 +31,13 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
 
-    // Room Database
-    implementation "android.arch.persistence.room:runtime:$lifecycle_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
-
     //Getter / setter
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    // Room Database
+    implementation "android.arch.persistence.room:runtime:$lifecycle_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
 
     //Layouts
     implementation "com.android.support:recyclerview-v7:$old_version"

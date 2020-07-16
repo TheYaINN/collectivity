@@ -2,19 +2,40 @@ package de.joachimsohn.collectivity.db.dao.impl;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "Tags")
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Entity(tableName = "tags",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Item.class,
+                        parentColumns = "id",
+                        childColumns = "id",
+                        onDelete = ForeignKey.CASCADE,
+                        onUpdate = ForeignKey.CASCADE),
+                @ForeignKey(
+                        entity = StorageLocation.class,
+                        parentColumns = "id",
+                        childColumns = "id",
+                        onDelete = ForeignKey.CASCADE,
+                        onUpdate = ForeignKey.CASCADE)
+        }
+)
+@Getter
+@Setter
 public class Tag {
 
-    @NonNull
     @PrimaryKey(autoGenerate = true)
-    private Long tagId;
+    private Long id;
 
-    @NonNull
     String content;
 
     public Tag(@NonNull String content) {
         this.content = content;
     }
+
 }

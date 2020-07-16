@@ -22,13 +22,13 @@ public interface ItemDAO {
     @Delete
     void delete(Item item);
 
-    @Query("DELETE FROM Items")
+    @Query("DELETE FROM items")
     void deleteAllItems();
 
-    @Query("SELECT * FROM Items")
+    @Query("SELECT * FROM items")
     List<Item> getAllItems();
 
-    @Query("SELECT * FROM Items WHERE :col LIKE :term")
+    @Query("SELECT * FROM items WHERE :col LIKE :term")
     List<Item> getItemsWithParamLike(String col, String term);
 
 }
