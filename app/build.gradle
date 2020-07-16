@@ -38,12 +38,14 @@ dependencies {
     // Room Database
     implementation "android.arch.persistence.room:runtime:$lifecycle_version"
     annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
+    compile 'com.facebook.stetho:stetho:1.5.1'
 
     //Layouts
     implementation "com.android.support:recyclerview-v7:$old_version"
     implementation "com.android.support:cardview-v7:$old_version"
     implementation "com.android.support:design:$old_version"
     implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+    implementation 'com.google.android.material:material:1.1.0'
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

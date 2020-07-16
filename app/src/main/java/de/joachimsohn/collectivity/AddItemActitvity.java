@@ -67,16 +67,16 @@ public class AddItemActitvity extends AppCompatActivity {
 
     private void findAndSetupCurrencySpinner() {
         itemCurrencySpinner = findViewById(R.id.item_edit_currency_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+      /*  ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.currency_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        itemCurrencySpinner.setAdapter(adapter);
+        itemCurrencySpinner.setAdapter(adapter);*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.fast_item_overview_navigationbar, menu);
+//        menuInflater.inflate(R.menu.fast_item_overview_navigationbar, menu);
         return true;
     }
 
@@ -103,10 +103,10 @@ public class AddItemActitvity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.save_item) {
+       /* if (item.getItemId() == R.id.save_item) {
             saveItem();
             return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 }

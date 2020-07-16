@@ -18,11 +18,11 @@ import lombok.Setter;
 public class Collection {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
     private Long id;
 
-    @ColumnInfo(name = "name")
     private String name;
+
+    private String description;
 
     @Ignore
     private List<StorageLocation> storageLocations;

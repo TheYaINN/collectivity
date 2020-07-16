@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import java.util.Arrays;
+import java.util.List;
 
 import de.joachimsohn.collectivity.db.AppDataBase;
 import de.joachimsohn.collectivity.db.dao.CollectionDAO;
@@ -27,7 +28,7 @@ public class DataBaseConnector {
         return connector;
     }
 
-    public LiveData<Collection> loadAndGetCollection(Application application) {
+    public LiveData<List<Collection>> loadAndGetCollection(Application application) {
         AppDataBase dataBase = AppDataBase.getInstance(application);
         collectionDAO = dataBase.collectionDAO();
         return collectionDAO.getAllCollections();

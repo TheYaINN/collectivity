@@ -3,7 +3,10 @@ package de.joachimsohn.collectivity.manager.impl;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import de.joachimsohn.collectivity.loader.DataBaseConnector;
 
 public class CollectionManager {
 
@@ -13,17 +16,18 @@ public class CollectionManager {
         manager = new CollectionManager();
     }
 
-    private @Nullable LiveData<Collection> collections;
+    private @Nullable
+    LiveData<List<Collection>> collections;
 
     public static CollectionManager getManager() {
         return manager;
     }
 
-    public LiveData<Collection> getCollection() {
+    public LiveData<List<Collection>> getCollection() {
         return collections;
     }
 
-    public void setCollection(LiveData<Collection> collections) {
+    public void setCollection(LiveData<List<Collection>> collections) {
         this.collections = collections;
     }
 

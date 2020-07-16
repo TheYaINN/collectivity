@@ -13,7 +13,7 @@
         android:id="@+id/item_edit_title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/edit_item_title_hint"
+        android:hint="test"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/edit_item_value_hint"
+        android:hint="test"
         android:inputType="text"
         app:layout_constraintRight_toLeftOf="@id/item_edit_currency_spinner"
         app:layout_constraintStart_toStartOf="@id/item_edit_title_text"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/edit_item_date_hint"
+        android:hint="test"
         android:inputType="date"
         app:layout_constraintStart_toStartOf="@id/item_edit_title_text"
         app:layout_constraintTop_toBottomOf="@id/item_edit_value_text" />
@@ -67,7 +67,7 @@
             android:id="@+id/item_edit_ean_scanner_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/edit_item_scan_ean" />
+            android:hint="test" />
 
     </LinearLayout>
 

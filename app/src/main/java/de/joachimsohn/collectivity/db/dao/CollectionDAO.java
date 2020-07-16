@@ -27,9 +27,9 @@ public interface CollectionDAO {
     void deleteAllCollections();
 
     @Query("SELECT * FROM collections")
-    LiveData<Collection> getAllCollections();
+    LiveData<List<Collection>> getAllCollections();
 
     @Query("SELECT * FROM collections WHERE :col LIKE :term")
-    LiveData<Collection> getCollectionsWithParamLike(String col, String term);
+    LiveData<List<Collection>> getCollectionsWithParamLike(String col, String term);
 
 }

@@ -7,6 +7,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
 
@@ -26,9 +28,9 @@ public interface TagDAO {
     void deleteAllTags();
 
     @Query("SELECT * FROM tags")
-    LiveData<Tag> getAllTags();
+    LiveData<List<Tag>> getAllTags();
 
     @Query("SELECT * FROM tags WHERE :col LIKE :term")
-    LiveData<Tag> getTagsWithParamLike(String col, String term);
+    LiveData<List<Tag>> getTagsWithParamLike(String col, String term);
 
 }
