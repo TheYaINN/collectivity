@@ -25,6 +25,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/textfield_name"
+            android:importantForAutofill="no"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +40,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/textfield_description"
+            android:importantForAutofill="no"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textfield_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>

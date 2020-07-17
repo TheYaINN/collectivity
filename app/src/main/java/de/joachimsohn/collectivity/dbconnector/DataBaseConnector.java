@@ -10,15 +10,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import de.joachimsohn.collectivity.ui.Marker;
-import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.db.AppDataBase;
 import de.joachimsohn.collectivity.db.dao.CollectionDAO;
 import de.joachimsohn.collectivity.db.dao.ItemDAO;
 import de.joachimsohn.collectivity.db.dao.StorageLocationDAO;
+import de.joachimsohn.collectivity.db.dao.StorageLocationWithItemsAndTagsDAO;
+import de.joachimsohn.collectivity.db.dao.StorageLocationWithItemsDAO;
 import de.joachimsohn.collectivity.db.dao.TagDAO;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.db.dao.impl.StorageLocationWithItems;
+import de.joachimsohn.collectivity.db.dao.impl.StorageLocationWithItemsAndTags;
+import de.joachimsohn.collectivity.ui.Marker;
+import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.util.logging.Priority;
 
 public class DataBaseConnector {
@@ -38,16 +42,18 @@ public class DataBaseConnector {
         AppDataBase dataBase = AppDataBase.getInstance(application);
         collectionDAO = dataBase.collectionDAO();
         itemDAO = dataBase.itemDAO();
-        locationDAO = dataBase.storageLocationDAO();
+        storageLocationDAO = dataBase.storageLocationDAO();
         tagDAO = dataBase.tagDAO();
+        uiObjectDAO = dataBase.uiObjectDAO();
     }
 
     /*   CONNECTIONS  */
 
     private static CollectionDAO collectionDAO;
     private ItemDAO itemDAO;
-    private StorageLocationDAO locationDAO;
+    private StorageLocationDAO storageLocationDAO;
     private TagDAO tagDAO;
+    private StorageLocationWithItemsDAO uiObjectDAO;
 
 
     public LiveData<List<Collection>> getAllCollections() {
@@ -94,6 +100,17 @@ public class DataBaseConnector {
 
     public void update(Item... items) {
         new UpdateItemsAsyncTask(itemDAO).execute(items);
+    }
+
+    public LiveData<List<StorageLocationWithItems>> getAllUIObjects() {
+        try {
+            return new getAllUIObjectsAsyncTask(uiObjectDAO).execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static class UpdateCollectionsAsyncTask extends AsyncTask<Collection, Void, Void> {
@@ -223,6 +240,20 @@ public class DataBaseConnector {
         @Override
         protected LiveData<List<Collection>> doInBackground(Void... voids) {
             return collectionDAO.getAllCollections();
+        }
+    }
+
+    private static class getAllUIObjectsAsyncTask extends AsyncTask<Collection, Void, LiveData<List<StorageLocationWithItems>>> {
+
+        private StorageLocationWithItemsDAO storageLocationsWithItemsAndTags;
+
+        public getAllUIObjectsAsyncTask(StorageLocationWithItemsDAO uiObjectDAO) {
+            this.storageLocationsWithItemsAndTags = uiObjectDAO;
+        }
+
+        @Override
+        protected LiveData<List<StorageLocationWithItems>> doInBackground(Collection... collections) {
+            return Arrays.stream(collections).findFirst().map(collection -> (storageLocationsWithItemsAndTags.getAllUIObjects(collection.getId()))).orElse(null);
         }
     }
 }

@@ -2,7 +2,6 @@ package de.joachimsohn.collectivity.manager.search;
 
 import java.util.List;
 
-import de.joachimsohn.collectivity.db.dao.UIObject;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 
 
@@ -15,7 +14,7 @@ public class LinearSearch implements SearchStrategy {
     }
 
     @Override
-    public List<UIObject> getResultsFor(String searchValue) {
+    public List<Object> getResultsFor(String searchValue) {
         //TODO
         return null;
     }

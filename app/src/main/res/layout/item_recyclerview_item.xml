@@ -18,25 +18,25 @@
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/fast_overview_item_icon"
+            android:id="@+id/item_recyclerview_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/fast_overview_item_title"
+            android:id="@+id/item_recyclerview_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fast_overview_item_icon"
+            android:layout_below="@id/item_recyclerview_icon"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="some text" />
 
         <TextView
-            android:id="@+id/fast_overview_item_worth"
+            android:id="@+id/item_recyclerview_first"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fast_overview_item_title"
+            android:layout_below="@id/item_recyclerview_title"
             android:text="50 €"
             android:textAlignment="textEnd" />
 

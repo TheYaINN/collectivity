@@ -6,6 +6,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
+    android:clickable="true"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
 
@@ -13,6 +14,7 @@
         android:id="@+id/collection_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="@dimen/collection_item_max_height"
         android:minHeight="@dimen/collection_item_min_height"
         android:padding="8dp">
 
@@ -20,12 +22,29 @@
             android:id="@+id/collection_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
             android:ellipsize="end"
             android:gravity="center_horizontal"
             android:maxLines="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/divider"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="@id/collection_item_title"
+            app:layout_constraintLeft_toLeftOf="@id/collection_item_title"
+            app:layout_constraintRight_toRightOf="@id/collection_item_title"
+            app:layout_constraintStart_toStartOf="@id/collection_item_title"
+            app:layout_constraintTop_toBottomOf="@id/collection_item_title" />
 
         <TextView
             android:id="@+id/collection_item_description"
@@ -34,7 +53,8 @@
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/collection_item_title" />
+            app:layout_constraintTop_toBottomOf="@id/divider" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

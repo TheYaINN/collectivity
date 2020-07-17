@@ -6,4 +6,5 @@
     <color name="accentLight">#EFEFEF</color>
     <color name="accent">#D3D3D3</color>
     <color name="accentDark">#B3B3B3</color>
+    <color name="transparent">#00F44336</color>
 </resources>

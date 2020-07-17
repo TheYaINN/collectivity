@@ -1,7 +1,7 @@
 package de.joachimsohn.collectivity.ui.activities.collection;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -9,20 +9,21 @@ import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
+import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
 import de.joachimsohn.collectivity.ui.Marker;
+import de.joachimsohn.collectivity.ui.activities.search.SearchActivity;
+import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.util.logging.Priority;
 
-public class MainActivity extends AppCompatActivity {
+public class collectionOverviewActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
@@ -50,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
 
         adapter = new CollectionAdapter(this);
-        CollectionViewModel collectionViewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
-        collectionViewModel.getAllCollections().observe(this, adapter::setData);
+        DataBaseConnector.getInstance().getAllCollections().observe(this, adapter::setData);
         recyclerView.setAdapter(adapter);
     }
 
@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_search:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchType.EXTRA, SearchType.COLLECTION);
+                startActivity(intent);
+                return true;
             case R.id.action_dropdown_name:
                 SortDirection directionName = SortManager.getManager().sortCollectionsBy(SortCriteria.NAME);
                 subMenu.getItem(0).setIcon(directionName.getIcon());

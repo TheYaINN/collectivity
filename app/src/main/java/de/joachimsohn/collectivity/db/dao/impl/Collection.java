@@ -2,6 +2,8 @@ package de.joachimsohn.collectivity.db.dao.impl;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -20,6 +22,7 @@ import lombok.ToString;
 public class Collection {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "collection_id")
     private Long id;
 
     @NonNull

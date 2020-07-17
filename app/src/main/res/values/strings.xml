@@ -20,6 +20,8 @@
     <!--  TEXTFIELD  -->
     <string name="textfield_name">Name</string>
     <string name="textfield_description">Beschreibung</string>
+    <string name="textfield_search">Suchbegriff</string>
+    <string name="Tags">Tags</string>
 
 
     <!--    -->

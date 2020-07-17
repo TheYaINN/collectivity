@@ -71,10 +71,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         if (data != null) {
             data.clear();
             data.addAll(newData);
-            notifyDataSetChanged();
         } else {
             data = newData;
         }
+        notifyDataSetChanged();
     }
 
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {

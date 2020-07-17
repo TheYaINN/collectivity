@@ -25,7 +25,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item, parent, false);
         return new ItemHolder(itemView);
-
     }
 
     @Override
@@ -54,9 +53,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
 
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
-            itemViewTitle = itemView.findViewById(R.id.fast_overview_item_title);
-            itemViewIcon = itemView.findViewById(R.id.fast_overview_item_icon);
-            itemViewWorth = itemView.findViewById(R.id.fast_overview_item_worth);
+            itemViewTitle = itemView.findViewById(R.id.item_recyclerview_title);
+            itemViewIcon = itemView.findViewById(R.id.item_recyclerview_icon);
+            itemViewWorth = itemView.findViewById(R.id.item_recyclerview_first);
         }
     }
 }

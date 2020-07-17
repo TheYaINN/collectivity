@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="collection_item_min_height">100dp</dimen>
-    <dimen name="collection_item_max_height">150dp</dimen>
+    <dimen name="collection_item_max_height">120dp</dimen>
 </resources>

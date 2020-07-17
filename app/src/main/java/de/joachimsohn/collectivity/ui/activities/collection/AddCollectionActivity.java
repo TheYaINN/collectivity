@@ -1,11 +1,9 @@
 package de.joachimsohn.collectivity.ui.activities.collection;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
@@ -44,9 +42,16 @@ public class AddCollectionActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (R.id.action_save == item.getItemId()) {
-            EditText name = findViewById(R.id.textfield_name);
-            EditText description = findViewById(R.id.textfield_description);
-            DataBaseConnector.getInstance().insert(new Collection(name.getText().toString().trim(), description.getText().toString().trim()));
+            EditText tfName = findViewById(R.id.textfield_name);
+            EditText tfDescription = findViewById(R.id.textfield_description);
+            String name = tfName.getText().toString().trim();
+            String description = tfDescription.getText().toString().trim();
+            if (!name.isEmpty()) {
+                DataBaseConnector.getInstance().insert(new Collection(name, description));
+                Intent intent = new Intent(this, collectionOverviewActivity.class);
+                intent.putExtra("some", "some");
+                startActivity(intent);
+            }
             return true;
         } else {
             return super.onOptionsItemSelected(item);

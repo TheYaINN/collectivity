@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/textfield_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/rounded_edittext"
+        android:foregroundTint="@color/accentLight"
+        android:gravity="center"
+        android:hint="@string/textfield_search"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:padding="8dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/collections_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
