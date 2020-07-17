@@ -15,17 +15,15 @@ import java.util.List;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
     private List<Collection> data;
-
-    public CollectionAdapter(List<Collection> data) {
-        this.data = data;
-    }
 
     @NonNull
     @Override
@@ -42,7 +40,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     @Override
     public void onBindViewHolder(@NonNull CollectionAdapter.CollectionViewHolder holder, int position) {
-        if (position == getItemCount()) {
+        if (data== null || position == getItemCount()) {
             holder.addActionListener(e -> System.out.println("TEST"));
         } else {
             holder.bind(data.get(position));
@@ -51,12 +49,12 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     @Override
     public int getItemViewType(int position) {
-        return (position == data.size()) ? R.layout.collection_item_add : R.layout.collection_item;
+        return (data == null || position == data.size()) ? R.layout.collection_item_add : R.layout.collection_item;
     }
 
     @Override
     public int getItemCount() {
-        return data.size() + 1;
+        return (data != null) ? data.size() + 1 : 1;
     }
 
     public void setData(List<Collection> newData) {
@@ -79,6 +77,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             super(v);
             title = v.findViewById(R.id.collection_item_title);
             description = v.findViewById(R.id.collection_item_description);
+            addButton = v.findViewById(R.id.action_collection_add);
         }
 
         void bind(@NonNull Collection collection) {

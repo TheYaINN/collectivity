@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        adapter = new CollectionAdapter();
         CollectionViewModel collectionViewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
         collectionViewModel.getAllCollections().observe(this, adapter::setData);
-        adapter = new CollectionAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
     }
 
