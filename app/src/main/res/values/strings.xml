@@ -1,4 +1,23 @@
 <resources>
+    <!--  General  -->
     <string name="app_name">Collectivity</string>
-    <string name="toolbar_search_title">Search</string>
+
+    <!--  Toolbar  -->
+    <string name="action_toolbar_search_title">Search</string>
+    <string name="action_toolbar_sort_title">Sort</string>
+    <string name="action_toolbar_save_title">Save</string>
+    <string name="empty" />
+    <string name="action_dropdown_name">Name</string>
+    <string name="action_dropdown_amount">Anzahl</string>
+    <string name="action_dropdown_description">Beschreibung</string>
+    <string name="action_dropdown_ean">EAN</string>
+    <string name="action_dropdown_value">Wert</string>
+    <string name="action_dropdown_insertiondate">Einfügedatum</string>
+    <string name="action_dropdown_buydate">Kaufdatum</string>
+    <string name="action_dropdown_condition">Zustand</string>
+    <string name="action_dropdown_position">Position</string>
+
+    <!--    -->
+
+    <!--    -->
 </resources>

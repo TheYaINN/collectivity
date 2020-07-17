@@ -1,6 +1,9 @@
 package de.joachimsohn.collectivity.manager.sort;
 
 public enum SortCriteria {
+
+    //TODO: maybe change to R.strings.xxx
+
     NAME("Name"),
     AMOUNT("Anzahl"),
     DESCRIPTION("Beschreibung"),
@@ -9,7 +12,8 @@ public enum SortCriteria {
     INSERTION_DATE("Einfüge Datum"),
     BUY_DATE("Kaufdatum"),
     CONDITION("Zustand"),
-    POSITION("Position");
+    POSITION("Position"),
+    TAG("Tags");
 
     private String representableName;
 

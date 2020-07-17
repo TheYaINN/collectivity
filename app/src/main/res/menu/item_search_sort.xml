@@ -1,0 +1,49 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--  SEARCH  -->
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white"
+        android:title="@string/action_toolbar_search_title"
+        app:showAsAction="ifRoom|withText" />
+
+    <!--  SORT  -->
+    <item
+        android:id="@+id/action_sort"
+        android:icon="@drawable/ic_sort_white"
+        android:title="@string/action_toolbar_sort_title"
+        app:showAsAction="ifRoom|withText">
+        <menu>
+            <item
+                android:id="@+id/action_dropdown_name"
+                android:title="@string/action_dropdown_name" />
+            <item
+                android:id="@+id/action_dropdown_amount"
+                android:title="@string/action_dropdown_amount" />
+            <item
+                android:id="@+id/action_dropdown_description"
+                android:title="@string/action_dropdown_description" />
+            <item
+                android:id="@+id/action_dropdown_ean"
+                android:title="@string/action_dropdown_ean" />
+            <item
+                android:id="@+id/action_dropdown_value"
+                android:title="@string/action_dropdown_value" />
+            <item
+                android:id="@+id/action_dropdown_insertiondate"
+                android:title="@string/action_dropdown_insertiondate" />
+            <item
+                android:id="@+id/action_dropdown_buydate"
+                android:title="@string/action_dropdown_buydate" />
+            <item
+                android:id="@+id/action_dropdown_condition"
+                android:title="@string/action_dropdown_condition" />
+            <item
+                android:id="@+id/action_dropdown_position"
+                android:title="@string/action_dropdown_position" />
+        </menu>
+    </item>
+
+
+</menu>

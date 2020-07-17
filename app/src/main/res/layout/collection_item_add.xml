@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center|center_horizontal"
@@ -15,21 +14,26 @@
         android:id="@+id/collection_item"
         android:layout_width="366dp"
         android:layout_height="wrap_content"
+        android:background="#00FFFFFF"
+        android:maxHeight="@dimen/collection_item_max_height"
+        android:minHeight="@dimen/collection_item_min_height"
         android:padding="8dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/action_collection_add"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:maxHeight="@dimen/collection_item_max_height"
-            android:minHeight="@dimen/collection_item_min_height"
+            android:background="#FFFFFF"
+            android:clickable="true"
+            android:onClick="addCollection"
             android:scaleType="fitCenter"
+            android:scaleX="5"
+            android:scaleY="5"
+            android:src="@drawable/ic_add_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription"
-            tools:srcCompat="@drawable/ic_add" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
-import de.joachimsohn.collectivity.loader.DataBaseConnector;
 
 public class CollectionManager {
 

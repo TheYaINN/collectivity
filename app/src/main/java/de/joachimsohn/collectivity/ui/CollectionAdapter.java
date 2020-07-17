@@ -41,6 +41,6 @@ public class CollectionAdapter extends Adapter {
 
     @Override
     public int getItemCount() {
-        return (dataSet.getValue() != null) ? dataSet.getValue().size() : 0;
+        return (dataSet != null && dataSet.getValue() != null) ? dataSet.getValue().size() : 0;
     }
 }
