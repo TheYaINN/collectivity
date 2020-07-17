@@ -37,7 +37,7 @@ public class collectionOverviewActivity extends AppCompatActivity {
         Logger.log(Priority.DEBUG, Marker.MAIN, "Starting App");
         DataBaseConnector.getInstance().init(getApplication());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.collection_overview);
+        setContentView(R.layout.recycler_overview);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

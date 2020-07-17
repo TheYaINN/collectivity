@@ -36,10 +36,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         CardView collectionView;
-        if (viewType == R.layout.collection_recyclerview_item) {
-            collectionView = (CardView) inflater.inflate(R.layout.collection_recyclerview_item, parent, false);
+        if (viewType == R.layout.recyclerciew_item_wide) {
+            collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide, parent, false);
         } else {
-            collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_add, parent, false);
+            collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide_add, parent, false);
         }
         return new CollectionViewHolder(collectionView);
     }
@@ -59,7 +59,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     @Override
     public int getItemViewType(int position) {
-        return (data == null || position == data.size()) ? R.layout.recyclerciew_add : R.layout.collection_recyclerview_item;
+        return (data == null || position == data.size()) ? R.layout.recyclerciew_item_wide_add : R.layout.recyclerciew_item_wide;
     }
 
     @Override
@@ -79,9 +79,9 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title;
-        TextView description;
-        ImageButton addButton;
+        private TextView title;
+        private TextView description;
+        private ImageButton addButton;
 
         public CollectionViewHolder(@NonNull View v) {
             super(v);

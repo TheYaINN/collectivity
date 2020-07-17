@@ -24,7 +24,7 @@
             android:scrollbars="vertical" />
     </LinearLayout>
 
-    <include layout="@layout/recyclerciew_add" />
+    <include layout="@layout/recyclerciew_item_wide_add" />
 
     <!--  This item is here to go to the add screen  -->
 
