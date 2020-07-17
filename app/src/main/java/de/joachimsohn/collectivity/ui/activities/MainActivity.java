@@ -1,6 +1,7 @@
 package de.joachimsohn.collectivity.ui.activities;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,28 +11,30 @@ import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Timer;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.Logger;
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.loader.DataBaseConnector;
-import de.joachimsohn.collectivity.manager.impl.CollectionManager;
+import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
 import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
 import de.joachimsohn.collectivity.ui.CollectionAdapter;
+import de.joachimsohn.collectivity.ui.CollectionViewModel;
 import de.joachimsohn.collectivity.ui.Marker;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* ====== UI ====== */
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter collectionAdapter;
-    private RecyclerView.LayoutManager collectionLayoutManager;
+    private CollectionAdapter adapter;
     private SubMenu subMenu;
 
 
@@ -39,32 +42,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logger.log(Log.INFO, Marker.MAIN, "Starting App");
-        //Load DB, this is an async task
-        CollectionManager.getManager().setCollection(DataBaseConnector.getInstance().loadAndGetCollection(getApplication()));
-        //setup UI
+        DataBaseConnector.getInstance().init(getApplication());
         initGUI();
     }
 
     private void initGUI() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.collection);
-
-
-        //Setting up the actionbar
         toolbar = findViewById(R.id.toolbar);
+        setUpActionBar();
+        recyclerView = findViewById(R.id.collections_recycler_view);
+        setUpRecyclerView();
+    }
+
+    private void setUpActionBar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-        //Load Recycler view and fill it with data from DB
-        recyclerView = findViewById(R.id.collections_recycler_view);
+    private void setUpRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        collectionLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(collectionLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        collectionAdapter = new CollectionAdapter(CollectionManager.getManager().getCollection());
-        recyclerView.setAdapter(collectionAdapter);
-
+        CollectionViewModel collectionViewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
+        collectionViewModel.getAllCollections().observe(this, adapter::setData);
+        adapter = new CollectionAdapter(new ArrayList<>());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -92,22 +97,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onOptionsMenuClosed(Menu menu) {
-        try {
-            wait(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         super.onOptionsMenuClosed(menu);
     }
 
     @Override
     protected void onDestroy() {
         Logger.log(Log.INFO, Marker.MAIN, "Closing App");
-        CollectionManager.getManager().saveUserState();
+        //Save data
         super.onDestroy();
     }
 
     public void addCollection(View view) {
+        //TODO: change to collection_create
         System.out.println("TEST");
     }
 }

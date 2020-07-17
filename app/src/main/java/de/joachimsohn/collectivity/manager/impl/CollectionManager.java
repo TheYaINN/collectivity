@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import lombok.Getter;
 
 public class CollectionManager {
 
@@ -15,6 +16,7 @@ public class CollectionManager {
         manager = new CollectionManager();
     }
 
+    @Getter
     private @Nullable
     LiveData<List<Collection>> collections;
 
@@ -22,15 +24,4 @@ public class CollectionManager {
         return manager;
     }
 
-    public LiveData<List<Collection>> getCollection() {
-        return collections;
-    }
-
-    public void setCollection(LiveData<List<Collection>> collections) {
-        this.collections = collections;
-    }
-
-    public void saveUserState() {
-
-    }
 }

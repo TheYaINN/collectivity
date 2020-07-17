@@ -38,7 +38,6 @@ dependencies {
     // Room Database
     implementation "android.arch.persistence.room:runtime:$lifecycle_version"
     annotationProcessor "android.arch.persistence.room:compiler:$lifecycle_version"
-    compile 'com.facebook.stetho:stetho:1.5.1'
 
     //Layouts
     implementation "com.android.support:recyclerview-v7:$old_version"
