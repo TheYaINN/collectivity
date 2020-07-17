@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import de.joachimsohn.collectivity.ui.Marker;
+import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.db.AppDataBase;
 import de.joachimsohn.collectivity.db.dao.CollectionDAO;
 import de.joachimsohn.collectivity.db.dao.ItemDAO;
@@ -17,6 +19,7 @@ import de.joachimsohn.collectivity.db.dao.StorageLocationDAO;
 import de.joachimsohn.collectivity.db.dao.TagDAO;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.util.logging.Priority;
 
 public class DataBaseConnector {
 
@@ -57,6 +60,7 @@ public class DataBaseConnector {
     }
 
     public void insert(Collection... collections) {
+        Logger.log(Priority.DEBUG, Marker.DB, "inserting into collections -> " + collections.toString());
         new InsertCollectionsAsyncTask(collectionDAO).execute(collections);
     }
 

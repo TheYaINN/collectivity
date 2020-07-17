@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <!--  SEARCH  -->
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_white"
+        android:icon="@drawable/ic_search"
+        android:iconTint="@color/accent"
         android:title="@string/action_toolbar_search_title"
         app:showAsAction="ifRoom|withText" />
-
     <!--  SORT  -->
     <item
         android:id="@+id/action_sort"
-        android:icon="@drawable/ic_sort_white"
+        android:icon="@drawable/ic_sort"
+        android:iconTint="@color/accent"
         android:title="@string/action_toolbar_sort_title"
         app:showAsAction="ifRoom|withText">
+        <!--    SUBMENU    -->
         <menu>
+        <!--    NAME    -->
             <item
                 android:id="@+id/action_dropdown_name"
+                android:iconTint="@color/primary"
                 android:title="@string/action_dropdown_name" />
+        <!--    DESCRIPTION    -->
             <item
                 android:id="@+id/action_dropdown_description"
+                android:iconTint="@color/primary"
                 android:title="@string/action_dropdown_description" />
         </menu>
     </item>
-
 </menu>

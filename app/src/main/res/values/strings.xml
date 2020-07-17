@@ -1,8 +1,8 @@
 <resources>
-    <!--  General  -->
+    <!--  GENERAL  -->
     <string name="app_name">Collectivity</string>
 
-    <!--  Toolbar  -->
+    <!--  TOOLBAR  -->
     <string name="action_toolbar_search_title">Search</string>
     <string name="action_toolbar_sort_title">Sort</string>
     <string name="action_toolbar_save_title">Save</string>
@@ -17,7 +17,10 @@
     <string name="action_dropdown_condition">Zustand</string>
     <string name="action_dropdown_position">Position</string>
 
-    <!--    -->
+    <!--  TEXTFIELD  -->
+    <string name="textfield_name">Name</string>
+    <string name="textfield_description">Beschreibung</string>
+
 
     <!--    -->
 </resources>

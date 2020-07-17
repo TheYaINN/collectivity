@@ -16,7 +16,7 @@ import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
 
-@Database(entities = {Collection.class, StorageLocation.class, Tag.class, Item.class}, version = 1)
+@Database(entities = {Collection.class, StorageLocation.class, Tag.class, Item.class}, version = 2)
 @TypeConverters({Converter.class})
 public abstract class AppDataBase extends RoomDatabase {
 

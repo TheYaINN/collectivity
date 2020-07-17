@@ -17,6 +17,7 @@ import de.joachimsohn.collectivity.db.dao.Condition;
 import de.joachimsohn.collectivity.db.dao.UIObject;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity(tableName = "items", foreignKeys = {
         @ForeignKey(
@@ -28,6 +29,7 @@ import lombok.Setter;
 )
 @Getter
 @Setter
+@ToString
 public class Item extends UIObject {
 
     @PrimaryKey(autoGenerate = true)

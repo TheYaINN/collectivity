@@ -1,5 +1,7 @@
-package de.joachimsohn.collectivity.ui;
+package de.joachimsohn.collectivity.ui.activities.collection;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,41 +17,49 @@ import java.util.List;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
     private List<Collection> data;
+    private Activity activity;
+
+    public CollectionAdapter(Activity activity) {
+        this.activity = activity;
+    }
+
 
     @NonNull
     @Override
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         CardView collectionView;
-        if (viewType == R.layout.collection_item) {
-            collectionView = (CardView) inflater.inflate(R.layout.collection_item, parent, false);
+        if (viewType == R.layout.collection_recyclerview_item) {
+            collectionView = (CardView) inflater.inflate(R.layout.collection_recyclerview_item, parent, false);
         } else {
-            collectionView = (CardView) inflater.inflate(R.layout.collection_item_add, parent, false);
+            collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_add, parent, false);
         }
         return new CollectionViewHolder(collectionView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CollectionAdapter.CollectionViewHolder holder, int position) {
-        if (data== null || position == getItemCount()) {
-            holder.addActionListener(e -> System.out.println("TEST"));
-        } else {
+        if (data == null || position == getItemCount()) {
+            holder.addActionListener(e -> {
+                Intent intent = new Intent(activity, AddCollectionActivity.class);
+                intent.putExtra("some", "some");
+                activity.startActivity(intent);
+            });
+        } else if (position < data.size()) {
             holder.bind(data.get(position));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (data == null || position == data.size()) ? R.layout.collection_item_add : R.layout.collection_item;
+        return (data == null || position == data.size()) ? R.layout.recyclerciew_add : R.layout.collection_recyclerview_item;
     }
 
     @Override
@@ -61,10 +71,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         if (data != null) {
             data.clear();
             data.addAll(newData);
+            notifyDataSetChanged();
         } else {
             data = newData;
         }
-        notifyDataSetChanged();
     }
 
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {

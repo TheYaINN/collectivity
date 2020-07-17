@@ -16,17 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddItemActitvity extends AppCompatActivity {
 
-    public static final String EXTRA_TITLE = "EXTRA_TITLE";
-    public static final String EXTRA_VALUE = "EXTRA_VALUE";
-    public static final String EXTRA_VALUE_CURRENCY = "EXTRA_VALUE_CURRENCY";
-    public static final String EXTRA_CREATION_DATE = "EXTRA_VALUE";
-    public static final String EXTRA_EAN = "EXTRA_EAN";
-    public static final String EXTRA_ICON = "EXTRA_ICON";
-    public static final String EXTRA_BUY_DATE = "EXTRA_BUY_DATE";
-
-    private static final int CAMERA_PIC_REQUEST = 1337;
-
-
     private EditText itemTitle;
     private EditText itemPurchaseDate;
     private EditText itemValue;
@@ -37,22 +26,22 @@ public class AddItemActitvity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_item);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black);
+        setContentView(R.layout.item_add);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         findGUIElements();
     }
 
     private void findGUIElements() {
-        itemTitle = findViewById(R.id.item_edit_title_text);
+       /* itemTitle = findViewById(R.id.item_edit_title_text);
         itemValue = findViewById(R.id.item_edit_value_text);
-        itemPurchaseDate = findViewById(R.id.item_edit_purchase_date_text);
+        itemPurchaseDate = findViewById(R.id.item_edit_purchase_date_text);*/
         findAndSetupCurrencySpinner();
         findAndSetupEANScanner();
     }
 
     private void findAndSetupEANScanner() {
-        eanScanner = findViewById(R.id.item_edit_ean_scanner_button);
-        eanText = findViewById(R.id.item_edit_ean_scanner_text);
+        /*eanScanner = findViewById(R.id.item_edit_ean_scanner_button);
+        eanText = findViewById(R.id.item_edit_ean_scanner_text);*/
 
 
         eanScanner.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +54,7 @@ public class AddItemActitvity extends AppCompatActivity {
     }
 
     private void findAndSetupCurrencySpinner() {
-        itemCurrencySpinner = findViewById(R.id.item_edit_currency_spinner);
+//        itemCurrencySpinner = findViewById(R.id.item_edit_currency_spinner);
       /*  ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.currency_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,9 +82,6 @@ public class AddItemActitvity extends AppCompatActivity {
         }
 
         Intent data = new Intent();
-        data.putExtra(EXTRA_TITLE, title);
-        data.putExtra(EXTRA_VALUE, value);
-
         setResult(RESULT_OK, data);
         finish();
     }

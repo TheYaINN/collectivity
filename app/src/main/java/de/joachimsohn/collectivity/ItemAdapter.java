@@ -23,15 +23,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemHolder> {
     @Override
     public ItemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fast_overview_item, parent, false);
+                .inflate(R.layout.item, parent, false);
         return new ItemHolder(itemView);
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         Item currentNode = items.get(position);
         //holder.itemViewTitle.setText(currentNode.getTitle());
-       // holder.itemViewIcon.setImageBitmap(currentNode.getIcon());
+        // holder.itemViewIcon.setImageBitmap(currentNode.getIcon());
         //holder.itemViewWorth.setText(String.valueOf(currentNode.getPrice()));
     }
 

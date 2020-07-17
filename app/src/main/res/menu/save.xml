@@ -5,8 +5,9 @@
     <!--  SAVE  -->
     <item
         android:id="@+id/action_save"
-        android:icon="@drawable/ic_save_black"
+        android:icon="@drawable/ic_save"
         android:title="@string/action_toolbar_save_title"
+        android:iconTint="@color/accent"
         app:showAsAction="ifRoom|withText" />
 
 </menu>

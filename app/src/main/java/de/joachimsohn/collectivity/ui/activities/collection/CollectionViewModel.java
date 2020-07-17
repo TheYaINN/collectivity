@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity.ui;
+package de.joachimsohn.collectivity.ui.activities.collection;
 
 import android.app.Application;
 

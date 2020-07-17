@@ -10,6 +10,7 @@ import java.util.List;
 import de.joachimsohn.collectivity.db.dao.UIObject;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity(tableName = "storagelocations",
         foreignKeys = {
@@ -23,6 +24,7 @@ import lombok.Setter;
 )
 @Getter
 @Setter
+@ToString
 public class StorageLocation extends UIObject {
 
     @PrimaryKey(autoGenerate = true)

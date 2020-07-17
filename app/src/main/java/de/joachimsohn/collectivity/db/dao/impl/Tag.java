@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Entity(tableName = "tags",
@@ -27,6 +28,7 @@ import lombok.Setter;
 )
 @Getter
 @Setter
+@ToString
 public class Tag {
 
     @PrimaryKey(autoGenerate = true)

@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.collection.MainActivity"
             android:label="@string/empty"
             android:theme="@style/HiddenTitle">
             <intent-filter>
@@ -20,5 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activities.collection.AddCollectionActivity"
+            android:parentActivityName=".ui.activities.collection.MainActivity" />
     </application>
 </manifest>

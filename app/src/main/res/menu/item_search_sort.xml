@@ -1,49 +1,66 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <!--  SEARCH  -->
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_white"
+        android:icon="@drawable/ic_search"
+        android:iconTint="@color/accent"
         android:title="@string/action_toolbar_search_title"
         app:showAsAction="ifRoom|withText" />
-
     <!--  SORT  -->
     <item
         android:id="@+id/action_sort"
-        android:icon="@drawable/ic_sort_white"
+        android:icon="@drawable/ic_sort"
+        android:iconTint="@color/accent"
         android:title="@string/action_toolbar_sort_title"
         app:showAsAction="ifRoom|withText">
+        <!--   SUBMENU     -->
         <menu>
+            <!--     NAME       -->
             <item
                 android:id="@+id/action_dropdown_name"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_name" />
+            <!--      AMOUNT      -->
             <item
                 android:id="@+id/action_dropdown_amount"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_amount" />
+            <!--      DESCRIPTION      -->
             <item
                 android:id="@+id/action_dropdown_description"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_description" />
+            <!--      EAN      -->
             <item
                 android:id="@+id/action_dropdown_ean"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_ean" />
+            <!--     VALUE       -->
             <item
                 android:id="@+id/action_dropdown_value"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_value" />
+            <!--      INSERTION DATE      -->
             <item
                 android:id="@+id/action_dropdown_insertiondate"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_insertiondate" />
+            <!--       BUY DATE     -->
             <item
                 android:id="@+id/action_dropdown_buydate"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_buydate" />
+            <!--       CONDITION     -->
             <item
                 android:id="@+id/action_dropdown_condition"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_condition" />
+            <!--      POSITION      -->
             <item
                 android:id="@+id/action_dropdown_position"
+                android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_position" />
         </menu>
     </item>
-
-
 </menu>

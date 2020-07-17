@@ -4,7 +4,8 @@ import lombok.Getter;
 
 public enum Marker {
 
-    MAIN(">> Main: ");
+    MAIN(">> Main: "),
+    DB(">> Database: ");
 
     @Getter
     private String text;

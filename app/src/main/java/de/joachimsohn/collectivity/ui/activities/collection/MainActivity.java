@@ -1,34 +1,26 @@
-package de.joachimsohn.collectivity.ui.activities;
+package de.joachimsohn.collectivity.ui.activities.collection;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.View;
 import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
-import de.joachimsohn.collectivity.Logger;
+import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
 import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
-import de.joachimsohn.collectivity.ui.CollectionAdapter;
-import de.joachimsohn.collectivity.ui.CollectionViewModel;
 import de.joachimsohn.collectivity.ui.Marker;
+import de.joachimsohn.collectivity.util.logging.Priority;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,32 +33,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.log(Log.INFO, Marker.MAIN, "Starting App");
+        Logger.log(Priority.DEBUG, Marker.MAIN, "Starting App");
         DataBaseConnector.getInstance().init(getApplication());
-        initGUI();
-    }
-
-    private void initGUI() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.collection);
+        setContentView(R.layout.collection_overview);
+
         toolbar = findViewById(R.id.toolbar);
-        setUpActionBar();
-        recyclerView = findViewById(R.id.collections_recycler_view);
-        setUpRecyclerView();
-    }
-
-    private void setUpActionBar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
-    private void setUpRecyclerView() {
+        recyclerView = findViewById(R.id.collections_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new CollectionAdapter();
+        adapter = new CollectionAdapter(this);
         CollectionViewModel collectionViewModel = ViewModelProviders.of(this).get(CollectionViewModel.class);
         collectionViewModel.getAllCollections().observe(this, adapter::setData);
         recyclerView.setAdapter(adapter);
@@ -102,13 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Logger.log(Log.INFO, Marker.MAIN, "Closing App");
-        //Save data
+        Logger.log(Priority.DEBUG, Marker.MAIN, "Closing App");
         super.onDestroy();
-    }
-
-    public void addCollection(View view) {
-        //TODO: change to collection_create
-        System.out.println("TEST");
     }
 }

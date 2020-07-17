@@ -5,8 +5,8 @@ import de.joachimsohn.collectivity.R;
 public enum SortDirection {
 
     NONE("Aufsteigend", 0), //TODO: add empty icon
-    ASCENDING("Aufsteigend", R.drawable.ic_arrow_up_black),
-    DESCENDING("Absteigend", R.drawable.ic_arrow_down_black);
+    ASCENDING("Aufsteigend", R.drawable.ic_arrow_up),
+    DESCENDING("Absteigend", R.drawable.ic_arrow_down);
 
     //TODO: add getter and setter from lombok
     private String representableName;
