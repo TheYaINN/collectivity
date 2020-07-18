@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,8 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import de.joachimsohn.collectivity.manager.impl.CacheManager;
+import de.joachimsohn.collectivity.ui.activities.Extra;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,9 +28,11 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     private List<Collection> data;
     private Activity activity;
+    private CardView collectionView;
 
     public CollectionAdapter(Activity activity) {
         this.activity = activity;
+        notifyDataSetChanged();
     }
 
 
@@ -35,7 +40,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     @Override
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CardView collectionView;
         if (viewType == R.layout.recyclerciew_item_wide) {
             collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide, parent, false);
         } else {
@@ -49,11 +53,17 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         if (data == null || position == getItemCount()) {
             holder.addActionListener(e -> {
                 Intent intent = new Intent(activity, AddCollectionActivity.class);
-                intent.putExtra("some", "some");
                 activity.startActivity(intent);
             });
         } else if (position < data.size()) {
             holder.bind(data.get(position));
+            collectionView.setOnClickListener(e -> {
+                //TODO: find another way to implement this
+                Intent intent = new Intent(activity, MainActivity.class);
+                intent.putExtra(Extra.ID.getValue(), data.get(position).getId());
+                CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
+                activity.startActivity(intent);
+            });
         }
     }
 
@@ -79,24 +89,35 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {
 
+        @Nullable
         private TextView title;
+
+        @Nullable
         private TextView description;
+
+        @Nullable
         private ImageButton addButton;
 
         public CollectionViewHolder(@NonNull View v) {
             super(v);
             title = v.findViewById(R.id.collection_item_title);
             description = v.findViewById(R.id.collection_item_description);
-            addButton = v.findViewById(R.id.action_collection_add);
+            addButton = v.findViewById(R.id.recyclerview_item_wide_add);
         }
 
         void bind(@NonNull Collection collection) {
-            title.setText(collection.getName());
-            description.setText(collection.getDescription());
+            if (title != null) {
+                title.setText(collection.getName());
+            }
+            if (description != null) {
+                description.setText(collection.getDescription());
+            }
         }
 
         public void addActionListener(View.OnClickListener listener) {
-            addButton.setOnClickListener(listener);
+            if (addButton != null) {
+                addButton.setOnClickListener(listener);
+            }
         }
     }
 

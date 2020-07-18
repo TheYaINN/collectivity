@@ -5,7 +5,9 @@ import lombok.Getter;
 public enum Marker {
 
     MAIN(">> Main: "),
-    DB(">> Database: ");
+    DB(">> Database: "),
+    STORAGELOCATION(">> StorageLocation: "),
+    SEARCH(">> Search:"), CACHEMANAGER(">> CacheManager: ");
 
     @Getter
     private String text;

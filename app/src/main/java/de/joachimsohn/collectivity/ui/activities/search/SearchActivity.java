@@ -1,6 +1,9 @@
 package de.joachimsohn.collectivity.ui.activities.search;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,14 +11,31 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import de.joachimsohn.collectivity.R;
+import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
+import de.joachimsohn.collectivity.manager.impl.SearchManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
+import de.joachimsohn.collectivity.ui.Marker;
+import de.joachimsohn.collectivity.ui.activities.storagelocation.StorageLocationAdapter;
+import de.joachimsohn.collectivity.util.logging.Logger;
+import de.joachimsohn.collectivity.util.logging.Priority;
+import lombok.NonNull;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private SearchType type;
-    private RecyclerView recyclerView;
+    private @Nullable
+    Toolbar toolbar;
+
+    private @Nullable
+    SearchType type;
+
+    private @Nullable
+    RecyclerView recyclerView;
+
+    private @Nullable
+    EditText tfSearch;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,16 +49,43 @@ public class SearchActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        type = (SearchType) getIntent().getSerializableExtra(SearchType.EXTRA);
-        //TODO set adapter and content for recycler depending on the @Searchtype
-
-        recyclerView = findViewById(R.id.collections_recycler_view);
+        recyclerView = findViewById(R.id.recyclerview_wide);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
+        findViewById(R.id.recyclervew_item_wide_add_cardview).setVisibility(View.GONE);
+        setUpSearch();
+    }
 
+    private void setUpSearch() {
+        tfSearch = findViewById(R.id.textfield_search);
+        type = (SearchType) getIntent().getSerializableExtra(SearchType.EXTRA);
+        if (type == null || tfSearch == null) {
+            return;
+        }
 
-        //ADAPTER
-//        DataBaseConnector.getInstance().getAllItems().observe(this, adapter::setData);
-//        recyclerView.setAdapter(adapter);
+        switch (type) {
+            case COLLECTION:
+                if (recyclerView != null) {
+                    break;
+                }
+                StorageLocationAdapter adapter = new StorageLocationAdapter(this);
+                DataBaseConnector.getInstance().getAllStorageLocations().observe(this, adapter::setData);
+                recyclerView.setAdapter(adapter);
+                tfSearch.addTextChangedListener(new SearchTextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        Logger.log(Priority.DEBUG, Marker.SEARCH, editable.toString());
+                        SearchManager.getManager().searchForStorageLocation(editable.toString());
+                    }
+                });
+            case STORAGELOCATION:
+                //TODO: change to recyclerview.getSearchValue; (observable value)
+                @NonNull List<Object> objects = SearchManager.getManager().searchForStorageLocation(null);
+            case ITEM:
+                @NonNull List<Object> objects2 = SearchManager.getManager().searchForItem(null);
+            default:
+                //TODO: make combined search for multiple ENUM value
+                break;
+        }
     }
 }

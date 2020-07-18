@@ -1,8 +1,7 @@
 package de.joachimsohn.collectivity.manager.search;
 
-import lombok.Getter;
-
 public enum SearchType {
+
     COLLECTION,
     STORAGELOCATION,
     ITEM;

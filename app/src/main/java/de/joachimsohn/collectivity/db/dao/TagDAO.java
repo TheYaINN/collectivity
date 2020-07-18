@@ -9,7 +9,6 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
 
 @Dao

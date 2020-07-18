@@ -23,9 +23,6 @@ public interface CollectionDAO {
     @Delete
     void delete(Collection collection);
 
-    @Query("DELETE FROM collections")
-    void deleteAllCollections();
-
     @Query("SELECT * FROM collections")
     LiveData<List<Collection>> getAllCollections();
 

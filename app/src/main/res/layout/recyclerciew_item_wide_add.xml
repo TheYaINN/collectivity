@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recyclervew_item_wide_add_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
@@ -18,13 +19,12 @@
         android:padding="8dp">
 
         <ImageButton
-            android:id="@+id/action_collection_add"
+            android:id="@+id/recyclerview_item_wide_add"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/transparent"
             android:clickable="true"
             android:minHeight="@dimen/collection_item_min_height"
-            android:onClick="addCollection"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_add"
             android:tint="@color/accentLight"

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/textfield_description"
+        android:id="@+id/textfield_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -22,12 +22,7 @@
         android:inputType="text"
         android:padding="8dp" />
 
+    <include layout="@layout/recycler_overview_wide" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/collections_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:scrollbars="vertical" />
 
 </LinearLayout>

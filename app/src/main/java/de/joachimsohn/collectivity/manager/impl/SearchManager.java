@@ -1,8 +1,6 @@
 package de.joachimsohn.collectivity.manager.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import lombok.NonNull;
 
@@ -18,21 +16,18 @@ public class SearchManager {
         return manager;
     }
 
-    /*public @NonNull List<UIObject> search(String searchValue) {
-        @NonNull List<UIObject> items = searchForItems(searchValue);
-        @NonNull List<UIObject> storageLocations = searchForStorageLocation(searchValue);
-        return Stream.concat(items.stream(), storageLocations.stream())
-                .collect(Collectors.toList());
-    }*/
-
-  /*  public @NonNull List<UIObject> searchForItems(String searchValue) {
-        //TODO: Find storageLocation and search in this location with property @Code searchValue given
+    //TODO: change returntype to something better, but it works for now
+    public @NonNull List<Object> searchForCollection(String searchValue) {
+        CacheManager.getManager().getCollections();
         return null;
-    }*/
+    }
 
-    /*public @NonNull List<UIObject> searchForStorageLocation(String searchValue) {
-        //TODO: Find Collection and search for Storage locations with property @Code searchValue given
+    public @NonNull List<Object> searchForItem(String searchValue) {
         return null;
-    }*/
+    }
+
+    public @NonNull List<Object> searchForStorageLocation(String searchValue) {
+        return null;
+    }
 
 }

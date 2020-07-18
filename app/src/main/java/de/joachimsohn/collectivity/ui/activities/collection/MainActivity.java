@@ -14,20 +14,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
+import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
 import de.joachimsohn.collectivity.ui.Marker;
+import de.joachimsohn.collectivity.ui.activities.item.ItemAdapter;
 import de.joachimsohn.collectivity.ui.activities.search.SearchActivity;
+import de.joachimsohn.collectivity.ui.activities.storagelocation.StorageLocationAdapter;
 import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.util.logging.Priority;
 
-public class collectionOverviewActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private CollectionAdapter adapter;
+    private RecyclerView.Adapter adapter;
     private SubMenu subMenu;
 
 
@@ -37,22 +40,16 @@ public class collectionOverviewActivity extends AppCompatActivity {
         Logger.log(Priority.DEBUG, Marker.MAIN, "Starting App");
         DataBaseConnector.getInstance().init(getApplication());
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.recycler_overview);
+        setContentView(R.layout.default_overview);
 
+        //Setting up the UI and binding the data from the CollectionManager to the Recyclerview
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
-        recyclerView = findViewById(R.id.collections_recycler_view);
+        recyclerView = findViewById(R.id.recyclerview_wide);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
-        adapter = new CollectionAdapter(this);
-        DataBaseConnector.getInstance().getAllCollections().observe(this, adapter::setData);
-        recyclerView.setAdapter(adapter);
+        loadViewItems();
     }
 
     @Override
@@ -62,9 +59,15 @@ public class collectionOverviewActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+            case R.id.home:
+                CacheManager.getManager().setLevel(CacheManager.Direction.UP);
+                loadViewItems();
+                return true;
             case R.id.action_search:
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchType.EXTRA, SearchType.COLLECTION);
@@ -80,6 +83,41 @@ public class collectionOverviewActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void loadViewItems() {
+        switch (CacheManager.getManager().getCurrentCacheLevel()) {
+            case COLLECTION:
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                CacheManager.getManager().setCollections(DataBaseConnector.getInstance().getAllCollections());
+                adapter = new CollectionAdapter(this);
+                CacheManager.getManager().getCollections().observe(this, ((CollectionAdapter) adapter)::setData);
+                recyclerView.setAdapter((RecyclerView.Adapter) adapter);
+                break;
+            case STORAGELOCATION:
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    getSupportActionBar().setDisplayShowHomeEnabled(true);
+                }
+                CacheManager.getManager().setStorageLocations(DataBaseConnector.getInstance().getAllStorageLocations());
+                adapter = new StorageLocationAdapter(this);
+                CacheManager.getManager().getStorageLocations().observe(this, ((StorageLocationAdapter) adapter)::setData);
+                recyclerView.setAdapter((RecyclerView.Adapter) adapter);
+                break;
+            case ITEM:
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    getSupportActionBar().setDisplayShowHomeEnabled(true);
+                }
+                CacheManager.getManager().setItems(DataBaseConnector.getInstance().getAllItems());
+                adapter = new StorageLocationAdapter(this);
+                CacheManager.getManager().getItems().observe(this, ((ItemAdapter) adapter)::setData);
+                recyclerView.setAdapter((RecyclerView.Adapter) adapter);
+                break;
         }
     }
 

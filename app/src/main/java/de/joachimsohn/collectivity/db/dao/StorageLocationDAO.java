@@ -5,7 +5,6 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Transaction;
 import androidx.room.Update;
 
 import java.util.List;
@@ -24,13 +23,10 @@ public interface StorageLocationDAO {
     @Delete
     void delete(StorageLocation storageLocation);
 
-    @Query("DELETE FROM storagelocations")
-    void deleteAllStorageLocations();
+    @Query("SELECT * FROM storagelocations s WHERE s.collection_id == :collectionId")
+    LiveData<List<StorageLocation>> getAllStorageLocationsForID(Long collectionId);
 
-    @Query("SELECT * FROM storagelocations ")
+    @Query("SELECT * FROM storagelocations")
     LiveData<List<StorageLocation>> getAllStorageLocations();
-
-    @Query("SELECT * FROM StorageLocations WHERE :col LIKE :term")
-    LiveData<List<StorageLocation>> getStorageLocationsWithParamLike(String col, String term);
 
 }

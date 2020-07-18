@@ -76,7 +76,6 @@ public class Item {
 
     public String getAllAttributes() {
         StringBuilder sb = new StringBuilder();
-        //TODO: read from strings
         sb.append(R.string.action_dropdown_amount).append(": ").append(getAmount()).append(", ");
         if (description != null) {
             sb.append(R.string.action_dropdown_description).append(": ").append(getDescription()).append(", ");
