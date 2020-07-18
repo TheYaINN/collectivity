@@ -34,13 +34,13 @@ public class Tag {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "tag_id")
-    private Long id;
+    private long id;
 
     @ColumnInfo(name = "storage_location_id")
-    private Long storageLocationId;
+    private long storageLocationId;
 
     @ColumnInfo(name = "item_id")
-    private Long ItemId;
+    private long ItemId;
 
     private
 

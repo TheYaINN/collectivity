@@ -36,10 +36,10 @@ public class Item {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "item_id")
-    private Long id;
+    private long id;
 
     @ColumnInfo(name = "storage_location_id")
-    private Long storageLocationId;
+    private long storageLocationId;
 
     @NonNull
     private String name;

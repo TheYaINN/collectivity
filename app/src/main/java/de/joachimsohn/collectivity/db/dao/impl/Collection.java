@@ -22,7 +22,7 @@ public class Collection {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "collection_id")
-    private Long id;
+    private long id;
 
     @NonNull
     private String name;

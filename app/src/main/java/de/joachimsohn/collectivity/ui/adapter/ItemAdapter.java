@@ -1,5 +1,6 @@
 package de.joachimsohn.collectivity.ui.adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,11 @@ import lombok.NoArgsConstructor;
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
     private List<Item> data;
+    private Activity activity;
+
+    public ItemAdapter(Activity activity) {
+        this.activity = activity;
+    }
 
     @NonNull
     @Override

@@ -27,12 +27,11 @@ public class CacheManager {
         manager = new CacheManager();
     }
 
-
     private LiveData<List<Collection>> collections;
     private LiveData<List<StorageLocation>> storageLocations;
     private LiveData<List<Item>> items;
     private SearchType currentCacheLevel = SearchType.COLLECTION;
-
+    private long currentId;
 
     @NonNull
     public static CacheManager getManager() {

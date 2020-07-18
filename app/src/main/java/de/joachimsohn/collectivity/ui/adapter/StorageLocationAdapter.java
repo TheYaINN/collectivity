@@ -18,9 +18,8 @@ import java.util.List;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.ui.activities.Extra;
 import de.joachimsohn.collectivity.ui.activities.MainActivity;
-import de.joachimsohn.collectivity.ui.activities.storagelocation.AddStorageLocationActivity;
+import de.joachimsohn.collectivity.ui.activities.add.AddActivity;
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 
@@ -46,18 +45,17 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
 
     @Override
     public void onBindViewHolder(@NonNull StorageLocationViewHolder holder, int position) {
-        if (data == null || position == getItemCount()) {
-            holder.addNewStorageLocationListener(e -> {
-                Intent intent = new Intent(activity, AddStorageLocationActivity.class);
-                activity.startActivity(intent);
-            });
-        } else if (position < data.size()) {
+        if (data != null && position < data.size()) {
             holder.bind(data.get(position));
             storageLocationView.setOnClickListener(e -> {
-                //TODO: find another way to implement this
                 Intent intent = new Intent(activity, MainActivity.class);
-                intent.putExtra(Extra.ID.getValue(), data.get(position).getId());
                 CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
+                CacheManager.getManager().setCurrentId(data.get(position).getId());
+                activity.startActivity(intent);
+            });
+        } else {
+            holder.addNewStorageLocationListener(e -> {
+                Intent intent = new Intent(activity, AddActivity.class);
                 activity.startActivity(intent);
             });
         }
@@ -70,7 +68,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
 
     @Override
     public int getItemCount() {
-        return (data != null) ? data.size() + 1 : 1;
+        return (data != null) ? data.size() + 1 : 0;
     }
 
     public void setData(List<StorageLocation> newData) {

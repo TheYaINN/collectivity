@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -26,14 +27,15 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class StorageLocation {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "storage_location_id")
-    private Long id;
+    private long id;
 
     @ColumnInfo(name = "collection_id")
-    private int collectionId;
+    private long collectionId;
 
     private String name;
 
@@ -47,4 +49,9 @@ public class StorageLocation {
     @Embedded
     private List<Item> items;
 
+    @Ignore
+    public StorageLocation(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

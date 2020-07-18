@@ -33,17 +33,20 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private SubMenu subMenu;
+    private CacheManager.Direction direction;
+    private boolean startup = true;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.log(Priority.DEBUG, Marker.MAIN, "Starting App");
-        DataBaseConnector.getInstance().init(getApplication());
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.default_overview);
-
-        //Setting up the UI and binding the data from the CollectionManager to the Recyclerview
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        if (startup) {
+            DataBaseConnector.getInstance().init(getApplication());
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            setContentView(R.layout.default_overview);
+            startup = !startup;
+        }
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -63,10 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        direction = CacheManager.Direction.DOWN;
         switch (item.getItemId()) {
             case android.R.id.home:
             case R.id.home:
-                CacheManager.getManager().setLevel(CacheManager.Direction.UP);
+                direction = CacheManager.Direction.UP;
+                CacheManager.getManager().setLevel(direction);
                 loadViewItems();
                 return true;
             case R.id.action_search:
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     getSupportActionBar().setDisplayShowHomeEnabled(true);
                 }
-                CacheManager.getManager().setStorageLocations(DataBaseConnector.getInstance().getAllStorageLocations());
+                CacheManager.getManager().setStorageLocations(DataBaseConnector.getInstance().getAllStorageLocationsForID(CacheManager.getManager().getCurrentId()));
                 adapter = new StorageLocationAdapter(this);
                 CacheManager.getManager().getStorageLocations().observe(this, ((StorageLocationAdapter) adapter)::setData);
                 recyclerView.setAdapter((RecyclerView.Adapter) adapter);
@@ -114,17 +119,12 @@ public class MainActivity extends AppCompatActivity {
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     getSupportActionBar().setDisplayShowHomeEnabled(true);
                 }
-                CacheManager.getManager().setItems(DataBaseConnector.getInstance().getAllItems());
-                adapter = new StorageLocationAdapter(this);
+                CacheManager.getManager().setItems(DataBaseConnector.getInstance().getAllItemsForID(CacheManager.getManager().getCurrentId()));
+                adapter = new ItemAdapter(this);
                 CacheManager.getManager().getItems().observe(this, ((ItemAdapter) adapter)::setData);
                 recyclerView.setAdapter((RecyclerView.Adapter) adapter);
                 break;
         }
-    }
-
-    @Override
-    public void onOptionsMenuClosed(Menu menu) {
-        super.onOptionsMenuClosed(menu);
     }
 
     @Override

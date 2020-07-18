@@ -18,9 +18,8 @@ import java.util.List;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.ui.activities.Extra;
 import de.joachimsohn.collectivity.ui.activities.MainActivity;
-import de.joachimsohn.collectivity.ui.activities.collection.AddCollectionActivity;
+import de.joachimsohn.collectivity.ui.activities.add.AddActivity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,16 +53,15 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     public void onBindViewHolder(@NonNull CollectionAdapter.CollectionViewHolder holder, int position) {
         if (data == null || position == getItemCount()) {
             holder.addActionListener(e -> {
-                Intent intent = new Intent(activity, AddCollectionActivity.class);
+                Intent intent = new Intent(activity, AddActivity.class);
                 activity.startActivity(intent);
             });
         } else if (position < data.size()) {
             holder.bind(data.get(position));
             collectionView.setOnClickListener(e -> {
-                //TODO: find another way to implement this
                 Intent intent = new Intent(activity, MainActivity.class);
-                intent.putExtra(Extra.ID.getValue(), data.get(position).getId());
                 CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
+                CacheManager.getManager().setCurrentId(data.get(position).getId());
                 activity.startActivity(intent);
             });
         }

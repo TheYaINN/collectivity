@@ -77,16 +77,8 @@ public class DataBaseConnector {
         new DeleteCollectionsAsyncTask(collectionDAO).execute(collections);
     }
 
-    public LiveData<List<Item>> getAllItems() {
-        return itemDAO.getAllItems();
-    }
-
-    public void insert(Item item) {
+    public void insert(Item... item) {
         new InsertItemAsyncTask(itemDAO).execute(item);
-    }
-
-    public void deleteAllItems() {
-        new DeleteAllItemsAsyncTask(itemDAO).execute();
     }
 
     public void delete(Item... items) {
@@ -97,19 +89,9 @@ public class DataBaseConnector {
         new UpdateItemsAsyncTask(itemDAO).execute(items);
     }
 
-    public LiveData<List<StorageLocationWithItems>> getAllUIObjects() {
-        try {
-            return new getAllUIObjectsAsyncTask(uiObjectDAO).execute().get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public LiveData<List<StorageLocation>> getAllStorageLocationsForID(Long id) {
         try {
             return new GetAllStorageLocationsForID(storageLocationDAO).execute(id).get();
-
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -119,12 +101,25 @@ public class DataBaseConnector {
     public LiveData<List<StorageLocation>> getAllStorageLocations() {
         try {
             return new GetAllStorageLocations(storageLocationDAO).execute().get();
-
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    public void insert(StorageLocation... storageLocation) {
+        new InsertStorageLocationAsyncTask(storageLocationDAO).execute(storageLocation);
+    }
+
+    public LiveData<List<Item>> getAllItemsForID(long id) {
+        try {
+            return new GetAllItemsAsyncTask(itemDAO).execute(id).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     private static class UpdateCollectionsAsyncTask extends AsyncTask<Collection, Void, Void> {
 
@@ -181,20 +176,6 @@ public class DataBaseConnector {
         @Override
         protected Void doInBackground(Item... items) {
             Arrays.stream(items).forEach(itemDAO::insert);
-            return null;
-        }
-    }
-
-    private static class DeleteAllItemsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private ItemDAO itemDAO;
-
-        public DeleteAllItemsAsyncTask(ItemDAO itemDAO) {
-            this.itemDAO = itemDAO;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            itemDAO.deleteAllItems();
             return null;
         }
     }
@@ -282,6 +263,37 @@ public class DataBaseConnector {
         @Override
         protected LiveData<List<StorageLocation>> doInBackground(Void... voids) {
             return storageLocationDAO.getAllStorageLocations();
+        }
+    }
+
+    private static class InsertStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Void> {
+        private StorageLocationDAO storageLocationDAO;
+
+        public InsertStorageLocationAsyncTask(StorageLocationDAO storageLocationDAO) {
+            this.storageLocationDAO = storageLocationDAO;
+        }
+
+        @Override
+        protected Void doInBackground(StorageLocation... storageLocations) {
+            Arrays.stream(storageLocations).forEach(storageLocationDAO::insert);
+            return null;
+        }
+    }
+
+    private static class GetAllItemsAsyncTask extends AsyncTask<Long, Void, LiveData<List<Item>>> {
+        private ItemDAO itemDAO;
+
+        public GetAllItemsAsyncTask(ItemDAO itemDAO) {
+            this.itemDAO = itemDAO;
+        }
+
+        @Override
+        protected LiveData<List<Item>> doInBackground(Long... ids) {
+            if (ids.length == 1) {
+                Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
+                return itemDAO.getAllItemsForID(id);
+            }
+            return null;
         }
     }
 }
