@@ -18,7 +18,7 @@ import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.SearchManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.Marker;
-import de.joachimsohn.collectivity.ui.activities.storagelocation.StorageLocationAdapter;
+import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
 import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.util.logging.Priority;
 import lombok.NonNull;

@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity.ui.activities.item;
+package de.joachimsohn.collectivity.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

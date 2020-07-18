@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity.ui.activities.storagelocation;
+package de.joachimsohn.collectivity.ui.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,7 +19,8 @@ import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.Extra;
-import de.joachimsohn.collectivity.ui.activities.collection.MainActivity;
+import de.joachimsohn.collectivity.ui.activities.MainActivity;
+import de.joachimsohn.collectivity.ui.activities.storagelocation.AddStorageLocationActivity;
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 

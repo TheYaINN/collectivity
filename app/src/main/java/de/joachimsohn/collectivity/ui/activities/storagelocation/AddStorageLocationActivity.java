@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
-import de.joachimsohn.collectivity.ui.activities.collection.MainActivity;
+import de.joachimsohn.collectivity.ui.activities.MainActivity;
 
 public class AddStorageLocationActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity.ui.activities.collection;
+package de.joachimsohn.collectivity.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +20,10 @@ import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
 import de.joachimsohn.collectivity.ui.Marker;
-import de.joachimsohn.collectivity.ui.activities.item.ItemAdapter;
 import de.joachimsohn.collectivity.ui.activities.search.SearchActivity;
-import de.joachimsohn.collectivity.ui.activities.storagelocation.StorageLocationAdapter;
+import de.joachimsohn.collectivity.ui.adapter.CollectionAdapter;
+import de.joachimsohn.collectivity.ui.adapter.ItemAdapter;
+import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
 import de.joachimsohn.collectivity.util.logging.Logger;
 import de.joachimsohn.collectivity.util.logging.Priority;
 
