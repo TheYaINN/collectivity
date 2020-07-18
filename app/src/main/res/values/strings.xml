@@ -22,6 +22,7 @@
     <string name="textfield_description">Beschreibung</string>
     <string name="textfield_search">Suchbegriff</string>
     <string name="Tags">Tags</string>
+    <string name="missing_name">Bitte geben sie einen Namen ein</string>
 
 
     <!--    -->

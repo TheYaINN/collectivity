@@ -9,9 +9,7 @@ import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.manager.search.SearchType;
-import de.joachimsohn.collectivity.ui.Marker;
 import de.joachimsohn.collectivity.util.logging.Logger;
-import de.joachimsohn.collectivity.util.logging.Priority;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -67,7 +65,7 @@ public class CacheManager {
                     break;
             }
         }
-        Logger.log(Priority.DEBUG, Marker.CACHEMANAGER, String.format("Current Cachelevel is: %s, setting Cachelevel to: %s", currentCacheLevel, newCacheLevel));
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.CACHEMANAGER, String.format("Current Cachelevel is: %s, setting Cachelevel to: %s", currentCacheLevel, newCacheLevel));
         currentCacheLevel = newCacheLevel;
     }
 

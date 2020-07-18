@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <EditText
         android:id="@+id/textfield_search"
         android:layout_width="match_parent"
@@ -22,7 +17,5 @@
         android:inputType="text"
         android:padding="8dp" />
 
-    <include layout="@layout/recycler_overview_wide" />
-
-
+    <include layout="@layout/recyclerview_wide" />
 </LinearLayout>

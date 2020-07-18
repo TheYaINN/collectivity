@@ -21,9 +21,7 @@ import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocationWithItems;
-import de.joachimsohn.collectivity.ui.Marker;
 import de.joachimsohn.collectivity.util.logging.Logger;
-import de.joachimsohn.collectivity.util.logging.Priority;
 
 public class DataBaseConnector {
 
@@ -65,7 +63,7 @@ public class DataBaseConnector {
     }
 
     public void insert(Collection... collections) {
-        Logger.log(Priority.DEBUG, Marker.DB, "inserting into collections -> " + collections.toString());
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "inserting into collections -> " + collections.toString());
         new InsertCollectionsAsyncTask(collectionDAO).execute(collections);
     }
 

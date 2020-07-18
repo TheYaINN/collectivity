@@ -1,7 +1,6 @@
 package de.joachimsohn.collectivity.ui.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,8 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
-import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.ui.activities.MainActivity;
-import de.joachimsohn.collectivity.ui.activities.add.AddActivity;
+import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
+import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 
@@ -35,10 +33,10 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
     @Override
     public StorageLocationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == R.layout.recyclerciew_item_wide) {
-            storageLocationView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide, parent, false);
+        if (viewType == R.layout.recyclerview_item_wide) {
+            storageLocationView = (CardView) inflater.inflate(R.layout.recyclerview_item_wide, parent, false);
         } else {
-            storageLocationView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide_add, parent, false);
+            storageLocationView = (CardView) inflater.inflate(R.layout.recyclerview_item_wide_add, parent, false);
         }
         return new StorageLocationViewHolder(storageLocationView);
     }
@@ -48,22 +46,16 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
             storageLocationView.setOnClickListener(e -> {
-                Intent intent = new Intent(activity, MainActivity.class);
-                CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
-                CacheManager.getManager().setCurrentId(data.get(position).getId());
-                activity.startActivity(intent);
+                //TODO
             });
         } else {
-            holder.addNewStorageLocationListener(e -> {
-                Intent intent = new Intent(activity, AddActivity.class);
-                activity.startActivity(intent);
-            });
+            holder.addNewStorageLocationActionListener(e -> NavigationHelper.navigateToFragment(activity, new AddCollectionOrStorageLocationFragment()));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (data == null || position == data.size()) ? R.layout.recyclerciew_item_wide_add : R.layout.recyclerciew_item_wide;
+        return (data == null || position == data.size()) ? R.layout.recyclerview_item_wide_add : R.layout.recyclerview_item_wide;
     }
 
     @Override
@@ -92,8 +84,8 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
 
         public StorageLocationViewHolder(@NonNull View v) {
             super(v);
-            title = v.findViewById(R.id.collection_item_title);
-            description = v.findViewById(R.id.collection_item_description);
+            title = v.findViewById(R.id.recyclerview_item_wide_title);
+            description = v.findViewById(R.id.recyclerview_item_wide_description);
             addButton = v.findViewById(R.id.recyclerview_item_wide_add);
         }
 
@@ -106,7 +98,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             }
         }
 
-        public void addNewStorageLocationListener(@NonNull View.OnClickListener listener) {
+        public void addNewStorageLocationActionListener(@NonNull View.OnClickListener listener) {
             if (addButton != null) {
                 addButton.setOnClickListener(listener);
             }

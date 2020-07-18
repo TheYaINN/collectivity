@@ -1,7 +1,10 @@
 package de.joachimsohn.collectivity.manager.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import lombok.NonNull;
 
 public class SearchManager {
@@ -16,10 +19,17 @@ public class SearchManager {
         return manager;
     }
 
-    //TODO: change returntype to something better, but it works for now
-    public @NonNull List<Object> searchForCollection(String searchValue) {
-        CacheManager.getManager().getCollections();
+    public @NonNull List<Collection> search(String searchValue) {
         return null;
+    }
+
+    public @NonNull List<Collection> searchForCollection(String searchValue) {
+        List<Collection> collections = CacheManager.getManager().getCollections().getValue();
+        List<Collection> filteredItems = new ArrayList<Collection>();
+        if (collections != null) {
+            filteredItems = collections.parallelStream().filter(c -> c.getName().contains(searchValue) || c.getDescription() != null && c.getDescription().contains(searchValue)).collect(Collectors.toList());
+        }
+        return filteredItems;
     }
 
     public @NonNull List<Object> searchForItem(String searchValue) {

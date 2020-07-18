@@ -1,4 +1,4 @@
-package de.joachimsohn.collectivity.ui.activities.search;
+package de.joachimsohn.collectivity.ui;
 
 import android.text.Editable;
 import android.text.TextWatcher;

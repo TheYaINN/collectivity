@@ -1,7 +1,6 @@
 package de.joachimsohn.collectivity.ui.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,23 +16,19 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
-import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.ui.activities.MainActivity;
-import de.joachimsohn.collectivity.ui.activities.add.AddActivity;
-import lombok.Getter;
-import lombok.Setter;
+import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
+import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
+import de.joachimsohn.collectivity.ui.fragments.StorageLocationFragment;
 
-@Getter
-@Setter
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
     private List<Collection> data;
     private Activity activity;
+    private View.OnClickListener listener;
     private CardView collectionView;
 
     public CollectionAdapter(Activity activity) {
         this.activity = activity;
-        notifyDataSetChanged();
     }
 
 
@@ -41,10 +36,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     @Override
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == R.layout.recyclerciew_item_wide) {
-            collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide, parent, false);
+        if (viewType == R.layout.recyclerview_item_wide) {
+            collectionView = (CardView) inflater.inflate(R.layout.recyclerview_item_wide, parent, false);
         } else {
-            collectionView = (CardView) inflater.inflate(R.layout.recyclerciew_item_wide_add, parent, false);
+            collectionView = (CardView) inflater.inflate(R.layout.recyclerview_item_wide_add, parent, false);
         }
         return new CollectionViewHolder(collectionView);
     }
@@ -52,24 +47,16 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     @Override
     public void onBindViewHolder(@NonNull CollectionAdapter.CollectionViewHolder holder, int position) {
         if (data == null || position == getItemCount()) {
-            holder.addActionListener(e -> {
-                Intent intent = new Intent(activity, AddActivity.class);
-                activity.startActivity(intent);
-            });
+            holder.addNewCollectionActionListener(e -> NavigationHelper.navigateToFragment(activity, new AddCollectionOrStorageLocationFragment()));
         } else if (position < data.size()) {
             holder.bind(data.get(position));
-            collectionView.setOnClickListener(e -> {
-                Intent intent = new Intent(activity, MainActivity.class);
-                CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
-                CacheManager.getManager().setCurrentId(data.get(position).getId());
-                activity.startActivity(intent);
-            });
+            collectionView.setOnClickListener(e -> NavigationHelper.navigateDownToFragment(activity, new StorageLocationFragment(), data.get(position).getId()));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (data == null || position == data.size()) ? R.layout.recyclerciew_item_wide_add : R.layout.recyclerciew_item_wide;
+        return (data == null || position == data.size()) ? R.layout.recyclerview_item_wide_add : R.layout.recyclerview_item_wide;
     }
 
     @Override
@@ -100,8 +87,8 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
 
         public CollectionViewHolder(@NonNull View v) {
             super(v);
-            title = v.findViewById(R.id.collection_item_title);
-            description = v.findViewById(R.id.collection_item_description);
+            title = v.findViewById(R.id.recyclerview_item_wide_title);
+            description = v.findViewById(R.id.recyclerview_item_wide_description);
             addButton = v.findViewById(R.id.recyclerview_item_wide_add);
         }
 
@@ -114,7 +101,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             }
         }
 
-        public void addActionListener(View.OnClickListener listener) {
+        public void addNewCollectionActionListener(View.OnClickListener listener) {
             if (addButton != null) {
                 addButton.setOnClickListener(listener);
             }

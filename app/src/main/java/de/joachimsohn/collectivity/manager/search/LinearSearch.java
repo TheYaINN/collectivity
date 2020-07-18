@@ -13,9 +13,9 @@ public class LinearSearch implements SearchStrategy {
         this.collection = collection;
     }
 
+
     @Override
-    public List<Object> getResultsFor(String searchValue) {
-        //TODO
+    public List<Collection> getResultsFor(String searchValue) {
         return null;
     }
 }

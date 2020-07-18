@@ -25,7 +25,4 @@
             android:textColor="@color/accent" />
 
     </androidx.appcompat.widget.Toolbar>
-
-    <!-- Layout for content is here. This can be a RelativeLayout  -->
-
 </LinearLayout>

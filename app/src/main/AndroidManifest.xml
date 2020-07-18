@@ -20,11 +20,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activities.add.AddActivity"
-            android:parentActivityName=".ui.activities.MainActivity" />
-        <activity
-            android:name=".ui.activities.search.SearchActivity"
-            android:parentActivityName=".ui.activities.MainActivity" />
     </application>
 </manifest>
