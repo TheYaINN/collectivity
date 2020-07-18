@@ -18,6 +18,7 @@ import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
+import de.joachimsohn.collectivity.ui.fragments.ItemFragment;
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 
@@ -46,7 +47,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
             storageLocationView.setOnClickListener(e -> {
-                //TODO
+                NavigationHelper.navigateDownToFragment(activity, new ItemFragment(), data.get(position).getId());
             });
         } else {
             holder.addNewStorageLocationActionListener(e -> NavigationHelper.navigateToFragment(activity, new AddCollectionOrStorageLocationFragment()));
