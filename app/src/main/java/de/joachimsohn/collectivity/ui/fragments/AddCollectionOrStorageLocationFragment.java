@@ -29,11 +29,6 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
     private EditText tfName;
     private EditText tfDescription;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,27 +48,41 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                return NavigationHelper.navigateLeft(getActivity(), new CollectionFragment());
+                return goBack();
             case R.id.action_save:
-                String name = tfName.getText().toString().trim();
-                String description = tfDescription.getText().toString().trim();
-                if (!name.isEmpty()) {
-                    Fragment destination;
-                    if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
-                        StorageLocation storageLocation = new StorageLocation(name, description);
-                        storageLocation.setCollectionId(CacheManager.getManager().getCurrentId());
-                        DataBaseConnector.getInstance().insert(storageLocation);
-                        destination = new StorageLocationFragment();
-                        return NavigationHelper.navigateDown(getActivity(), destination, false);
-                    } else {
-                        DataBaseConnector.getInstance().insert(new Collection(name, description));
-                        destination = new CollectionFragment();
-                        return NavigationHelper.navigateDown(getActivity(), destination, true);
-                    }
+                if (hasInsertedData()) {
+                    return goBack();
+                } else {
+                    Toast.makeText(getContext(), R.string.missing_name, Toast.LENGTH_LONG).show();
                 }
-                Toast.makeText(getContext(), R.string.missing_name, Toast.LENGTH_LONG).show();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private boolean hasInsertedData() {
+        String name = tfName.getText().toString().trim();
+        String description = tfDescription.getText().toString().trim();
+        if (!name.isEmpty()) {
+            if (description.isEmpty()) {
+                description = null;
+            }
+            if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+                StorageLocation storageLocation = new StorageLocation(name, description);
+                storageLocation.setCollectionId(CacheManager.getManager().getCurrentId());
+                DataBaseConnector.getInstance().insert(storageLocation);
+            } else {
+                DataBaseConnector.getInstance().insert(new Collection(name, description));
+            }
+        }
+        return false;
+    }
+
+    private boolean goBack() {
+        if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+            return NavigationHelper.navigateUp(getActivity(), new StorageLocationFragment(), false);
+        } else {
+            return NavigationHelper.navigateUp(getActivity(), new CollectionFragment(), true);
         }
     }
 }

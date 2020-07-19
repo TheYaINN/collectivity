@@ -50,6 +50,12 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
         if (collectionData != null) {
             holder.bind(collectionData.get(position));
         }
+        if (storageData != null) {
+            holder.bind(storageData.get(position));
+        }
+        if (itemData != null) {
+            holder.bind(itemData.get(position));
+        }
     }
 
     @Override
@@ -129,6 +135,10 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
             if (description != null) {
                 description.setText(storageLocation.getDescription());
             }
+        }
+
+        public void bind(Item item) {
+
         }
     }
 }

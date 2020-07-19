@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.impl.SearchManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.SearchTextWatcher;
-import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.MixedAdapter;
+
+import static de.joachimsohn.collectivity.manager.impl.CacheManager.getManager;
+import static de.joachimsohn.collectivity.ui.activities.NavigationHelper.navigateDown;
 
 public class SearchFragment extends Fragment {
 
@@ -49,15 +50,16 @@ public class SearchFragment extends Fragment {
         tfSearch.addTextChangedListener(new SearchTextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                switch (CacheManager.getManager().getCurrentCacheLevel()) {
+                switch (getManager().getCurrentCacheLevel()) {
                     case COLLECTION:
                         adapter.setCollectionData(SearchManager.getManager().searchForCollection(charSequence.toString()));
+                        break;
                     case STORAGELOCATION:
                         adapter.setStorageLocationData(SearchManager.getManager().searchForStorageLocation(charSequence.toString()));
+                        break;
                     case ITEM:
                         adapter.setItemData(SearchManager.getManager().searchForItem(charSequence.toString()));
                     default:
-                        super.onTextChanged(charSequence, i, i1, i2);
                 }
             }
         });
@@ -67,12 +69,12 @@ public class SearchFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.COLLECTION) {
-                NavigationHelper.navigateDown(getActivity(), new CollectionFragment(), true);
-            } else if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
-                NavigationHelper.navigateDown(getActivity(), new StorageLocationFragment(), false);
+            if (getManager().getCurrentCacheLevel() == SearchType.COLLECTION) {
+                navigateDown(getActivity(), new CollectionFragment(), true);
+            } else if (getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+                navigateDown(getActivity(), new StorageLocationFragment(), false);
             } else {
-                NavigationHelper.navigateDown(getActivity(), new StorageLocationFragment(), false);
+                navigateDown(getActivity(), new StorageLocationFragment(), false);
             }
         }
         return super.onOptionsItemSelected(item);

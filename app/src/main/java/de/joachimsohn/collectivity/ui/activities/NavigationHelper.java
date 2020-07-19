@@ -12,7 +12,6 @@ import de.joachimsohn.collectivity.manager.search.SearchType;
 
 public class NavigationHelper {
 
-
     public static boolean onStartReplace(Activity activity, Fragment newFragment) {
         return navigateToFragment(activity, newFragment, 0, 0);
     }
