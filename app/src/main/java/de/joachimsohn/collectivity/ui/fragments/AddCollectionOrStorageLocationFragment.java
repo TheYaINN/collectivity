@@ -70,9 +70,9 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
             if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
                 StorageLocation storageLocation = new StorageLocation(name, description);
                 storageLocation.setCollectionId(CacheManager.getManager().getCurrentId());
-                DataBaseConnector.getInstance().insert(storageLocation);
+                return DataBaseConnector.getInstance().insert(storageLocation);
             } else {
-                DataBaseConnector.getInstance().insert(new Collection(name, description));
+                return DataBaseConnector.getInstance().insert(new Collection(name, description));
             }
         }
         return false;

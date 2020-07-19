@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
+import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.ItemFragment;
@@ -42,6 +44,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
         return new StorageLocationViewHolder(storageLocationView);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull StorageLocationViewHolder holder, int position) {
         if (data != null && position < data.size()) {
@@ -49,10 +52,12 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             storageLocationView.setOnClickListener(e -> {
                 NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId());
             });
+            holder.addDeleteListener(data.get(position));
         } else {
             holder.addNewStorageLocationActionListener(e -> NavigationHelper.navigateDown(activity, new AddCollectionOrStorageLocationFragment(), false));
         }
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -76,8 +81,10 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
 
     public static class StorageLocationViewHolder extends RecyclerView.ViewHolder {
 
+
         @Nullable
         ImageView addButton;
+        private View v;
         @Nullable
         private TextView title;
         @Nullable
@@ -88,6 +95,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             title = v.findViewById(R.id.recyclerview_item_wide_title);
             description = v.findViewById(R.id.recyclerview_item_wide_description);
             addButton = v.findViewById(R.id.recyclerview_item_wide_add);
+            this.v = v;
         }
 
         void bind(@NonNull StorageLocation storageLocation) {
@@ -97,6 +105,20 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             if (description != null) {
                 description.setText(storageLocation.getDescription());
             }
+        }
+
+        void addDeleteListener(StorageLocation storageLocation) {
+            v.setOnLongClickListener(e -> {
+                ImageButton delete = v.findViewById(R.id.cardview_delete);
+                delete.setVisibility(View.VISIBLE);
+                delete.setOnClickListener(dl -> {
+                    DataBaseConnector.getInstance().delete(storageLocation);
+                });
+
+                ImageButton edit = v.findViewById(R.id.cardview_edit);
+                edit.setVisibility(View.VISIBLE);
+                return true;
+            });
         }
 
         public void addNewStorageLocationActionListener(@NonNull View.OnClickListener listener) {

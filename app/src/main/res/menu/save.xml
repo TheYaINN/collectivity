@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_save"
         android:icon="@drawable/ic_save"
-        android:iconTint="@color/accentLight"
+        android:iconTint="@color/accent"
         android:title="@string/action_toolbar_save_title"
         app:showAsAction="ifRoom|withText" />
 

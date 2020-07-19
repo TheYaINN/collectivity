@@ -11,7 +11,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import de.joachimsohn.collectivity.R;
@@ -53,18 +53,18 @@ public class Item {
     @Nullable
     private String ean;
 
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     @Nullable
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private Bitmap icon;
 
     @Nullable
     private BigDecimal value;
 
     @NonNull
-    private Date insertionDate;
+    private Calendar insertionDate;
 
     @Nullable
-    private Date buyDate;
+    private Calendar buyDate;
 
     @Ignore
     private List<Tag> tags;
@@ -74,6 +74,14 @@ public class Item {
 
     @NonNull
     private String position;
+
+    public Item(@NonNull String name, @NonNull Calendar insertionDate, @NonNull Condition condition, @NonNull String position, long storageLocationId) {
+        this.name = name;
+        this.insertionDate = insertionDate;
+        this.condition = condition;
+        this.position = position;
+        this.storageLocationId = storageLocationId;
+    }
 
     public String getAllAttributes() {
         StringBuilder sb = new StringBuilder();

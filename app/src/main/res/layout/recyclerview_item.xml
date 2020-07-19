@@ -8,16 +8,16 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
+    android:maxWidth="@dimen/recyclerview_item_max_width"
+    android:maxHeight="@dimen/recyclerview_item_max_height"
+    android:minWidth="@dimen/recyclerview_item_min_width"
+    android:minHeight="@dimen/recyclerview_item_min_height"
     app:cardElevation="5dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="@dimen/recyclerview_item_max_width"
-        android:maxHeight="@dimen/recyclerview_item_max_height"
-        android:minWidth="@dimen/recyclerview_item_min_width"
-        android:minHeight="@dimen/recyclerview_item_min_height"
         android:padding="8dp">
 
         <ImageView
@@ -39,6 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/recyclerview_item_title"
+            android:ellipsize="end"
             android:textAlignment="textEnd" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

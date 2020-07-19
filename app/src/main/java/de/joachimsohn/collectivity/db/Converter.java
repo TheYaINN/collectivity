@@ -8,10 +8,11 @@ import androidx.room.TypeConverter;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.time.Instant;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Locale;
 
 import de.joachimsohn.collectivity.db.dao.Condition;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
@@ -19,23 +20,27 @@ import de.joachimsohn.collectivity.db.dao.impl.Tag;
 public class Converter {
 
     @TypeConverter
-    public Date toDate(String date) {
-        Date parse = Date.from(Instant.now());
+    public Calendar toCalendar(String date) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         try {
-            parse = DateFormat.getInstance().parse(date);
+            cal.setTime(sdf.parse(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return parse;
+        return cal;
     }
 
     @TypeConverter
-    public String fromDate(Date date) {
+    public String fromCalendar(Calendar date) {
         return date.toString();
     }
 
     @TypeConverter
     public byte[] fromBitmap(Bitmap bmp) {
+        if (bmp == null) {
+            return new byte[0];
+        }
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         return bos.toByteArray();
@@ -62,7 +67,7 @@ public class Converter {
 
     @TypeConverter
     public Condition toCondition(String condition) {
-        return Condition.valueOf(condition);
+        return Arrays.stream(Condition.values()).filter(b -> b.toString().equalsIgnoreCase(condition)).findFirst().get();
     }
 
     @TypeConverter
@@ -79,5 +84,4 @@ public class Converter {
     public Tag toTag(String tag) {
         return new Tag(tag);
     }
-
 }

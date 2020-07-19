@@ -54,6 +54,7 @@ public class DataBaseConnector {
     }
 
     public LiveData<List<Collection>> getAllCollections() {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all Collections");
         try {
             return new GetAllCollectionsAsyncTask(collectionDAO).execute().get();
         } catch (ExecutionException | InterruptedException e) {
@@ -62,32 +63,68 @@ public class DataBaseConnector {
         return null;
     }
 
-    public void insert(Collection... collections) {
-        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "inserting into collections -> " + collections.toString());
-        new InsertCollectionsAsyncTask(collectionDAO).execute(collections);
+    public boolean insert(Collection... collections) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "inserting into collections -> " + Arrays.toString(collections));
+        try {
+            return new InsertCollectionsAsyncTask(collectionDAO).execute(collections).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public void update(Collection... collections) {
-        new UpdateCollectionsAsyncTask(collectionDAO).execute(collections);
+    public boolean update(Collection... collections) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "updating collections -> " + Arrays.toString(collections));
+        try {
+            return new UpdateCollectionsAsyncTask(collectionDAO).execute(collections).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public void delete(Collection... collections) {
-        new DeleteCollectionsAsyncTask(collectionDAO).execute(collections);
+    public boolean delete(Collection... collections) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "updating collections -> " + Arrays.toString(collections));
+        try {
+            return new DeleteCollectionsAsyncTask(collectionDAO).execute(collections).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public void insert(Item... item) {
-        new InsertItemAsyncTask(itemDAO).execute(item);
+    public boolean insert(Item... items) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "inserting into Items -> " + Arrays.toString(items));
+        try {
+            return new InsertItemAsyncTask(itemDAO).execute(items).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public void delete(Item... items) {
-        new DeleteItemsAsyncTask(itemDAO).execute(items);
+    public boolean delete(Item... items) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "deleting Items -> " + Arrays.toString(items));
+        try {
+            return new DeleteItemsAsyncTask(itemDAO).execute(items).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
-    public void update(Item... items) {
-        new UpdateItemsAsyncTask(itemDAO).execute(items);
+    public boolean update(Item... items) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "updating Items -> " + Arrays.toString(items));
+        try {
+            return new UpdateItemsAsyncTask(itemDAO).execute(items).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public LiveData<List<StorageLocation>> getAllStorageLocationsForID(Long id) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all StorageLocations for ID: -> " + id);
         try {
             return new GetAllStorageLocationsForID(storageLocationDAO).execute(id).get();
         } catch (ExecutionException | InterruptedException e) {
@@ -105,11 +142,18 @@ public class DataBaseConnector {
         return null;
     }
 
-    public void insert(StorageLocation... storageLocation) {
-        new InsertStorageLocationAsyncTask(storageLocationDAO).execute(storageLocation);
+    public boolean insert(StorageLocation... storageLocation) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "inserting into StorageLocations -> " + Arrays.toString(storageLocation));
+        try {
+            return new InsertStorageLocationAsyncTask(storageLocationDAO).execute(storageLocation).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public LiveData<List<Item>> getAllItemsForID(long id) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all items for ID: -> " + id);
         try {
             return new GetAllItemsAsyncTask(itemDAO).execute(id).get();
         } catch (ExecutionException | InterruptedException e) {
@@ -118,8 +162,18 @@ public class DataBaseConnector {
         return null;
     }
 
+    public boolean delete(StorageLocation... storageLocation) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "deleting StorageLocations -> " + Arrays.toString(storageLocation));
+        try {
+            return new DeleteStorageLocationAsyncTask(storageLocationDAO).execute(storageLocation).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-    private static class UpdateCollectionsAsyncTask extends AsyncTask<Collection, Void, Void> {
+
+    private static class UpdateCollectionsAsyncTask extends AsyncTask<Collection, Void, Boolean> {
 
         CollectionDAO collectionDAO;
 
@@ -128,13 +182,13 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(Collection... collections) {
+        protected Boolean doInBackground(Collection... collections) {
             Arrays.stream(collections).forEach(collectionDAO::update);
-            return null;
+            return true;
         }
     }
 
-    private static class InsertCollectionsAsyncTask extends AsyncTask<Collection, Void, Void> {
+    private static class InsertCollectionsAsyncTask extends AsyncTask<Collection, Void, Boolean> {
 
         CollectionDAO collectionDAO;
 
@@ -143,13 +197,13 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(Collection... collections) {
+        protected Boolean doInBackground(Collection... collections) {
             Arrays.stream(collections).forEach(collectionDAO::insert);
-            return null;
+            return true;
         }
     }
 
-    private static class DeleteCollectionsAsyncTask extends AsyncTask<Collection, Void, Void> {
+    private static class DeleteCollectionsAsyncTask extends AsyncTask<Collection, Void, Boolean> {
 
         CollectionDAO collectionDAO;
 
@@ -158,13 +212,13 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(Collection... collections) {
+        protected Boolean doInBackground(Collection... collections) {
             Arrays.stream(collections).forEach(collectionDAO::delete);
-            return null;
+            return true;
         }
     }
 
-    private static class InsertItemAsyncTask extends AsyncTask<Item, Void, Void> {
+    private static class InsertItemAsyncTask extends AsyncTask<Item, Void, Boolean> {
         private ItemDAO itemDAO;
 
         public InsertItemAsyncTask(ItemDAO itemDAO) {
@@ -172,13 +226,13 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(Item... items) {
+        protected Boolean doInBackground(Item... items) {
             Arrays.stream(items).forEach(itemDAO::insert);
-            return null;
+            return true;
         }
     }
 
-    private static class DeleteItemsAsyncTask extends AsyncTask<Item, Void, Void> {
+    private static class DeleteItemsAsyncTask extends AsyncTask<Item, Void, Boolean> {
         private ItemDAO itemDAO;
 
         public DeleteItemsAsyncTask(ItemDAO itemDAO) {
@@ -186,13 +240,13 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(Item... items) {
+        protected Boolean doInBackground(Item... items) {
             Arrays.stream(items).forEach(itemDAO::delete);
-            return null;
+            return true;
         }
     }
 
-    private static class UpdateItemsAsyncTask extends AsyncTask<Item, Void, Void> {
+    private static class UpdateItemsAsyncTask extends AsyncTask<Item, Void, Boolean> {
         private ItemDAO itemDAO;
 
         public UpdateItemsAsyncTask(ItemDAO itemDAO) {
@@ -200,9 +254,9 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(Item... items) {
+        protected Boolean doInBackground(Item... items) {
             Arrays.stream(items).forEach(itemDAO::update);
-            return null;
+            return true;
         }
     }
 
@@ -264,7 +318,7 @@ public class DataBaseConnector {
         }
     }
 
-    private static class InsertStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Void> {
+    private static class InsertStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Boolean> {
         private StorageLocationDAO storageLocationDAO;
 
         public InsertStorageLocationAsyncTask(StorageLocationDAO storageLocationDAO) {
@@ -272,9 +326,9 @@ public class DataBaseConnector {
         }
 
         @Override
-        protected Void doInBackground(StorageLocation... storageLocations) {
+        protected Boolean doInBackground(StorageLocation... storageLocations) {
             Arrays.stream(storageLocations).forEach(storageLocationDAO::insert);
-            return null;
+            return true;
         }
     }
 
@@ -292,6 +346,21 @@ public class DataBaseConnector {
                 return itemDAO.getAllItemsForID(id);
             }
             return null;
+        }
+    }
+
+    private static class DeleteStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Boolean> {
+
+        private StorageLocationDAO storageLocationDAO;
+
+        public DeleteStorageLocationAsyncTask(StorageLocationDAO storageLocationDAO) {
+            this.storageLocationDAO = storageLocationDAO;
+        }
+
+        @Override
+        protected Boolean doInBackground(StorageLocation... storageLocations) {
+            Arrays.stream(storageLocations).forEach(storageLocationDAO::delete);
+            return true;
         }
     }
 }
