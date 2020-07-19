@@ -14,8 +14,8 @@
         android:id="@+id/recyclerview_item_wide_constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="@dimen/collection_item_max_height"
-        android:minHeight="@dimen/collection_item_min_height"
+        android:maxHeight="@dimen/recyclerview_item_wide_max_height"
+        android:minHeight="@dimen/recyclerview_item_wide_min_height"
         android:padding="8dp">
 
         <TextView

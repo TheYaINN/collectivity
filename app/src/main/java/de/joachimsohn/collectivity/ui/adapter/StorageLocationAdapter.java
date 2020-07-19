@@ -50,7 +50,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
                 NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId());
             });
         } else {
-            holder.addNewStorageLocationActionListener(e -> NavigationHelper.navigateUp(activity, new AddCollectionOrStorageLocationFragment(), false));
+            holder.addNewStorageLocationActionListener(e -> NavigationHelper.navigateDown(activity, new AddCollectionOrStorageLocationFragment(), false));
         }
     }
 

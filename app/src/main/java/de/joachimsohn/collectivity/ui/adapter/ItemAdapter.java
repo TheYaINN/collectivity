@@ -1,7 +1,6 @@
 package de.joachimsohn.collectivity.ui.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddItemFragment;
 import lombok.NoArgsConstructor;
 
@@ -48,10 +48,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
         } else {
-            holder.addNewItemActionListener(e -> {
-                Intent intent = new Intent(activity, AddItemFragment.class);
-                activity.startActivity(intent);
-            });
+            holder.addNewItemActionListener(e -> NavigationHelper.navigateDown(activity, new AddItemFragment(), false));
         }
     }
 

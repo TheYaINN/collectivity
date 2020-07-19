@@ -1,6 +1,5 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center|center_horizontal"
@@ -19,10 +18,20 @@
         android:minHeight="@dimen/recyclerview_item_min_height"
         android:padding="8dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/recyclerview_item_icon_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:backgroundTint="@color/transparent"
+            android:clickable="true"
+            android:minWidth="@dimen/recyclerview_item_min_width"
+            android:minHeight="@dimen/recyclerview_item_min_height"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_add"
+            android:tint="@color/accentLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
