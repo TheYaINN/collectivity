@@ -16,6 +16,7 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
@@ -52,7 +53,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
             collectionView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new StorageLocationFragment(), data.get(position).getId()));
-            holder.addDeleteAndEditListener(data.get(position), e -> NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false));
+            holder.addDeleteAndEditListener(data.get(position), e -> {
+                CacheManager.getManager().setCurrentId(data.get(position).getId());
+                NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
+            });
         } else {
             holder.addNewCollectionActionListener(e -> NavigationHelper.navigateDown(activity, new AddCollectionOrStorageLocationFragment(), false));
         }

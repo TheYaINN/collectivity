@@ -43,6 +43,15 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
         tfTags = view.findViewById(R.id.textfield_tags);
         if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
             tfTags.setVisibility(View.VISIBLE);
+            StorageLocation storageLocation = CacheManager.getManager().getCurrentStorageLocation();
+            tfName.setText(storageLocation.getName());
+            tfDescription.setText(storageLocation.getDescription());
+            //TODO: how to? godda wörk
+            //tfTags.setText(storageLocation.getTags().forEach(Tag::toString));
+        } else {
+            Collection collection = CacheManager.getManager().getCurrentCollection();
+            tfName.setText(collection.getName());
+            tfDescription.setText(collection.getDescription());
         }
         return view;
     }
@@ -77,13 +86,13 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
                 currentStorageLocation.setDescription(tfDescription.getText().toString().trim());
                 currentStorageLocation.setTags(new ArrayList<Tag>() {{
                     new Tag(tfTags.getText().toString().trim());
-                }});
-                DataBaseConnector.getInstance().update(currentStorageLocation);
+                }});//TODO: fix this should not be like this
+                return DataBaseConnector.getInstance().update(currentStorageLocation);
             } else {
                 Collection currentCollection = CacheManager.getManager().getCurrentCollection();
                 currentCollection.setName(name);
                 currentCollection.setDescription(tfDescription.getText().toString().trim());
-                DataBaseConnector.getInstance().update(currentCollection);
+                return DataBaseConnector.getInstance().update(currentCollection);
             }
         }
         return false;

@@ -384,7 +384,7 @@ public class DataBaseConnector {
         @Override
         protected Boolean doInBackground(StorageLocation... storageLocations) {
             Arrays.stream(storageLocations).forEach(storageLocationDAO::update);
-            return null;
+            return true;
         }
     }
 }
