@@ -16,19 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.adapter.CollectionAdapter;
 
 public class CollectionFragment extends Fragment {
 
     private SubMenu subMenu;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        CacheManager.getManager().setCollections(DataBaseConnector.getInstance().getAllCollections());
-    }
 
     @Nullable
     @Override

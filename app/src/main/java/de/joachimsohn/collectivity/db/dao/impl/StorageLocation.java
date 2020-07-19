@@ -24,7 +24,7 @@ import lombok.ToString;
                 @ForeignKey(
                         entity = Collection.class,
                         parentColumns = "collection_id",
-                        childColumns = "storage_location_id",
+                        childColumns = "collection_id",
                         onDelete = ForeignKey.CASCADE)
         }
 )

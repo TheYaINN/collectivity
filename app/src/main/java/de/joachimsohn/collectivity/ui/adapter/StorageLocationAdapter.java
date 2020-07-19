@@ -17,10 +17,12 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
-import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
+import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.ItemFragment;
+
+import static de.joachimsohn.collectivity.dbconnector.DataBaseConnector.getInstance;
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 
@@ -49,10 +51,8 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
     public void onBindViewHolder(@NonNull StorageLocationViewHolder holder, int position) {
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
-            storageLocationView.setOnClickListener(e -> {
-                NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId());
-            });
-            holder.addDeleteListener(data.get(position));
+            storageLocationView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId()));
+            holder.addDeleteAndEditListener(data.get(position), e -> NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false));
         } else {
             holder.addNewStorageLocationActionListener(e -> NavigationHelper.navigateDown(activity, new AddCollectionOrStorageLocationFragment(), false));
         }
@@ -107,16 +107,22 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             }
         }
 
-        void addDeleteListener(StorageLocation storageLocation) {
+        void addDeleteAndEditListener(StorageLocation storageLocation, View.OnClickListener el) {
             v.setOnLongClickListener(e -> {
                 ImageButton delete = v.findViewById(R.id.cardview_delete);
-                delete.setVisibility(View.VISIBLE);
-                delete.setOnClickListener(dl -> {
-                    DataBaseConnector.getInstance().delete(storageLocation);
-                });
-
+                if (delete.getVisibility() == View.INVISIBLE) {
+                    delete.setVisibility(View.VISIBLE);
+                    delete.setOnClickListener(dl -> getInstance().delete(storageLocation));
+                } else {
+                    delete.setVisibility(View.INVISIBLE);
+                }
                 ImageButton edit = v.findViewById(R.id.cardview_edit);
-                edit.setVisibility(View.VISIBLE);
+                if (edit.getVisibility() == View.INVISIBLE) {
+                    edit.setVisibility(View.VISIBLE);
+                    edit.setOnClickListener(el);
+                } else {
+                    edit.setVisibility(View.INVISIBLE);
+                }
                 return true;
             });
         }

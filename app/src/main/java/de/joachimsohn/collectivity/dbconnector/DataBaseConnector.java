@@ -172,6 +172,16 @@ public class DataBaseConnector {
         return false;
     }
 
+    public boolean update(StorageLocation... storageLocations) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "updating Items -> " + Arrays.toString(storageLocations));
+        try {
+            return new UpdateStorageLocationAsyncTask(storageLocationDAO).execute(storageLocations).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     private static class UpdateCollectionsAsyncTask extends AsyncTask<Collection, Void, Boolean> {
 
@@ -361,6 +371,20 @@ public class DataBaseConnector {
         protected Boolean doInBackground(StorageLocation... storageLocations) {
             Arrays.stream(storageLocations).forEach(storageLocationDAO::delete);
             return true;
+        }
+    }
+
+    private class UpdateStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Boolean> {
+        private StorageLocationDAO storageLocationDAO;
+
+        public UpdateStorageLocationAsyncTask(StorageLocationDAO storageLocationDAO) {
+            this.storageLocationDAO = storageLocationDAO;
+        }
+
+        @Override
+        protected Boolean doInBackground(StorageLocation... storageLocations) {
+            Arrays.stream(storageLocations).forEach(storageLocationDAO::update);
+            return null;
         }
     }
 }

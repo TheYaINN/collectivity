@@ -15,15 +15,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
+import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 
-public class AddCollectionOrStorageLocationFragment extends Fragment {
+public class EditCollectionOrStorageLocationFragment extends Fragment {
 
     private Toolbar toolbar;
     private EditText tfName;
@@ -55,7 +58,7 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
             case android.R.id.home:
                 return goBack();
             case R.id.action_save:
-                if (hasInsertedData()) {
+                if (isValidData()) {
                     return goBack();
                 } else {
                     Toast.makeText(getContext(), R.string.missing_name, Toast.LENGTH_LONG).show();
@@ -65,23 +68,27 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
         }
     }
 
-    private boolean hasInsertedData() {
+    private boolean isValidData() {
         String name = tfName.getText().toString().trim();
-        String description = tfDescription.getText().toString().trim();
         if (!name.isEmpty()) {
-            if (description.isEmpty()) {
-                description = null;
-            }
             if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
-                StorageLocation storageLocation = new StorageLocation(name, description);
-                storageLocation.setCollectionId(CacheManager.getManager().getCurrentId());
-                return DataBaseConnector.getInstance().insert(storageLocation);
+                StorageLocation currentStorageLocation = CacheManager.getManager().getCurrentStorageLocation();
+                currentStorageLocation.setName(name);
+                currentStorageLocation.setDescription(tfDescription.getText().toString().trim());
+                currentStorageLocation.setTags(new ArrayList<Tag>() {{
+                    new Tag(tfTags.getText().toString().trim());
+                }});
+                DataBaseConnector.getInstance().update(currentStorageLocation);
             } else {
-                return DataBaseConnector.getInstance().insert(new Collection(name, description));
+                Collection currentCollection = CacheManager.getManager().getCurrentCollection();
+                currentCollection.setName(name);
+                currentCollection.setDescription(tfDescription.getText().toString().trim());
+                DataBaseConnector.getInstance().update(currentCollection);
             }
         }
         return false;
     }
+
 
     private boolean goBack() {
         if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
@@ -90,4 +97,5 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
             return NavigationHelper.navigateUp(getActivity(), new CollectionFragment(), true);
         }
     }
+
 }

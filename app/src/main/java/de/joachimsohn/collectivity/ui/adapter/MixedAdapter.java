@@ -3,6 +3,7 @@ package de.joachimsohn.collectivity.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,7 +42,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     @Override
     public MixedAdapter.MixedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        view = (CardView) inflater.inflate(R.layout.recyclerview_item_wide, parent, false);
+        view = (CardView) inflater.inflate(R.layout.recyclerview_item, parent, false);
         return new MixedViewHolder(view);
     }
 
@@ -106,39 +107,54 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     public static class MixedViewHolder extends RecyclerView.ViewHolder {
 
         @Nullable
-        private TextView title;
+        private TextView collectionStorageLocationTitle;
 
         @Nullable
-        private TextView description;
+        private TextView collectionStorageLocationDescription;
 
-        //TODO: item
+        @Nullable
+        private ImageView itemIcon;
+
+        @Nullable
+        private TextView itemTitle;
+
+        @Nullable
+        private TextView itemAttributes;
 
         public MixedViewHolder(@NonNull View v) {
             super(v);
-            title = v.findViewById(R.id.recyclerview_item_wide_title);
-            description = v.findViewById(R.id.recyclerview_item_wide_description);
+            collectionStorageLocationTitle = v.findViewById(R.id.recyclerview_item_wide_title);
+            collectionStorageLocationDescription = v.findViewById(R.id.recyclerview_item_wide_description);
         }
 
         void bind(@NonNull Collection collection) {
-            if (title != null) {
-                title.setText(collection.getName());
+            if (collectionStorageLocationTitle != null) {
+                collectionStorageLocationTitle.setText(collection.getName());
             }
-            if (description != null) {
-                description.setText(collection.getDescription());
+            if (collectionStorageLocationDescription != null) {
+                collectionStorageLocationDescription.setText(collection.getDescription());
             }
         }
 
         void bind(@NonNull StorageLocation storageLocation) {
-            if (title != null) {
-                title.setText(storageLocation.getName());
+            if (collectionStorageLocationTitle != null) {
+                collectionStorageLocationTitle.setText(storageLocation.getName());
             }
-            if (description != null) {
-                description.setText(storageLocation.getDescription());
+            if (collectionStorageLocationDescription != null) {
+                collectionStorageLocationDescription.setText(storageLocation.getDescription());
             }
         }
 
         public void bind(Item item) {
-
+            if (itemIcon != null) {
+                itemIcon.setImageBitmap(item.getIcon());
+            }
+            if (itemTitle != null) {
+                itemTitle.setText(item.getName());
+            }
+            if (itemAttributes != null) {
+                itemAttributes.setText(item.getAllAttributes());
+            }
         }
     }
 }

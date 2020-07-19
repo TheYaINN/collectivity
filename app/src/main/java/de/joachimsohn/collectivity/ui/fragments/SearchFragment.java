@@ -74,7 +74,7 @@ public class SearchFragment extends Fragment {
             } else if (getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
                 navigateDown(getActivity(), new StorageLocationFragment(), false);
             } else {
-                navigateDown(getActivity(), new StorageLocationFragment(), false);
+                navigateDown(getActivity(), new ItemFragment(), false);
             }
         }
         return super.onOptionsItemSelected(item);

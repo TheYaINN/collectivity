@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
@@ -24,12 +23,6 @@ import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
 public class StorageLocationFragment extends Fragment {
 
     private SubMenu subMenu;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        CacheManager.getManager().setStorageLocations(DataBaseConnector.getInstance().getAllStorageLocationsForID(CacheManager.getManager().getCurrentId()));
-    }
 
     @Nullable
     @Override

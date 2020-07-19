@@ -8,7 +8,6 @@
     <string name="action_toolbar_save_title">Save</string>
     <string name="empty" />
     <string name="action_dropdown_name">Name</string>
-    <string name="action_dropdown_amount">Anzahl</string>
     <string name="action_dropdown_description">Beschreibung</string>
     <string name="action_dropdown_ean">EAN</string>
     <string name="action_dropdown_value">Wert</string>
@@ -27,6 +26,8 @@
     <string name="spinner_amount_hint">Anzahl:</string>
     <string name="textfield_position">Position</string>
     <string name="missing_position">Bitte geben sie eine Position ein</string>
+    <string name="action_dropdown_amount">Anzahl</string>
+    <string name="textfield_tags">Tags / Schlagwörter</string>
 
     <string-array name="spinner_amount">
         <item>1</item>

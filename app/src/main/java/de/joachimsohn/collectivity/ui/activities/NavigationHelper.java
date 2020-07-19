@@ -13,6 +13,7 @@ import de.joachimsohn.collectivity.manager.search.SearchType;
 public class NavigationHelper {
 
     public static boolean onStartReplace(Activity activity, Fragment newFragment) {
+        CacheManager.getManager().loadCollectionsOnStartup();
         return navigateToFragment(activity, newFragment, 0, 0);
     }
 
@@ -24,7 +25,6 @@ public class NavigationHelper {
         fragmentTransaction.addToBackStack(newFragment.toString());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
-
         return true;
     }
 
@@ -47,8 +47,8 @@ public class NavigationHelper {
     }
 
     public static boolean navigateRight(Activity activity, Fragment newFragment, long id) {
-        CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
         CacheManager.getManager().setCurrentId(id);
+        CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_right, R.anim.slide_out_left);
     }

@@ -7,16 +7,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_margin="24dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="48dp">
 
         <EditText
             android:id="@+id/textfield_name"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_height="0px"
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/textfield_name"
@@ -28,10 +25,7 @@
         <EditText
             android:id="@+id/textfield_description"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_height="0px"
             android:layout_weight="1"
             android:gravity="center"
             android:hint="@string/textfield_description"
@@ -39,5 +33,20 @@
             android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textfield_name" />
+
+        <EditText
+            android:id="@+id/textfield_tags"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="@string/textfield_tags"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textfield_description" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
