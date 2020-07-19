@@ -53,7 +53,7 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                return NavigationHelper.navigateUpToFragment(getActivity(), new CollectionFragment());
+                return NavigationHelper.navigateLeft(getActivity(), new CollectionFragment());
             case R.id.action_save:
                 String name = tfName.getText().toString().trim();
                 String description = tfDescription.getText().toString().trim();
@@ -64,11 +64,12 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
                         storageLocation.setCollectionId(CacheManager.getManager().getCurrentId());
                         DataBaseConnector.getInstance().insert(storageLocation);
                         destination = new StorageLocationFragment();
+                        return NavigationHelper.navigateDown(getActivity(), destination, false);
                     } else {
                         DataBaseConnector.getInstance().insert(new Collection(name, description));
                         destination = new CollectionFragment();
+                        return NavigationHelper.navigateDown(getActivity(), destination, true);
                     }
-                    return NavigationHelper.navigateToFragment(getActivity(), destination);
                 }
                 Toast.makeText(getContext(), R.string.missing_name, Toast.LENGTH_LONG).show();
             default:

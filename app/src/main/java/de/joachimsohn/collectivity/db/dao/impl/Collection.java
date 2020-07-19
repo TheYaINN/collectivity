@@ -14,10 +14,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity(tableName = "collections")
+
 @Getter
 @Setter
 @ToString
+@Entity(tableName = "collections")
 public class Collection {
 
     @PrimaryKey(autoGenerate = true)
@@ -44,4 +45,9 @@ public class Collection {
         this(name);
         this.description = description;
     }
+
+    public String getSearchString() {
+        return name + "," + description;
+    }
+
 }

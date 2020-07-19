@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,9 +19,11 @@ import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
-import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
+import de.joachimsohn.collectivity.ui.adapter.ItemAdapter;
 
 public class ItemFragment extends Fragment {
+
+    private SubMenu subMenu;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,22 +42,23 @@ public class ItemFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        StorageLocationAdapter adapter = new StorageLocationAdapter(getActivity());
-        CacheManager.getManager().getStorageLocations().observe(requireActivity(), adapter::setData);
+        ItemAdapter adapter = new ItemAdapter(getActivity());
+        CacheManager.getManager().getItems().observe(requireActivity(), adapter::setData);
         recyclerView.setAdapter(adapter);
-
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.item_search_sort, menu);
+        subMenu = menu.getItem(1).getSubMenu();
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            NavigationHelper.navigateUpToFragment(getActivity(), new CollectionFragment());
+            NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment());
         }
         return super.onOptionsItemSelected(item);
     }

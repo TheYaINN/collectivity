@@ -77,6 +77,26 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
         notifyDataSetChanged();
     }
 
+    public void setStorageLocationData(List<StorageLocation> newStorageLocationData) {
+        if (storageData != null) {
+            storageData.clear();
+            storageData.addAll(newStorageLocationData);
+        } else {
+            storageData = newStorageLocationData;
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setItemData(List<Item> newItemData) {
+        if (itemData != null) {
+            itemData.clear();
+            itemData.addAll(newItemData);
+        } else {
+            itemData = newItemData;
+        }
+        notifyDataSetChanged();
+    }
+
     public static class MixedViewHolder extends RecyclerView.ViewHolder {
 
         @Nullable

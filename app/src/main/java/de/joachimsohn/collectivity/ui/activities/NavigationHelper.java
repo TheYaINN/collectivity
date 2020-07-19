@@ -13,37 +13,51 @@ import de.joachimsohn.collectivity.manager.search.SearchType;
 public class NavigationHelper {
 
 
-    public static boolean navigateToFragment(Activity activity, Fragment newFragment) {
+    public static boolean onStartReplace(Activity activity, Fragment newFragment) {
+        return navigateToFragment(activity, newFragment, 0, 0);
+    }
+
+    private static boolean navigateToFragment(Activity activity, Fragment newFragment, int inAnim, int outAnim) {
         FragmentManager fragmentManager = ((MainActivity) activity).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(inAnim, outAnim);
         fragmentTransaction.replace(R.id.default_container, newFragment);
         fragmentTransaction.addToBackStack(newFragment.toString());
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
+
         return true;
     }
 
-    public static boolean navigateToFragmentWithBackOption(Activity activity, Fragment newFragment) {
-        return navigateToFragment(activity, newFragment);
+    public static boolean navigateDown(Activity activity, Fragment newFragment, boolean isHome) {
+        if (isHome) {
+            ((MainActivity) activity).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+        } else {
+            ((MainActivity) activity).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        }
+        return navigateToFragment(activity, newFragment, R.anim.slide_in_top, R.anim.slide_out_bottom);
     }
 
-    public static boolean navigateDownToFragment(Activity activity, Fragment newFragment, long id) {
+    public static boolean navigateUp(Activity activity, Fragment newFragment, boolean isHome) {
+        if (isHome) {
+            ((MainActivity) activity).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
+        } else {
+            ((MainActivity) activity).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);
+        }
+        return navigateToFragment(activity, newFragment, R.anim.slide_in_bottom, R.anim.slide_out_top);
+    }
+
+    public static boolean navigateRight(Activity activity, Fragment newFragment, long id) {
         CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
         CacheManager.getManager().setCurrentId(id);
         updateToolbar(activity);
-        return navigateToFragment(activity, newFragment);
+        return navigateToFragment(activity, newFragment, R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    public static boolean navigateDownToFragment(Activity activity, Fragment newFragment) {
-        CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
-        updateToolbar(activity);
-        return navigateToFragment(activity, newFragment);
-    }
-
-    public static boolean navigateUpToFragment(Activity activity, Fragment newFragment) {
+    public static boolean navigateLeft(Activity activity, Fragment newFragment) {
         CacheManager.getManager().setLevel(CacheManager.Direction.UP);
         updateToolbar(activity);
-        return navigateToFragment(activity, newFragment);
+        return navigateToFragment(activity, newFragment, R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     private static void updateToolbar(Activity activity) {

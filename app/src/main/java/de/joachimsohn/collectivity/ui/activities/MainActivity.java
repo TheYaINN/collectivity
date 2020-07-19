@@ -1,6 +1,7 @@
 package de.joachimsohn.collectivity.ui.activities;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.Window;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.ui.fragments.CollectionFragment;
+import de.joachimsohn.collectivity.ui.fragments.SearchFragment;
 import de.joachimsohn.collectivity.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,9 +31,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-        NavigationHelper.navigateToFragment(this, new CollectionFragment());
+        NavigationHelper.onStartReplace(this, new CollectionFragment());
     }
-
 
     @Override
     protected void onDestroy() {
@@ -39,4 +40,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return NavigationHelper.navigateUp(this, new SearchFragment(), false);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

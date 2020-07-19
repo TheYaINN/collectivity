@@ -21,6 +21,10 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
+
+@Getter
+@Setter
+@ToString
 @Entity(tableName = "items", foreignKeys = {
         @ForeignKey(
                 entity = StorageLocation.class,
@@ -29,9 +33,6 @@ import lombok.ToString;
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE)}
 )
-@Getter
-@Setter
-@ToString
 public class Item {
 
     @PrimaryKey(autoGenerate = true)

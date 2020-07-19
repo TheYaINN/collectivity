@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.CollectionAdapter;
 
 public class CollectionFragment extends Fragment {
@@ -56,8 +55,6 @@ public class CollectionFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
-                return NavigationHelper.navigateToFragmentWithBackOption(getActivity(), new SearchFragment());
             case R.id.action_dropdown_name:
             case R.id.action_dropdown_description:
                 //TODO

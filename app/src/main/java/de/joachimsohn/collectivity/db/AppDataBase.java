@@ -17,19 +17,9 @@ import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
 
-@Database(entities = {Collection.class, StorageLocation.class, Tag.class, Item.class}, version = 5)
+@Database(entities = {Collection.class, StorageLocation.class, Tag.class, Item.class}, version = 6)
 @TypeConverters({Converter.class})
 public abstract class AppDataBase extends RoomDatabase {
-
-    public abstract CollectionDAO collectionDAO();
-
-    public abstract StorageLocationDAO storageLocationDAO();
-
-    public abstract TagDAO tagDAO();
-
-    public abstract ItemDAO itemDAO();
-
-    public abstract StorageLocationWithItemsDAO uiObjectDAO();
 
     private static AppDataBase instance;
 
@@ -43,5 +33,15 @@ public abstract class AppDataBase extends RoomDatabase {
         }
         return instance;
     }
+
+    public abstract CollectionDAO collectionDAO();
+
+    public abstract StorageLocationDAO storageLocationDAO();
+
+    public abstract TagDAO tagDAO();
+
+    public abstract ItemDAO itemDAO();
+
+    public abstract StorageLocationWithItemsDAO uiObjectDAO();
 
 }

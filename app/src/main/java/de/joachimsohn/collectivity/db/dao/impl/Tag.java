@@ -17,14 +17,12 @@ import lombok.ToString;
                         entity = Item.class,
                         parentColumns = "item_id",
                         childColumns = "tag_id",
-                        onDelete = ForeignKey.CASCADE,
-                        onUpdate = ForeignKey.CASCADE),
+                        onDelete = ForeignKey.CASCADE),
                 @ForeignKey(
                         entity = StorageLocation.class,
                         parentColumns = "storage_location_id",
                         childColumns = "tag_id",
-                        onDelete = ForeignKey.CASCADE,
-                        onUpdate = ForeignKey.CASCADE)
+                        onDelete = ForeignKey.CASCADE)
         }
 )
 @Getter

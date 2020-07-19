@@ -59,7 +59,7 @@ public class StorageLocationFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavigationHelper.navigateUpToFragment(getActivity(), new CollectionFragment());
+                NavigationHelper.navigateLeft(getActivity(), new CollectionFragment());
             default:
                 return super.onOptionsItemSelected(item);
         }

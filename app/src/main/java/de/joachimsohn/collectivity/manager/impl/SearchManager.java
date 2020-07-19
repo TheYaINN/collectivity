@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import lombok.NonNull;
 
 public class SearchManager {
@@ -25,19 +27,29 @@ public class SearchManager {
 
     public @NonNull List<Collection> searchForCollection(String searchValue) {
         List<Collection> collections = CacheManager.getManager().getCollections().getValue();
-        List<Collection> filteredItems = new ArrayList<Collection>();
+        List<Collection> filteredCollections = new ArrayList<Collection>();
         if (collections != null) {
-            filteredItems = collections.parallelStream().filter(c -> c.getName().contains(searchValue) || c.getDescription() != null && c.getDescription().contains(searchValue)).collect(Collectors.toList());
+            filteredCollections = collections.parallelStream().filter(c -> c.getName().contains(searchValue) || c.getDescription() != null && c.getDescription().contains(searchValue)).collect(Collectors.toList());
+        }
+        return filteredCollections;
+    }
+
+    public @NonNull List<StorageLocation> searchForStorageLocation(String searchValue) {
+        List<StorageLocation> storageLocations = CacheManager.getManager().getStorageLocations().getValue();
+        List<StorageLocation> filteredStorageCollections = new ArrayList<>();
+        if (storageLocations != null) {
+            filteredStorageCollections = storageLocations.parallelStream().filter(s -> s.getSearchString().contains(searchValue)).collect(Collectors.toList());
+        }
+        return filteredStorageCollections;
+    }
+
+    public @NonNull List<Item> searchForItem(String searchValue) {
+        List<Item> items = CacheManager.getManager().getItems().getValue();
+        List<Item> filteredItems = new ArrayList<>();
+        if (items != null) {
+            filteredItems = items.parallelStream().filter(i -> i.getAllAttributes().contains(searchValue)).collect(Collectors.toList());
         }
         return filteredItems;
-    }
-
-    public @NonNull List<Object> searchForItem(String searchValue) {
-        return null;
-    }
-
-    public @NonNull List<Object> searchForStorageLocation(String searchValue) {
-        return null;
     }
 
 }

@@ -14,20 +14,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @Entity(tableName = "storagelocations",
         foreignKeys = {
                 @ForeignKey(
                         entity = Collection.class,
                         parentColumns = "collection_id",
                         childColumns = "storage_location_id",
-                        onDelete = ForeignKey.CASCADE,
-                        onUpdate = ForeignKey.CASCADE)
+                        onDelete = ForeignKey.CASCADE)
         }
 )
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
 public class StorageLocation {
 
     @PrimaryKey(autoGenerate = true)
@@ -53,5 +53,9 @@ public class StorageLocation {
     public StorageLocation(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public String getSearchString() {
+        return name + "," + description;
     }
 }

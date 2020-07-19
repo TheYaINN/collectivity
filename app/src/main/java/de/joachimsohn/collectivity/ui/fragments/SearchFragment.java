@@ -49,9 +49,16 @@ public class SearchFragment extends Fragment {
         tfSearch.addTextChangedListener(new SearchTextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //TODO: wann was wie suchen
-                adapter.setCollectionData(SearchManager.getManager().searchForCollection(charSequence.toString()));
-                super.onTextChanged(charSequence, i, i1, i2);
+                switch (CacheManager.getManager().getCurrentCacheLevel()) {
+                    case COLLECTION:
+                        adapter.setCollectionData(SearchManager.getManager().searchForCollection(charSequence.toString()));
+                    case STORAGELOCATION:
+                        adapter.setStorageLocationData(SearchManager.getManager().searchForStorageLocation(charSequence.toString()));
+                    case ITEM:
+                        adapter.setItemData(SearchManager.getManager().searchForItem(charSequence.toString()));
+                    default:
+                        super.onTextChanged(charSequence, i, i1, i2);
+                }
             }
         });
         return view;
@@ -61,11 +68,11 @@ public class SearchFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.COLLECTION) {
-                NavigationHelper.navigateToFragment(getActivity(), new CollectionFragment());
+                NavigationHelper.navigateDown(getActivity(), new CollectionFragment(), true);
             } else if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
-                NavigationHelper.navigateToFragment(getActivity(), new StorageLocationFragment());
+                NavigationHelper.navigateDown(getActivity(), new StorageLocationFragment(), false);
             } else {
-                NavigationHelper.navigateToFragment(getActivity(), new StorageLocationFragment());
+                NavigationHelper.navigateDown(getActivity(), new StorageLocationFragment(), false);
             }
         }
         return super.onOptionsItemSelected(item);

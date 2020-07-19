@@ -47,10 +47,10 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
     @Override
     public void onBindViewHolder(@NonNull CollectionAdapter.CollectionViewHolder holder, int position) {
         if (data == null || position == getItemCount()) {
-            holder.addNewCollectionActionListener(e -> NavigationHelper.navigateToFragment(activity, new AddCollectionOrStorageLocationFragment()));
+            holder.addNewCollectionActionListener(e -> NavigationHelper.navigateDown(activity, new AddCollectionOrStorageLocationFragment(), false));
         } else if (position < data.size()) {
             holder.bind(data.get(position));
-            collectionView.setOnClickListener(e -> NavigationHelper.navigateDownToFragment(activity, new StorageLocationFragment(), data.get(position).getId()));
+            collectionView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new StorageLocationFragment(), data.get(position).getId()));
         }
     }
 
