@@ -25,12 +25,6 @@ public class ItemFragment extends Fragment {
 
     private SubMenu subMenu;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        CacheManager.getManager().setItems(DataBaseConnector.getInstance().getAllItemsForID(CacheManager.getManager().getCurrentId()));
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,7 +32,7 @@ public class ItemFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerview_wide_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
@@ -52,7 +46,6 @@ public class ItemFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.item_search_sort, menu);
         subMenu = menu.getItem(1).getSubMenu();
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

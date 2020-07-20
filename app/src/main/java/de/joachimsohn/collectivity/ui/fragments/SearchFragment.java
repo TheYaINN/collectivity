@@ -9,10 +9,11 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.manager.impl.SearchManager;
@@ -25,14 +26,6 @@ import static de.joachimsohn.collectivity.ui.activities.NavigationHelper.navigat
 
 public class SearchFragment extends Fragment {
 
-    private @Nullable
-    Toolbar toolbar;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,8 +33,8 @@ public class SearchFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerview_wide_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setHasFixedSize(true);
 
         MixedAdapter adapter = new MixedAdapter(getActivity());
@@ -53,12 +46,18 @@ public class SearchFragment extends Fragment {
                 switch (getManager().getCurrentCacheLevel()) {
                     case COLLECTION:
                         adapter.setCollectionData(SearchManager.getManager().searchForCollection(charSequence.toString()));
-                        break;
                     case STORAGELOCATION:
-                        adapter.setStorageLocationData(SearchManager.getManager().searchForStorageLocation(charSequence.toString()));
-                        break;
+                        SearchManager
+                                .getManager()
+                                .searchForStorageLocation()
+                                .observe(requireActivity(), storageLocations -> adapter
+                                        .setStorageLocations(storageLocations
+                                                .stream()
+                                                .filter(s -> s.getSearchString()
+                                                        .contains(charSequence.toString()))
+                                                .collect(Collectors.toList())));
                     case ITEM:
-                        adapter.setItemData(SearchManager.getManager().searchForItem(charSequence.toString()));
+                        //TODO adapter.setItemData(SearchManager.getManager().searchForItem(charSequence.toString()));
                     default:
                 }
             }

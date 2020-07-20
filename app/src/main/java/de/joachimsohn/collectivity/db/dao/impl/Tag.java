@@ -45,7 +45,7 @@ public class Tag {
     String content;
 
     public Tag(@NonNull String content) {
-        this.content = content;
+        this.content = content.trim();
     }
 
 }

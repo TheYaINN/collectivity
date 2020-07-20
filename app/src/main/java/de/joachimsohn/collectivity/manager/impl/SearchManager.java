@@ -1,5 +1,8 @@
 package de.joachimsohn.collectivity.manager.impl;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MediatorLiveData;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,7 +10,7 @@ import java.util.stream.Collectors;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
-import lombok.NonNull;
+import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 
 public class SearchManager {
 
@@ -21,11 +24,8 @@ public class SearchManager {
         return manager;
     }
 
-    public @NonNull List<Collection> search(String searchValue) {
-        return null;
-    }
-
-    public @NonNull List<Collection> searchForCollection(String searchValue) {
+    public @NonNull
+    List<Collection> searchForCollection(String searchValue) {
         List<Collection> collections = CacheManager.getManager().getCollections().getValue();
         List<Collection> filteredCollections = new ArrayList<Collection>();
         if (collections != null) {
@@ -34,16 +34,20 @@ public class SearchManager {
         return filteredCollections;
     }
 
-    public @NonNull List<StorageLocation> searchForStorageLocation(String searchValue) {
-        List<StorageLocation> storageLocations = CacheManager.getManager().getStorageLocations().getValue();
-        List<StorageLocation> filteredStorageCollections = new ArrayList<>();
-        if (storageLocations != null) {
-            filteredStorageCollections = storageLocations.parallelStream().filter(s -> s.getSearchString().contains(searchValue)).collect(Collectors.toList());
+    public @NonNull
+    MediatorLiveData<List<StorageLocation>> searchForStorageLocation() {
+        MediatorLiveData<List<StorageLocation>> liveDataMerger = new MediatorLiveData<>();
+        List<Collection> collections = CacheManager.getManager().getCollections().getValue();
+        if (collections != null) {
+            for (Collection c : collections) {
+                liveDataMerger.addSource(DataBaseConnector.getInstance().getAllStorageLocationsForID(c.getId()), liveDataMerger::setValue);
+            }
         }
-        return filteredStorageCollections;
+        return liveDataMerger;
     }
 
-    public @NonNull List<Item> searchForItem(String searchValue) {
+    public @NonNull
+    List<Item> searchForItem(String searchValue) {
         List<Item> items = CacheManager.getManager().getItems().getValue();
         List<Item> filteredItems = new ArrayList<>();
         if (items != null) {

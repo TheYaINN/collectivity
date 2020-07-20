@@ -1,13 +1,14 @@
 package de.joachimsohn.collectivity.manager.impl;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import java.util.List;
 
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
+import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.util.logging.Logger;
@@ -26,9 +27,19 @@ public class CacheManager {
         manager = new CacheManager();
     }
 
-    private LiveData<List<Collection>> collections;
-    private LiveData<List<StorageLocation>> storageLocations;
-    private LiveData<List<Item>> items;
+    private @NonNull
+    MediatorLiveData<List<Collection>> collections = new MediatorLiveData<>();
+
+    private @NonNull
+    MediatorLiveData<List<StorageLocation>> storageLocations = new MediatorLiveData<>();
+
+    private @NonNull
+    MediatorLiveData<List<Tag>> tags = new MediatorLiveData<>();
+
+    private @NonNull
+    MediatorLiveData<List<Item>> items = new MediatorLiveData<>();
+
+    @NonNull
     private SearchType currentCacheLevel = SearchType.COLLECTION;
     private long currentId;
 
@@ -43,11 +54,12 @@ public class CacheManager {
             switch (currentCacheLevel) {
                 case COLLECTION:
                     newCacheLevel = SearchType.STORAGELOCATION;
-                    updateStorageLocations();
+                    loadStorageLocations();
+                    loadTags();
                     break;
                 case STORAGELOCATION:
                     newCacheLevel = SearchType.ITEM;
-                    updateItems();
+                    loadItems();
                     break;
                 case ITEM:
                     break;
@@ -61,10 +73,12 @@ public class CacheManager {
                     break;
                 case ITEM:
                     newCacheLevel = SearchType.STORAGELOCATION;
+                    items = new MediatorLiveData<>();
                     break;
                 case STORAGELOCATION:
                 default:
                     newCacheLevel = SearchType.COLLECTION;
+                    storageLocations = new MediatorLiveData<>();
                     break;
             }
         }
@@ -72,24 +86,20 @@ public class CacheManager {
         currentCacheLevel = newCacheLevel;
     }
 
+    private void loadTags() {
+        tags.addSource(DataBaseConnector.getInstance().getAllTagsForID(getCurrentId()), tags::postValue);
+    }
+
     public void loadCollectionsOnStartup() {
-        setCollections(DataBaseConnector.getInstance().getAllCollections());
+        collections.addSource(DataBaseConnector.getInstance().getAllCollections(), collections::postValue);
     }
 
-    private void updateStorageLocations() {
-        setStorageLocations(DataBaseConnector.getInstance().getAllStorageLocationsForID(getCurrentId()));
+    private void loadStorageLocations() {
+        storageLocations.addSource(DataBaseConnector.getInstance().getAllStorageLocationsForID(getCurrentId()), storageLocations::postValue);
     }
 
-    private void updateItems() {
-        setItems(DataBaseConnector.getInstance().getAllItemsForID(getCurrentId()));
-    }
-
-    public StorageLocation getCurrentStorageLocation() {
-        return getStorageLocations().getValue().stream().filter(sl -> sl.getId() == getCurrentId()).findFirst().get();
-    }
-
-    public Collection getCurrentCollection() {
-        return getCollections().getValue().stream().filter(c -> c.getId() == getCurrentId()).findFirst().get();
+    private void loadItems() {
+        items.addSource(DataBaseConnector.getInstance().getAllItemsForID(getCurrentId()), items::postValue);
     }
 
     public enum Direction {

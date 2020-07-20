@@ -29,7 +29,7 @@ public class CollectionFragment extends Fragment {
         View view = inflater.inflate(R.layout.recyclerview_wide, container, false);
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerview_wide_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

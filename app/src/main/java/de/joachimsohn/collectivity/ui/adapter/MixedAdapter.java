@@ -12,12 +12,18 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
+import de.joachimsohn.collectivity.manager.impl.CacheManager;
+import de.joachimsohn.collectivity.manager.search.SearchType;
+import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
+import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
 
 public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHolder> {
 
@@ -26,8 +32,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     @Nullable
     private List<Collection> collectionData;
 
-    @Nullable
-    private List<StorageLocation> storageData;
+    private List<StorageLocation> storageLocationData = new ArrayList<>();
 
     @Nullable
     private List<Item> itemData;
@@ -48,15 +53,43 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MixedAdapter.MixedViewHolder holder, int position) {
-        if (collectionData != null) {
-            holder.bind(collectionData.get(position));
+        if (getItemViewType(position) == SearchType.COLLECTION.ordinal()) {
+            if (collectionData != null) {
+                holder.bind(collectionData.get(position));
+                view.setOnClickListener(e -> {
+                    CacheManager.getManager().setCurrentId(collectionData.get(position).getId());
+                    NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
+                });
+            }
+        } else if (getItemViewType(position) == SearchType.STORAGELOCATION.ordinal()) {
+            if (storageLocationData != null) {
+                holder.bind(storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0)));
+                view.setOnClickListener(e -> {
+                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
+                    CacheManager.getManager().setCurrentId(storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0)).getId());
+                    NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
+                });
+            }
+        } else {
+            if (itemData != null) {
+                holder.bind(itemData.get(position));
+                view.setOnClickListener(e -> {
+                    System.out.println("YOUUUUUUUUUUUUUUUUUUUUUUUUUU CLIK MÄH"); //TODO:
+                });
+            }
         }
-        if (storageData != null) {
-            holder.bind(storageData.get(position));
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (collectionData != null && position < collectionData.size()) {
+            return SearchType.COLLECTION.ordinal();
+        } else if (storageLocationData != null && collectionData != null && position - collectionData.size() < storageLocationData.size()) {
+            return SearchType.STORAGELOCATION.ordinal();
+        } else if (itemData != null) {
+            return SearchType.ITEM.ordinal();
         }
-        if (itemData != null) {
-            holder.bind(itemData.get(position));
-        }
+        return -1;
     }
 
     @Override
@@ -65,8 +98,8 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
         if (collectionData != null) {
             size += collectionData.size();
         }
-        if (storageData != null) {
-            size += storageData.size();
+        if (storageLocationData != null) {
+            size += storageLocationData.size();
         }
         if (itemData != null) {
             size += itemData.size();
@@ -84,13 +117,12 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
         notifyDataSetChanged();
     }
 
-    public void setStorageLocationData(List<StorageLocation> newStorageLocationData) {
-        if (storageData != null) {
-            storageData.clear();
-            storageData.addAll(newStorageLocationData);
-        } else {
-            storageData = newStorageLocationData;
-        }
+    public void setStorageLocations(List<StorageLocation> newStorageLocationData) {
+        newStorageLocationData.addAll(storageLocationData);
+        storageLocationData = newStorageLocationData
+                .stream()
+                .filter(StorageLocation.distinctByKey(StorageLocation::getId))
+                .collect(Collectors.toList());
         notifyDataSetChanged();
     }
 
@@ -107,12 +139,6 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     public static class MixedViewHolder extends RecyclerView.ViewHolder {
 
         @Nullable
-        private TextView collectionStorageLocationTitle;
-
-        @Nullable
-        private TextView collectionStorageLocationDescription;
-
-        @Nullable
         private ImageView itemIcon;
 
         @Nullable
@@ -123,29 +149,30 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
 
         public MixedViewHolder(@NonNull View v) {
             super(v);
-            collectionStorageLocationTitle = v.findViewById(R.id.recyclerview_item_wide_title);
-            collectionStorageLocationDescription = v.findViewById(R.id.recyclerview_item_wide_description);
+            itemIcon = v.findViewById(R.id.recyclerview_item_icon);
+            itemTitle = v.findViewById(R.id.recyclerview_item_title);
+            itemAttributes = v.findViewById(R.id.recyclerview_item_wide_description);
         }
 
         void bind(@NonNull Collection collection) {
-            if (collectionStorageLocationTitle != null) {
-                collectionStorageLocationTitle.setText(collection.getName());
+            if (itemTitle != null) {
+                itemTitle.setText(collection.getName());
             }
-            if (collectionStorageLocationDescription != null) {
-                collectionStorageLocationDescription.setText(collection.getDescription());
+            if (itemAttributes != null) {
+                itemAttributes.setText(collection.getDescription());
             }
         }
 
         void bind(@NonNull StorageLocation storageLocation) {
-            if (collectionStorageLocationTitle != null) {
-                collectionStorageLocationTitle.setText(storageLocation.getName());
+            if (itemTitle != null) {
+                itemTitle.setText(storageLocation.getName());
             }
-            if (collectionStorageLocationDescription != null) {
-                collectionStorageLocationDescription.setText(storageLocation.getDescription());
+            if (itemAttributes != null) {
+                itemAttributes.setText(storageLocation.getDescription());
             }
         }
 
-        public void bind(Item item) {
+        public void bind(@NonNull Item item) {
             if (itemIcon != null) {
                 itemIcon.setImageBitmap(item.getIcon());
             }

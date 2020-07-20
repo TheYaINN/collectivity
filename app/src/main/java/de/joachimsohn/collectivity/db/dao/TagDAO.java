@@ -23,13 +23,9 @@ public interface TagDAO {
     @Delete
     void delete(Tag tag);
 
-    @Query("DELETE FROM tags")
-    void deleteAllTags();
-
     @Query("SELECT * FROM tags")
     LiveData<List<Tag>> getAllTags();
 
-    @Query("SELECT * FROM tags WHERE :col LIKE :term")
-    LiveData<List<Tag>> getTagsWithParamLike(String col, String term);
-
+    @Query("SELECT * FROM tags t WHERE t.storage_location_id == :id")
+    LiveData<List<Tag>> getAllTagsForID(Long id);
 }

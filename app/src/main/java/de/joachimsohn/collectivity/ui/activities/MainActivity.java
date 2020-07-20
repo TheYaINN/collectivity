@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         NavigationHelper.onStartReplace(this, new CollectionFragment());
-
     }
 
     @Override

@@ -25,7 +25,6 @@ import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 
 public class AddCollectionOrStorageLocationFragment extends Fragment {
 
-    private Toolbar toolbar;
     private EditText tfName;
     private EditText tfDescription;
     private EditText tfTags;

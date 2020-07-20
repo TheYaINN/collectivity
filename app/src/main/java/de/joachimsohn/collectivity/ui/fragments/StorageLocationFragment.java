@@ -31,7 +31,7 @@ public class StorageLocationFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerview_wide_recycler);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -45,7 +45,6 @@ public class StorageLocationFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.collection_search_sort, menu);
         subMenu = menu.getItem(1).getSubMenu();
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

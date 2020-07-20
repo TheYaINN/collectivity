@@ -21,6 +21,7 @@ import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocationWithItems;
+import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.util.logging.Logger;
 
 public class DataBaseConnector {
@@ -180,6 +181,16 @@ public class DataBaseConnector {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public LiveData<List<Tag>> getAllTagsForID(long id) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all tags for ID: -> " + id);
+        try {
+            return new GetAllTagsAsyncTask(tagDAO).execute(id).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -385,6 +396,23 @@ public class DataBaseConnector {
         protected Boolean doInBackground(StorageLocation... storageLocations) {
             Arrays.stream(storageLocations).forEach(storageLocationDAO::update);
             return true;
+        }
+    }
+
+    private class GetAllTagsAsyncTask extends AsyncTask<Long, Void, LiveData<List<Tag>>> {
+        private TagDAO tagDAO;
+
+        public GetAllTagsAsyncTask(TagDAO tagDAO) {
+            this.tagDAO = tagDAO;
+        }
+
+        @Override
+        protected LiveData<List<Tag>> doInBackground(Long... ids) {
+            if (ids.length == 1) {
+                Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
+                return tagDAO.getAllTagsForID(id);
+            }
+            return null;
         }
     }
 }
