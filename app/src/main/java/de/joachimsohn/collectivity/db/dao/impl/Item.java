@@ -14,6 +14,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import de.joachimsohn.collectivity.db.dao.Condition;
 import lombok.Getter;
@@ -83,26 +87,55 @@ public class Item {
         this.storageLocationId = storageLocationId;
     }
 
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
     public String getAllAttributes() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Anzahl").append(": ").append(getAmount()).append(", ");
+        sb.append("Anzahl: ").append(getAmount()).append(", ");
         if (description != null) {
-            sb.append("Beschreibung").append(": ").append(getDescription()).append(", ");
+            sb.append("Beschreibung: ").append(getDescription()).append(", ");
         }
         if (ean != null) {
-            sb.append("EAN").append(": ").append(getEan()).append(", ");
+            sb.append("EAN: ").append(getEan()).append(", ");
         }
         if (value != null) {
-            sb.append("Wert").append(": ").append(getValue()).append(", ");
+            sb.append("Wert: ").append(getValue()).append(", ");
         }
         if (buyDate != null) {
-            sb.append("Kaufdatum").append(": ").append(new SimpleDateFormat("dd/MM/yyyy").format(buyDate.getTime())).append(", ");
+            sb.append("Kaufdatum: ").append(new SimpleDateFormat("dd/MM/yyyy").format(buyDate.getTime())).append(", ");
         }
         if (tags != null && tags.size() > 0) {
-            sb.append("Tag").append(": ").append(getTags()).append(", ");
+            sb.append("Tag: ").append(getTags()).append(", ");
         }
-        sb.append("Zustand").append(": ").append(getCondition()).append(", ");
-        sb.append("Position").append(": ").append(getPosition());
+        sb.append("Zustand: ").append(getCondition()).append(", ");
+        sb.append("Position: ").append(getPosition());
+        return sb.toString();
+    }
+
+    public String getSearchString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
+        sb.append(getAmount());
+        if (description != null) {
+            sb.append(getDescription());
+        }
+        if (ean != null) {
+            sb.append(getEan());
+        }
+        if (value != null) {
+            sb.append(getValue());
+        }
+        if (buyDate != null) {
+            sb.append(new SimpleDateFormat("dd/MM/yyyy").format(buyDate.getTime()));
+        }
+        if (tags != null && tags.size() > 0) {
+            sb.append(getTags());
+        }
+        sb.append(getCondition());
+        sb.append(getPosition());
         return sb.toString();
     }
 }

@@ -13,10 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.stream.Collectors;
-
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.manager.impl.SearchManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.SearchTextWatcher;
 import de.joachimsohn.collectivity.ui.adapter.MixedAdapter;
@@ -43,23 +40,7 @@ public class SearchFragment extends Fragment {
         tfSearch.addTextChangedListener(new SearchTextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                switch (getManager().getCurrentCacheLevel()) {
-                    case COLLECTION:
-                        adapter.setCollectionData(SearchManager.getManager().searchForCollection(charSequence.toString()));
-                    case STORAGELOCATION:
-                        SearchManager
-                                .getManager()
-                                .searchForStorageLocation()
-                                .observe(requireActivity(), storageLocations -> adapter
-                                        .setStorageLocations(storageLocations
-                                                .stream()
-                                                .filter(s -> s.getSearchString()
-                                                        .contains(charSequence.toString()))
-                                                .collect(Collectors.toList())));
-                    case ITEM:
-                        //TODO adapter.setItemData(SearchManager.getManager().searchForItem(charSequence.toString()));
-                    default:
-                }
+                adapter.search(charSequence.toString());
             }
         });
         return view;

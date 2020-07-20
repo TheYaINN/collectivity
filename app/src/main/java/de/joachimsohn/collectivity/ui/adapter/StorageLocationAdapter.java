@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
@@ -74,6 +75,10 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
     }
 
     public void setData(List<StorageLocation> newData) {
+        newData = newData
+                .stream()
+                .filter(nd -> nd.getId() == CacheManager.getManager().getCurrentId())
+                .collect(Collectors.toList());
         if (data != null) {
             data.clear();
             data.addAll(newData);

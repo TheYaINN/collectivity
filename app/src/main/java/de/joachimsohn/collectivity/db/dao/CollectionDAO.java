@@ -26,7 +26,6 @@ public interface CollectionDAO {
     @Query("SELECT * FROM collections")
     LiveData<List<Collection>> getAllCollections();
 
-    @Query("SELECT * FROM collections WHERE :col LIKE :term")
-    LiveData<List<Collection>> getCollectionsWithParamLike(String col, String term);
-
+    @Query("SELECT * FROM collections c JOIN storagelocations st ON storage_location_id WHERE storage_location_id = :id")
+    LiveData<Collection> getCollectionFromStorageLocationId(Long id);
 }

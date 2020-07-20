@@ -28,6 +28,7 @@
     <string name="missing_position">Bitte geben sie eine Position ein</string>
     <string name="action_dropdown_amount">Anzahl</string>
     <string name="textfield_tags">Tags / Schlagwörter</string>
+    <string name="calendarview_buy_day_hint">Kaufdatum</string>
 
     <string-array name="spinner_amount">
         <item>1</item>

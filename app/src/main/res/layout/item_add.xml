@@ -65,15 +65,30 @@
             android:inputType="text"
             app:layout_constraintTop_toBottomOf="@id/textfield_description" />
 
-        <!--   TODO: hint   -->
+        <TextView
+            android:id="@+id/calendarview_buy_date_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/calendarview_buy_day_hint"
+            app:layout_constraintTop_toBottomOf="@id/textfield_value" />
 
         <CalendarView
             android:id="@+id/calendarview_buy_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/textfield_value" />
+            app:layout_constraintTop_toBottomOf="@id/calendarview_buy_date_hint" />
 
-        <!--    TODO: Tag    -->
+        <EditText
+            android:id="@+id/textfield_tags"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:gravity="center"
+            android:hint="@string/textfield_tags"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textfield_position" />
 
         <Spinner
             android:id="@+id/spinner_condition"
@@ -90,7 +105,5 @@
             android:importantForAutofill="no"
             android:inputType="text"
             app:layout_constraintTop_toBottomOf="@id/spinner_condition" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

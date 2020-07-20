@@ -20,22 +20,23 @@ import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
+import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
+import de.joachimsohn.collectivity.ui.fragments.AddItemFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
+
+import static de.joachimsohn.collectivity.manager.impl.CacheManager.getManager;
 
 public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHolder> {
 
     private FragmentActivity activity;
 
-    @Nullable
-    private List<Collection> collectionData;
-
+    private List<Collection> collectionData = new ArrayList<>();
     private List<StorageLocation> storageLocationData = new ArrayList<>();
-
-    @Nullable
-    private List<Item> itemData;
+    private List<Item> itemData = new ArrayList<>();
+    private List<Tag> tagData = new ArrayList<>();
     private CardView view;
 
 
@@ -54,27 +55,34 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     @Override
     public void onBindViewHolder(@NonNull MixedAdapter.MixedViewHolder holder, int position) {
         if (getItemViewType(position) == SearchType.COLLECTION.ordinal()) {
-            if (collectionData != null) {
-                holder.bind(collectionData.get(position));
+            if (collectionData != null && collectionData.size() > 0) {
+                Collection collection = collectionData.get(position);
+                holder.bind(collection);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCurrentId(collectionData.get(position).getId());
+                    CacheManager.getManager().setCurrentId(collection.getId());
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
         } else if (getItemViewType(position) == SearchType.STORAGELOCATION.ordinal()) {
-            if (storageLocationData != null) {
-                holder.bind(storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0)));
+            if (storageLocationData != null && storageLocationData.size() > 0) {
+                StorageLocation storageLocation = storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0));
+                holder.bind(storageLocation);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
-                    CacheManager.getManager().setCurrentId(storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0)).getId());
+                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 1);
+                    CacheManager.getManager().setCurrentId(storageLocation.getId());
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
         } else {
-            if (itemData != null) {
-                holder.bind(itemData.get(position));
+            if (itemData != null && itemData.size() > 0) {
+                int subtract = (collectionData != null ? collectionData.size() : 0) + (storageLocationData != null ? storageLocationData.size() : 0);
+                Item item = itemData.get(position - subtract);
+                CacheManager.getManager().getParentId(item.getStorageLocationId());
+                holder.bind(item);
                 view.setOnClickListener(e -> {
-                    System.out.println("YOUUUUUUUUUUUUUUUUUUUUUUUUUU CLIK MÄH"); //TODO:
+                    CacheManager.getManager().setParentId(item.getId());
+                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 2);
+                    NavigationHelper.navigateDown(activity, new AddItemFragment(), false);
                 });
             }
         }
@@ -95,44 +103,76 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     @Override
     public int getItemCount() {
         int size = 0;
-        if (collectionData != null) {
-            size += collectionData.size();
-        }
-        if (storageLocationData != null) {
-            size += storageLocationData.size();
-        }
-        if (itemData != null) {
-            size += itemData.size();
-        }
+        size += collectionData.size();
+        size += storageLocationData.size();
+        size += itemData.size();
         return size;
     }
 
-    public void setCollectionData(List<Collection> newCollection) {
-        if (collectionData != null) {
-            collectionData.clear();
-            collectionData.addAll(newCollection);
-        } else {
-            collectionData = newCollection;
+    private void setCollectionData(List<Collection> newCollection) {
+        collectionData.clear();
+        collectionData.addAll(newCollection);
+    }
+
+    private void setStorageLocationData(List<StorageLocation> newStorageLocationData) {
+        storageLocationData.clear();
+        storageLocationData.addAll(newStorageLocationData);
+    }
+
+    private void setItemData(List<Item> newItemData) {
+        itemData.clear();
+        itemData.addAll(newItemData);
+    }
+
+    private void clearData() {
+        collectionData.clear();
+        storageLocationData.clear();
+        itemData.clear();
+    }
+
+    public void search(String searchValue) {
+        getManager().loadDataForSearch();
+        //TODO: map tags to storagelocation or item
+        switch (getManager().getCurrentCacheLevel()) {
+            case COLLECTION:
+                addCollectionDataObserver(searchValue);
+            case STORAGELOCATION:
+                addStorageLocationObserver(searchValue);
+            case ITEM:
+                addItemObserver(searchValue);
+            default:
+                break;
         }
+    }
+
+    private void filterData(String searchValue) {
+        collectionData = collectionData.stream().filter(c -> c.getSearchString().contains(searchValue)).collect(Collectors.toList());
+        storageLocationData = storageLocationData.stream().filter(s -> s.getSearchString().contains(searchValue)).collect(Collectors.toList());
+        tagData = tagData.stream().filter(t -> t.getSearchString().contains(searchValue)).collect(Collectors.toList());
+        itemData = itemData.stream().filter(i -> i.getSearchString().contains(searchValue)).collect(Collectors.toList());
+    }
+
+    private void addCollectionDataObserver(String searchValue) {
+        CacheManager.getManager().getCollections().observe(activity, c -> {
+            setCollectionData(c);
+            filterData(searchValue);
+        });
         notifyDataSetChanged();
     }
 
-    public void setStorageLocations(List<StorageLocation> newStorageLocationData) {
-        newStorageLocationData.addAll(storageLocationData);
-        storageLocationData = newStorageLocationData
-                .stream()
-                .filter(StorageLocation.distinctByKey(StorageLocation::getId))
-                .collect(Collectors.toList());
+    private void addStorageLocationObserver(String searchValue) {
+        CacheManager.getManager().getStorageLocations().observe(activity, st -> {
+            setStorageLocationData(st);
+            filterData(searchValue);
+        });
         notifyDataSetChanged();
     }
 
-    public void setItemData(List<Item> newItemData) {
-        if (itemData != null) {
-            itemData.clear();
-            itemData.addAll(newItemData);
-        } else {
-            itemData = newItemData;
-        }
+    private void addItemObserver(String searchValue) {
+        CacheManager.getManager().getItems().observe(activity, i -> {
+            setItemData(i);
+            filterData(searchValue);
+        });
         notifyDataSetChanged();
     }
 

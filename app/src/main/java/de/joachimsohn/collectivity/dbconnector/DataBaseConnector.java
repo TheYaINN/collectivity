@@ -37,7 +37,6 @@ public class DataBaseConnector {
     /*   CONNECTIONS  */
     private StorageLocationDAO storageLocationDAO;
     private TagDAO tagDAO;
-    private StorageLocationWithItemsDAO uiObjectDAO;
     private ItemDAO itemDAO;
     private CollectionDAO collectionDAO;
 
@@ -51,7 +50,6 @@ public class DataBaseConnector {
         itemDAO = dataBase.itemDAO();
         storageLocationDAO = dataBase.storageLocationDAO();
         tagDAO = dataBase.tagDAO();
-        uiObjectDAO = dataBase.uiObjectDAO();
     }
 
     public LiveData<List<Collection>> getAllCollections() {
@@ -156,7 +154,7 @@ public class DataBaseConnector {
     public LiveData<List<Item>> getAllItemsForID(long id) {
         Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all items for ID: -> " + id);
         try {
-            return new GetAllItemsAsyncTask(itemDAO).execute(id).get();
+            return new GetAllItemsForIDAsyncTask(itemDAO).execute(id).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -186,7 +184,47 @@ public class DataBaseConnector {
     public LiveData<List<Tag>> getAllTagsForID(long id) {
         Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all tags for ID: -> " + id);
         try {
-            return new GetAllTagsAsyncTask(tagDAO).execute(id).get();
+            return new GetAllTagsForIDAsyncTask(tagDAO).execute(id).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LiveData<List<Tag>> getAllTags() {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all tags");
+        try {
+            return new GetAllTagsAsyncTask(tagDAO).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LiveData<List<Item>> getAllItems() {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting all items");
+        try {
+            return new GetAllItemsAsyncTask(itemDAO).execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LiveData<Collection> getCollectionFromStorageLocationId(long id) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting parent of ID");
+        try {
+            return new GetCollectionFromStorageLocationIDAsyncTask(collectionDAO).execute(id).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LiveData<Long> getStorageLocationIdFromItemId(long id) {
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting parent of ID");
+        try {
+            return new GetStorageLocationFromItemId(itemDAO).execute(id).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -353,10 +391,10 @@ public class DataBaseConnector {
         }
     }
 
-    private static class GetAllItemsAsyncTask extends AsyncTask<Long, Void, LiveData<List<Item>>> {
+    private static class GetAllItemsForIDAsyncTask extends AsyncTask<Long, Void, LiveData<List<Item>>> {
         private ItemDAO itemDAO;
 
-        public GetAllItemsAsyncTask(ItemDAO itemDAO) {
+        public GetAllItemsForIDAsyncTask(ItemDAO itemDAO) {
             this.itemDAO = itemDAO;
         }
 
@@ -364,7 +402,7 @@ public class DataBaseConnector {
         protected LiveData<List<Item>> doInBackground(Long... ids) {
             if (ids.length == 1) {
                 Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
-                return itemDAO.getAllItemsForID(id);
+                return itemDAO.getItemsForId(id);
             }
             return null;
         }
@@ -385,7 +423,7 @@ public class DataBaseConnector {
         }
     }
 
-    private class UpdateStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Boolean> {
+    private static class UpdateStorageLocationAsyncTask extends AsyncTask<StorageLocation, Void, Boolean> {
         private StorageLocationDAO storageLocationDAO;
 
         public UpdateStorageLocationAsyncTask(StorageLocationDAO storageLocationDAO) {
@@ -399,10 +437,10 @@ public class DataBaseConnector {
         }
     }
 
-    private class GetAllTagsAsyncTask extends AsyncTask<Long, Void, LiveData<List<Tag>>> {
+    private static class GetAllTagsForIDAsyncTask extends AsyncTask<Long, Void, LiveData<List<Tag>>> {
         private TagDAO tagDAO;
 
-        public GetAllTagsAsyncTask(TagDAO tagDAO) {
+        public GetAllTagsForIDAsyncTask(TagDAO tagDAO) {
             this.tagDAO = tagDAO;
         }
 
@@ -411,6 +449,66 @@ public class DataBaseConnector {
             if (ids.length == 1) {
                 Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
                 return tagDAO.getAllTagsForID(id);
+            }
+            return null;
+        }
+    }
+
+    private static class GetAllTagsAsyncTask extends AsyncTask<Long, Void, LiveData<List<Tag>>> {
+        private TagDAO tagDAO;
+
+        public GetAllTagsAsyncTask(TagDAO tagDAO) {
+            this.tagDAO = tagDAO;
+        }
+
+        @Override
+        protected LiveData<List<Tag>> doInBackground(Long... longs) {
+            return tagDAO.getAllTags();
+        }
+    }
+
+    private static class GetAllItemsAsyncTask extends AsyncTask<Long, Void, LiveData<List<Item>>> {
+        private ItemDAO itemDAO;
+
+        public GetAllItemsAsyncTask(ItemDAO itemDAO) {
+            this.itemDAO = itemDAO;
+        }
+
+        @Override
+        protected LiveData<List<Item>> doInBackground(Long... longs) {
+            return itemDAO.getAllItems();
+        }
+    }
+
+    private static class GetCollectionFromStorageLocationIDAsyncTask extends AsyncTask<Long, Void, LiveData<Collection>> {
+        private CollectionDAO collectionDAO;
+
+        public GetCollectionFromStorageLocationIDAsyncTask(CollectionDAO collectionDAO) {
+            this.collectionDAO = collectionDAO;
+        }
+
+        @Override
+        protected LiveData<Collection> doInBackground(Long... ids) {
+            if (ids.length == 1) {
+                Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
+                return collectionDAO.getCollectionFromStorageLocationId(id);
+            }
+            return null;
+        }
+    }
+
+    private static class GetStorageLocationFromItemId extends AsyncTask<Long, Void, LiveData<Long>> {
+        private ItemDAO itemDAO;
+
+        public GetStorageLocationFromItemId(ItemDAO itemDAO) {
+            this.itemDAO = itemDAO;
+        }
+
+        @Override
+        protected LiveData<Long> doInBackground(Long... ids) {
+            if (ids.length == 1) {
+                Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
+                return itemDAO.getStorageLocationIdFromItemId(id);
             }
             return null;
         }

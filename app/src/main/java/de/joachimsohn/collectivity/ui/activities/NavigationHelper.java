@@ -49,13 +49,13 @@ public class NavigationHelper {
 
     public static boolean navigateRight(Activity activity, Fragment newFragment, long id) {
         CacheManager.getManager().setCurrentId(id);
-        CacheManager.getManager().setLevel(CacheManager.Direction.DOWN);
+        CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 1);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static boolean navigateLeft(Activity activity, Fragment newFragment) {
-        CacheManager.getManager().setLevel(CacheManager.Direction.UP);
+        CacheManager.getManager().setLevel(CacheManager.Direction.UP, 1);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_left, R.anim.slide_out_right);
     }

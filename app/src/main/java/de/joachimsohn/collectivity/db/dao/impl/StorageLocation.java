@@ -60,7 +60,14 @@ public class StorageLocation {
     }
 
     public String getSearchString() {
-        return name + "," + description;
+        String value = name;
+        if (description != null) {
+            value += " " + description;
+        }
+        if (tags != null) {
+            value += tags.toString();
+        }
+        return value;
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {

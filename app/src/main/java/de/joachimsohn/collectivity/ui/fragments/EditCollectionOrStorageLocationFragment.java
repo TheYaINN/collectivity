@@ -113,10 +113,9 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
         return false;
     }
 
-
     private boolean goBack() {
         if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
-            CacheManager.getManager().setCurrentId(currentStorageLocation.get().getId());
+            CacheManager.getManager().parentIdOnTopOfStack();
             return NavigationHelper.navigateUp(getActivity(), new StorageLocationFragment(), false);
         } else {
             return NavigationHelper.navigateUp(getActivity(), new CollectionFragment(), true);

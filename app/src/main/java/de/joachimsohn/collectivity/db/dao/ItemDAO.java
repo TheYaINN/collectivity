@@ -23,7 +23,12 @@ public interface ItemDAO {
     @Delete
     void delete(Item item);
 
-    @Query("SELECT * FROM items i WHERE i.storage_location_id == :storageLocationId")
-    LiveData<List<Item>> getAllItemsForID(long storageLocationId);
+    @Query("SELECT * FROM items")
+    LiveData<List<Item>> getAllItems();
 
+    @Query("SELECT * FROM items i WHERE i.storage_location_id == :storageLocationId")
+    LiveData<List<Item>> getItemsForId(long storageLocationId);
+
+    @Query("SELECT storage_location_id FROM items WHERE item_id == :id")
+    LiveData<Long> getStorageLocationIdFromItemId(long id);
 }

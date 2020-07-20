@@ -48,4 +48,7 @@ public class Tag {
         this.content = content.trim();
     }
 
+    public String getSearchString() {
+        return content;
+    }
 }
