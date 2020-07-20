@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import de.joachimsohn.collectivity.R;
@@ -73,7 +72,7 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
             }
             if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
                 StorageLocation storageLocation = new StorageLocation(name, description);
-                storageLocation.setCollectionId(CacheManager.getManager().getCurrentId());
+                storageLocation.setCollectionId(CacheManager.getManager().getCurrentCollectionId());
                 return DataBaseConnector.getInstance().insert(storageLocation);
             } else {
                 return DataBaseConnector.getInstance().insert(new Collection(name, description));

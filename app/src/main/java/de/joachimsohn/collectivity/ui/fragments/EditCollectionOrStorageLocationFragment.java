@@ -48,7 +48,7 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
         if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
             tfTags.setVisibility(View.VISIBLE);
             CacheManager.getManager().getStorageLocations().observe(requireActivity(), stl -> {
-                currentStorageLocation = stl.stream().filter(s -> s.getId() == CacheManager.getManager().getCurrentId()).findFirst();
+                currentStorageLocation = stl.stream().filter(s -> s.getId() == CacheManager.getManager().getCurrentCollectionId()).findFirst();
                 if (currentStorageLocation.isPresent()) {
                     tfName.setText(currentStorageLocation.get().getName());
                     tfDescription.setText(currentStorageLocation.get().getDescription());
@@ -61,7 +61,7 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
                             .collect(Collectors.joining(", "))));
         } else {
             CacheManager.getManager().getCollections().observe(requireActivity(), cl -> {
-                currentCollection = cl.stream().filter(c -> c.getId() == CacheManager.getManager().getCurrentId()).findFirst();
+                currentCollection = cl.stream().filter(c -> c.getId() == CacheManager.getManager().getCurrentCollectionId()).findFirst();
                 if (currentCollection.isPresent()) {
                     tfName.setText(currentCollection.get().getName());
                     tfDescription.setText(currentCollection.get().getDescription());
@@ -115,7 +115,6 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
 
     private boolean goBack() {
         if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
-            CacheManager.getManager().parentIdOnTopOfStack();
             return NavigationHelper.navigateUp(getActivity(), new StorageLocationFragment(), false);
         } else {
             return NavigationHelper.navigateUp(getActivity(), new CollectionFragment(), true);

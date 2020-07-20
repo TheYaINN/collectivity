@@ -89,7 +89,7 @@ public class AddItemFragment extends Fragment {
             return false;
         }
         DataBaseConnector.getInstance().insert(
-                new ItemBuilder(name, condition, position, CacheManager.getManager().getCurrentId())
+                new ItemBuilder(name, condition, position, CacheManager.getManager().getCurrentCollectionId())
                         .addAmount((String) spinnerAmount.getSelectedItem())
                         .addDescription(tfDescription.getText().toString().trim())
                         .addEAN(ean)

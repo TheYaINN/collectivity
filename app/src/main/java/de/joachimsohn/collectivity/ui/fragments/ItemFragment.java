@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.ItemAdapter;
@@ -51,7 +50,7 @@ public class ItemFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment());
+            NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), -1);
         }
         return super.onOptionsItemSelected(item);
     }

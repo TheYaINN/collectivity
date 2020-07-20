@@ -26,6 +26,6 @@ public interface CollectionDAO {
     @Query("SELECT * FROM collections")
     LiveData<List<Collection>> getAllCollections();
 
-    @Query("SELECT * FROM collections c JOIN storagelocations st ON storage_location_id WHERE storage_location_id = :id")
-    LiveData<Collection> getCollectionFromStorageLocationId(Long id);
+    @Query("SELECT s.collection_id FROM collections c LEFT JOIN storagelocations s ON c.collection_id == s.collection_id LEFT JOIN items i ON s.storage_location_id  == i.storage_location_id WHERE i.item_id == :id")
+    long getCollectionIdFromItemId(long id);
 }

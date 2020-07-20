@@ -13,8 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
@@ -28,7 +28,7 @@ import static de.joachimsohn.collectivity.dbconnector.DataBaseConnector.getInsta
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 
-    private List<StorageLocation> data;
+    private List<StorageLocation> data = new ArrayList<>();
     private Activity activity;
     private CardView storageLocationView;
 
@@ -55,7 +55,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             holder.bind(data.get(position));
             storageLocationView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId()));
             holder.addDeleteAndEditListener(data.get(position), e -> {
-                CacheManager.getManager().setCurrentId(data.get(position).getId());
+                CacheManager.getManager().setCurrentCollectionId(data.get(position).getId());
                 NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
             });
         } else {
@@ -75,16 +75,8 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
     }
 
     public void setData(List<StorageLocation> newData) {
-        newData = newData
-                .stream()
-                .filter(nd -> nd.getId() == CacheManager.getManager().getCurrentId())
-                .collect(Collectors.toList());
-        if (data != null) {
-            data.clear();
-            data.addAll(newData);
-        } else {
-            data = newData;
-        }
+        data.clear();
+        data.addAll(newData);
         notifyDataSetChanged();
     }
 

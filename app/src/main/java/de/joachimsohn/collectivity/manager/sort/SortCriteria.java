@@ -2,8 +2,6 @@ package de.joachimsohn.collectivity.manager.sort;
 
 public enum SortCriteria {
 
-    //TODO: maybe change to R.strings.xxx
-
     NAME("Name"),
     AMOUNT("Anzahl"),
     DESCRIPTION("Beschreibung"),

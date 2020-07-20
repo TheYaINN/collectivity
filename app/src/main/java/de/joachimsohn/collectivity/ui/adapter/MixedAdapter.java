@@ -59,7 +59,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 Collection collection = collectionData.get(position);
                 holder.bind(collection);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCurrentId(collection.getId());
+                    CacheManager.getManager().setCurrentCollectionId(collection.getId());
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
@@ -68,8 +68,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 StorageLocation storageLocation = storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0));
                 holder.bind(storageLocation);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 1);
-                    CacheManager.getManager().setCurrentId(storageLocation.getId());
+                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 1, storageLocation.getId());
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
@@ -77,11 +76,9 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
             if (itemData != null && itemData.size() > 0) {
                 int subtract = (collectionData != null ? collectionData.size() : 0) + (storageLocationData != null ? storageLocationData.size() : 0);
                 Item item = itemData.get(position - subtract);
-                CacheManager.getManager().getParentId(item.getStorageLocationId());
                 holder.bind(item);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setParentId(item.getId());
-                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 2);
+                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 2, item.getId());
                     NavigationHelper.navigateDown(activity, new AddItemFragment(), false);
                 });
             }

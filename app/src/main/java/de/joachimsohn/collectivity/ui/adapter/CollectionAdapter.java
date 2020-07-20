@@ -54,7 +54,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             holder.bind(data.get(position));
             collectionView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new StorageLocationFragment(), data.get(position).getId()));
             holder.addDeleteAndEditListener(data.get(position), e -> {
-                CacheManager.getManager().setCurrentId(data.get(position).getId());
+                CacheManager.getManager().setCurrentCollectionId(data.get(position).getId());
                 NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
             });
         } else {

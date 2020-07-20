@@ -29,4 +29,6 @@ public interface StorageLocationDAO {
     @Query("SELECT * FROM storagelocations")
     LiveData<List<StorageLocation>> getAllStorageLocations();
 
+    @Query("SELECT collection_id FROM storagelocations s WHERE storage_location_id == :id")
+    LiveData<Long> getCollectionIdFromStorageLocationId(Long id);
 }

@@ -24,7 +24,7 @@ public class Converter {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
         try {
-            cal.setTime(sdf.parse(date)); //TODO: FIX
+            cal.setTime(sdf.parse(date));
         } catch (ParseException e) {
             e.printStackTrace();
         }

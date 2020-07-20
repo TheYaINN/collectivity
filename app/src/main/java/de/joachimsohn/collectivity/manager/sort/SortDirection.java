@@ -1,14 +1,15 @@
 package de.joachimsohn.collectivity.manager.sort;
 
 import de.joachimsohn.collectivity.R;
+import lombok.Getter;
 
+@Getter
 public enum SortDirection {
 
-    NONE("Aufsteigend", 0), //TODO: add empty icon
+    NONE("Aufsteigend", R.drawable.empty_icon),
     ASCENDING("Aufsteigend", R.drawable.ic_arrow_up),
     DESCENDING("Absteigend", R.drawable.ic_arrow_down);
 
-    //TODO: add getter and setter from lombok
     private String representableName;
     private int icon;
 
