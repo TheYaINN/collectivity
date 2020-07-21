@@ -53,7 +53,7 @@ public class ItemFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                return NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), -1);
+                return NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), adapter.getParent());
             case R.id.action_dropdown_name:
                 adapter.sortBy(NAME);
             case R.id.action_dropdown_description:

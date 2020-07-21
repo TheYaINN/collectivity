@@ -82,6 +82,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
     }
 
+    public long getParent() {
+        return data.get(0).getStorageLocationId();
+    }
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         private @Nullable

@@ -24,11 +24,9 @@ public interface StorageLocationDAO {
     void delete(StorageLocation storageLocation);
 
     @Query("SELECT * FROM storagelocations s WHERE s.collection_id == :collectionId")
-    LiveData<List<StorageLocation>> getAllStorageLocationsForID(Long collectionId);
+    LiveData<List<StorageLocation>> getAllStorageLocationsFromCollectionId(Long collectionId);
 
     @Query("SELECT * FROM storagelocations")
     LiveData<List<StorageLocation>> getAllStorageLocations();
 
-    @Query("SELECT collection_id FROM storagelocations s WHERE storage_location_id == :id")
-    LiveData<Long> getCollectionIdFromStorageLocationId(Long id);
 }

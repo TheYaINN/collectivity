@@ -90,6 +90,10 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
         }
     }
 
+    public long getParent() {
+        return data.get(0).getCollectionId();
+    }
+
     public static class StorageLocationViewHolder extends RecyclerView.ViewHolder {
 
 

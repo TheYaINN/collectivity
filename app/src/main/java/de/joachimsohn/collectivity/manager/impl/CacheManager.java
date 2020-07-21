@@ -88,7 +88,7 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
                 case ITEM:
                     newCacheLevel = STORAGELOCATION;
                     updateStorageLocations();
-                    //updateTags();
+                    updateTags();
                     break;
                 case STORAGELOCATION:
                 default:
@@ -121,10 +121,10 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
     }
 
     private void updateStorageLocations() {
-        if (currentCacheLevel == CacheLevel.ITEM) {
-            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(idMapper.get(ITEM)), storageLocationCache::postValue);
+        if (currentCacheLevel == ITEM) {
+            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(getInstance().getCollectionIdFromItemId(idMapper.get(ITEM))), storageLocationCache::postValue);
         } else {
-            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(idMapper.get(COLLECTION)), storageLocationCache::postValue);
+            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(getInstance().getCollectionIdFromItemId(idMapper.get(COLLECTION))), storageLocationCache::postValue);
         }
     }
 

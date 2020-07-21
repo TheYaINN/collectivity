@@ -199,16 +199,6 @@ public class DataBaseConnector {
         return null;
     }
 
-    public LiveData<Long> getCollectionIdFromStorageLocationId(long id) {
-        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting parent of ID");
-        try {
-            return new GetCollectionIdFromStorageLocationIdAsyncTask(storageLocationDAO).execute(id).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public LiveData<Long> getStorageLocationIdFromItemId(long id) {
         Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting parent of ID");
         try {
@@ -341,7 +331,7 @@ public class DataBaseConnector {
         protected LiveData<List<StorageLocation>> doInBackground(Long... ids) {
             if (ids.length == 1) {
                 Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
-                return storageLocationDAO.getAllStorageLocationsForID(id);
+                return storageLocationDAO.getAllStorageLocationsFromCollectionId(id);
             }
             return null;
         }
@@ -443,23 +433,6 @@ public class DataBaseConnector {
         @Override
         protected LiveData<List<Item>> doInBackground(Long... longs) {
             return itemDAO.getAllItems();
-        }
-    }
-
-    private static class GetCollectionIdFromStorageLocationIdAsyncTask extends AsyncTask<Long, Void, LiveData<Long>> {
-        private StorageLocationDAO storageLocationDAO;
-
-        public GetCollectionIdFromStorageLocationIdAsyncTask(StorageLocationDAO storageLocationDAO) {
-            this.storageLocationDAO = storageLocationDAO;
-        }
-
-        @Override
-        protected LiveData<Long> doInBackground(Long... ids) {
-            if (ids.length == 1) {
-                Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
-                return storageLocationDAO.getCollectionIdFromStorageLocationId(id);
-            }
-            return null;
         }
     }
 
