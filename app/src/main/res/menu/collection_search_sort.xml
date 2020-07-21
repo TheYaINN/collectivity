@@ -20,11 +20,13 @@
             <!--    NAME    -->
             <item
                 android:id="@+id/action_dropdown_name"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/primary"
                 android:title="@string/action_dropdown_name" />
             <!--    DESCRIPTION    -->
             <item
                 android:id="@+id/action_dropdown_description"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/primary"
                 android:title="@string/action_dropdown_description" />
         </menu>

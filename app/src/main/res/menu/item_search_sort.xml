@@ -19,46 +19,55 @@
             <!--     NAME       -->
             <item
                 android:id="@+id/action_dropdown_name"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_name" />
             <!--      AMOUNT      -->
             <item
                 android:id="@+id/action_dropdown_amount"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_amount" />
             <!--      DESCRIPTION      -->
             <item
                 android:id="@+id/action_dropdown_description"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_description" />
             <!--      EAN      -->
             <item
                 android:id="@+id/action_dropdown_ean"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_ean" />
             <!--     VALUE       -->
             <item
                 android:id="@+id/action_dropdown_value"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_value" />
             <!--      INSERTION DATE      -->
             <item
                 android:id="@+id/action_dropdown_insertiondate"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_insertiondate" />
             <!--       BUY DATE     -->
             <item
                 android:id="@+id/action_dropdown_buydate"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_buydate" />
             <!--       CONDITION     -->
             <item
                 android:id="@+id/action_dropdown_condition"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_condition" />
             <!--      POSITION      -->
             <item
                 android:id="@+id/action_dropdown_position"
+                android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_position" />
         </menu>
