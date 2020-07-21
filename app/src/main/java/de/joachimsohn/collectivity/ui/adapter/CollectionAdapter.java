@@ -18,7 +18,7 @@ import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
-import de.joachimsohn.collectivity.manager.sort.SortCriteria;
+import de.joachimsohn.collectivity.manager.sort.SortType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
@@ -84,8 +84,8 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         notifyDataSetChanged();
     }
 
-    public void sortBy(SortCriteria sortCriteria) {
-        List<Collection> collections = SortManager.getManager().sortCollectionsBy(sortCriteria);
+    public void sortBy(SortType sortType) {
+        List<Collection> collections = SortManager.getManager().sortCollectionsBy(sortType);
         if (collections != null) {
             data = collections;
             notifyDataSetChanged();

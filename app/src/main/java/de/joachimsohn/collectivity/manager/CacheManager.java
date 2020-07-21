@@ -4,10 +4,6 @@ public interface CacheManager extends Manager<CacheManager> {
 
     void setCacheLevel(CacheDirection direction, long id);
 
-    long getCurrentCacheLevelId();
-
-    void setCurrentCacheLevelId(long id);
-
     long getIdForCacheLevel(CacheLevel collection);
 
     void setIdForCacheLevel(CacheLevel level, long id);

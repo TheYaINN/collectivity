@@ -66,13 +66,13 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
                     newCacheLevel = STORAGELOCATION;
                     setIdForCacheLevel(COLLECTION, id);
                     updateStorageLocations();
-                    //updateTags();
+                    updateTags();
                     break;
                 case STORAGELOCATION:
                     newCacheLevel = ITEM;
                     idMapper.put(STORAGELOCATION, id);
                     updateItems();
-                    // updateTags();
+                    updateTags();
                     break;
                 case ITEM:
                     idMapper.put(ITEM, id);
@@ -98,16 +98,6 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
         }
         Logger.log(Logger.Priority.DEBUG, Logger.Marker.CACHEMANAGER, String.format("Current Cache level is: %s, setting Cache level to: %s", currentCacheLevel, newCacheLevel));
         currentCacheLevel = newCacheLevel;
-    }
-
-    @Override
-    public long getCurrentCacheLevelId() {
-        return idMapper.get(currentCacheLevel);
-    }
-
-    @Override
-    public void setCurrentCacheLevelId(long id) {
-        idMapper.replace(currentCacheLevel, id);
     }
 
     @Override
@@ -139,11 +129,7 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
     }
 
     private void updateTags() {
-        if (currentCacheLevel == CacheLevel.COLLECTION) {
-            tags.addSource(getInstance().getAllTagsForID(idMapper.get(STORAGELOCATION)), tags::postValue);
-        } else {
-            tags.addSource(getInstance().getAllTagsForID(idMapper.get(ITEM)), tags::postValue);
-        }
+        tags.addSource(getInstance().getAllTags(), tags::postValue);
     }
 
     private void updateItems() {

@@ -12,38 +12,42 @@ import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.manager.Manager;
 import de.joachimsohn.collectivity.manager.sort.CollectionSorter;
 import de.joachimsohn.collectivity.manager.sort.ItemSorter;
-import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
+import de.joachimsohn.collectivity.manager.sort.SortType;
 import de.joachimsohn.collectivity.manager.sort.StorageLocationSorter;
+import lombok.Getter;
 
+@Getter
 public class SortManager implements Manager<SortManager> {
 
     private static SortManager manager;
 
-    private Map<SortCriteria, SortDirection> itemSortStateMemory =
-            new HashMap<SortCriteria, SortDirection>() {{
-                put(SortCriteria.NAME, SortDirection.NONE);
-                put(SortCriteria.AMOUNT, SortDirection.NONE);
-                put(SortCriteria.DESCRIPTION, SortDirection.NONE);
-                put(SortCriteria.EAN, SortDirection.NONE);
-                put(SortCriteria.VALUE, SortDirection.NONE);
-                put(SortCriteria.INSERTION_DATE, SortDirection.NONE);
-                put(SortCriteria.BUY_DATE, SortDirection.NONE);
-                put(SortCriteria.CONDITION, SortDirection.NONE);
-                put(SortCriteria.POSITION, SortDirection.NONE);
+    @NonNull
+    private Map<SortType, SortDirection> itemSortStateMemory =
+            new HashMap<SortType, SortDirection>() {{
+                put(SortType.NAME, SortDirection.NONE);
+                put(SortType.AMOUNT, SortDirection.NONE);
+                put(SortType.DESCRIPTION, SortDirection.NONE);
+                put(SortType.VALUE, SortDirection.NONE);
+                put(SortType.INSERTION_DATE, SortDirection.NONE);
+                put(SortType.BUY_DATE, SortDirection.NONE);
+                put(SortType.CONDITION, SortDirection.NONE);
+                put(SortType.POSITION, SortDirection.NONE);
             }};
 
-    private Map<SortCriteria, SortDirection> collectionSortStateMemory =
-            new HashMap<SortCriteria, SortDirection>() {{
-                put(SortCriteria.NAME, SortDirection.NONE);
-                put(SortCriteria.DESCRIPTION, SortDirection.NONE);
+    @NonNull
+    private Map<SortType, SortDirection> collectionSortStateMemory =
+            new HashMap<SortType, SortDirection>() {{
+                put(SortType.NAME, SortDirection.NONE);
+                put(SortType.DESCRIPTION, SortDirection.NONE);
             }};
 
-    private Map<SortCriteria, SortDirection> storageLocationStateMemory =
-            new HashMap<SortCriteria, SortDirection>() {{
-                put(SortCriteria.NAME, SortDirection.NONE);
-                put(SortCriteria.TAG, SortDirection.NONE);
-                put(SortCriteria.DESCRIPTION, SortDirection.NONE);
+    @NonNull
+    private Map<SortType, SortDirection> storageLocationStateMemory =
+            new HashMap<SortType, SortDirection>() {{
+                put(SortType.NAME, SortDirection.NONE);
+                put(SortType.TAG, SortDirection.NONE);
+                put(SortType.DESCRIPTION, SortDirection.NONE);
             }};
 
     static {
@@ -54,7 +58,7 @@ public class SortManager implements Manager<SortManager> {
         return manager;
     }
 
-    public List<Item> sortItemsBy(SortCriteria criteria) {
+    public List<Item> sortItemsBy(@NonNull SortType criteria) {
         List<Item> itemCache = CacheManager.getManager().getItemCache().getValue();
         if (itemCache == null) {
             return null;
@@ -75,7 +79,7 @@ public class SortManager implements Manager<SortManager> {
         }
     }
 
-    public List<StorageLocation> sortStorageLocationsBy(SortCriteria criteria) {
+    public List<StorageLocation> sortStorageLocationsBy(@NonNull SortType criteria) {
         List<StorageLocation> storageLocations = CacheManager.getManager().getStorageLocationCache().getValue();
         if (storageLocations == null) {
             return null;
@@ -96,7 +100,7 @@ public class SortManager implements Manager<SortManager> {
         }
     }
 
-    public List<Collection> sortCollectionsBy(@NonNull SortCriteria criteria) {
+    public List<Collection> sortCollectionsBy(@NonNull SortType criteria) {
         List<Collection> collections = CacheManager.getManager().getCollectionCache().getValue();
         if (collections == null) {
             return null;
@@ -106,9 +110,10 @@ public class SortManager implements Manager<SortManager> {
         switch (direction) {
             case ASCENDING:
                 collectionSortStateMemory.replace(criteria, SortDirection.DESCENDING);
-                sorter.sortAscending(criteria, direction, collections);
+                return sorter.sortAscending(criteria, direction, collections);
             case DESCENDING:
-                sorter.sortDescending(criteria, direction, collections);
+                collectionSortStateMemory.replace(criteria, SortDirection.NONE);
+                return sorter.sortDescending(criteria, direction, collections);
             case NONE:
             default:
                 collectionSortStateMemory.replace(criteria, SortDirection.ASCENDING);

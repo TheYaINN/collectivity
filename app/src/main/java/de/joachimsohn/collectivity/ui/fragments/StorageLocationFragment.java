@@ -19,8 +19,8 @@ import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
 
-import static de.joachimsohn.collectivity.manager.sort.SortCriteria.DESCRIPTION;
-import static de.joachimsohn.collectivity.manager.sort.SortCriteria.NAME;
+import static de.joachimsohn.collectivity.manager.sort.SortType.DESCRIPTION;
+import static de.joachimsohn.collectivity.manager.sort.SortType.NAME;
 
 public class StorageLocationFragment extends Fragment {
 

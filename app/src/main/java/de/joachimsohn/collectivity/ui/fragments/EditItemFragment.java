@@ -29,7 +29,7 @@ import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 
 import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
 
-public class AddItemFragment extends Fragment {
+public class EditItemFragment extends Fragment {
 
     private EditText tfName;
     private Spinner spinnerAmount;
@@ -52,6 +52,9 @@ public class AddItemFragment extends Fragment {
         spinnerCondition = view.findViewById(R.id.spinner_condition);
         spinnerCondition.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, Condition.values()));
         tfPosition = view.findViewById(R.id.textfield_position);
+
+        //TODO: bind data
+
         return view;
     }
 

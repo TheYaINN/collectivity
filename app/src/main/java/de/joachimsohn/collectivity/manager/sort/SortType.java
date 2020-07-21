@@ -1,11 +1,10 @@
 package de.joachimsohn.collectivity.manager.sort;
 
-public enum SortCriteria {
+public enum SortType {
 
     NAME("Name"),
     AMOUNT("Anzahl"),
     DESCRIPTION("Beschreibung"),
-    EAN("EAN"),
     VALUE("Wert"),
     INSERTION_DATE("Einfüge Datum"),
     BUY_DATE("Kaufdatum"),
@@ -15,7 +14,7 @@ public enum SortCriteria {
 
     private String representableName;
 
-    SortCriteria(String representableName) {
+    SortType(String representableName) {
         this.representableName = representableName;
     }
 }

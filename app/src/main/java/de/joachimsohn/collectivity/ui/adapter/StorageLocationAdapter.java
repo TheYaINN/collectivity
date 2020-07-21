@@ -20,7 +20,7 @@ import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
-import de.joachimsohn.collectivity.manager.sort.SortCriteria;
+import de.joachimsohn.collectivity.manager.sort.SortType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
@@ -82,8 +82,8 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
         notifyDataSetChanged();
     }
 
-    public void sortBy(SortCriteria sortCriteria) {
-        List<StorageLocation> storageLocations = SortManager.getManager().sortStorageLocationsBy(sortCriteria);
+    public void sortBy(SortType sortType) {
+        List<StorageLocation> storageLocations = SortManager.getManager().sortStorageLocationsBy(sortType);
         if (storageLocations != null) {
             data = storageLocations;
             notifyDataSetChanged();

@@ -10,7 +10,6 @@ import androidx.room.TypeConverters;
 import de.joachimsohn.collectivity.db.dao.CollectionDAO;
 import de.joachimsohn.collectivity.db.dao.ItemDAO;
 import de.joachimsohn.collectivity.db.dao.StorageLocationDAO;
-import de.joachimsohn.collectivity.db.dao.StorageLocationWithItemsDAO;
 import de.joachimsohn.collectivity.db.dao.TagDAO;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
@@ -41,7 +40,5 @@ public abstract class AppDataBase extends RoomDatabase {
     public abstract TagDAO tagDAO();
 
     public abstract ItemDAO itemDAO();
-
-    public abstract StorageLocationWithItemsDAO uiObjectDAO();
 
 }

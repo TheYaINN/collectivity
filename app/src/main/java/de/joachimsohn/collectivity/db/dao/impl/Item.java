@@ -71,6 +71,7 @@ public class Item {
     private Calendar buyDate;
 
     @Ignore
+    @Nullable
     private List<Tag> tags;
 
     @NonNull
@@ -139,4 +140,8 @@ public class Item {
         return sb.toString();
     }
 
+    public Item addTag(Tag t) {
+        tags.add(t);
+        return this;
+    }
 }

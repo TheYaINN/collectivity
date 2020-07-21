@@ -75,4 +75,8 @@ public class StorageLocation {
         return t -> seen.add(keyExtractor.apply(t));
     }
 
+    public StorageLocation addTag(Tag t) {
+        tags.add(t);
+        return this;
+    }
 }

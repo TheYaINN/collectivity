@@ -131,7 +131,6 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
 
     public void search(String searchValue) {
         getManager().loadDataForSearch();
-        //TODO: map tags to storagelocation or item
         switch (getManager().getCurrentCacheLevel()) {
             case COLLECTION:
                 addCollectionDataObserver(searchValue);
@@ -161,6 +160,10 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
 
     private void addStorageLocationObserver(String searchValue) {
         CacheManager.getManager().getStorageLocationCache().observe(activity, st -> {
+            List<Tag> tags = getManager().getTags().getValue();
+            if (tags != null) {
+                tags.forEach(t -> st.stream().filter(s -> s.getId() == t.getStorageLocationId()).map(s -> s.addTag(t)));
+            }
             setStorageLocationData(st);
             filterData(searchValue);
         });
@@ -169,6 +172,10 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
 
     private void addItemObserver(String searchValue) {
         CacheManager.getManager().getItemCache().observe(activity, i -> {
+            List<Tag> tags = getManager().getTags().getValue();
+            if (tags != null) {
+                tags.forEach(t -> i.stream().filter(s -> s.getId() == t.getItemId()).map(s -> s.addTag(t)));
+            }
             setItemData(i);
             filterData(searchValue);
         });

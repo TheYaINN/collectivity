@@ -26,6 +26,4 @@ public interface TagDAO {
     @Query("SELECT * FROM tags")
     LiveData<List<Tag>> getAllTags();
 
-    @Query("SELECT * FROM tags t WHERE t.storage_location_id == :id")
-    LiveData<List<Tag>> getAllTagsForID(Long id);
 }
