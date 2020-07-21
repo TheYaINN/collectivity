@@ -70,7 +70,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 StorageLocation storageLocation = storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0));
                 holder.bind(storageLocation);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCacheLevel(DOWN, storageLocation.getId());
+                    CacheManager.getManager().setCacheLevel(DOWN, storageLocation.getId(), 1);
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
@@ -80,7 +80,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 Item item = itemData.get(position - subtract);
                 holder.bind(item);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCacheLevel(DOWN, item.getId());
+                    CacheManager.getManager().setCacheLevel(DOWN, item.getId(), 2);
                     NavigationHelper.navigateDown(activity, new AddItemFragment(), false);
                 });
             }

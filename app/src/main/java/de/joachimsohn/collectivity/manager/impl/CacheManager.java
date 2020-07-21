@@ -58,24 +58,25 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
     }
 
     @Override
-    public void setCacheLevel(CacheDirection direction, long id) {
+    public void setCacheLevel(CacheDirection direction, long id, int amount) {
         CacheLevel newCacheLevel = COLLECTION;
         if (direction == DOWN) {
             switch (currentCacheLevel) {
                 case COLLECTION:
                     newCacheLevel = STORAGELOCATION;
                     setIdForCacheLevel(COLLECTION, id);
+                    break;
+                case STORAGELOCATION:
                     updateStorageLocations();
                     updateTags();
                     break;
-                case STORAGELOCATION:
-                    newCacheLevel = ITEM;
-                    idMapper.put(STORAGELOCATION, id);
-                    updateItems();
-                    updateTags();
-                    break;
                 case ITEM:
-                    idMapper.put(ITEM, id);
+                    newCacheLevel = ITEM;
+                    if (amount == 1) {
+                        idMapper.put(STORAGELOCATION, id);
+                        updateItems();
+                        updateTags();
+                    }
                     break;
                 default:
                     newCacheLevel = COLLECTION;
@@ -86,6 +87,7 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
                 case COLLECTION:
                     break;
                 case ITEM:
+                    idMapper.put(ITEM, id);
                     newCacheLevel = STORAGELOCATION;
                     updateStorageLocations();
                     updateTags();
@@ -98,6 +100,9 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
         }
         Logger.log(Logger.Priority.DEBUG, Logger.Marker.CACHEMANAGER, String.format("Current Cache level is: %s, setting Cache level to: %s", currentCacheLevel, newCacheLevel));
         currentCacheLevel = newCacheLevel;
+        if (amount > 1) {
+            setCacheLevel(direction, id, amount - 1);
+        }
     }
 
     @Override

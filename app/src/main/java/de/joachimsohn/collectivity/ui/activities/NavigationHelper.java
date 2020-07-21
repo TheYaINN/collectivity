@@ -50,13 +50,13 @@ public class NavigationHelper {
     }
 
     public static boolean navigateRight(Activity activity, Fragment newFragment, long id) {
-        CacheManager.getManager().setCacheLevel(DOWN, id);
+        CacheManager.getManager().setCacheLevel(DOWN, id, 1);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static boolean navigateLeft(Activity activity, Fragment newFragment, long id) {
-        CacheManager.getManager().setCacheLevel(UP, id);
+        CacheManager.getManager().setCacheLevel(UP, id, 1);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_left, R.anim.slide_out_right);
     }

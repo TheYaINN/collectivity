@@ -2,7 +2,7 @@ package de.joachimsohn.collectivity.manager;
 
 public interface CacheManager extends Manager<CacheManager> {
 
-    void setCacheLevel(CacheDirection direction, long id);
+    void setCacheLevel(CacheDirection direction, long id, int amount);
 
     long getIdForCacheLevel(CacheLevel collection);
 
