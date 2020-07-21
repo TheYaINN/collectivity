@@ -1,16 +1,24 @@
 package de.joachimsohn.collectivity.manager.impl;
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import de.joachimsohn.collectivity.db.dao.impl.Collection;
+import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
+import de.joachimsohn.collectivity.manager.Manager;
+import de.joachimsohn.collectivity.manager.sort.CollectionSorter;
 import de.joachimsohn.collectivity.manager.sort.ItemSorter;
 import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.manager.sort.SortDirection;
+import de.joachimsohn.collectivity.manager.sort.StorageLocationSorter;
 
-public class SortManager {
+public class SortManager implements Manager<SortManager> {
 
     private static SortManager manager;
-    private ItemSorter sorter = new ItemSorter();
 
     private Map<SortCriteria, SortDirection> itemSortStateMemory =
             new HashMap<SortCriteria, SortDirection>() {{
@@ -46,67 +54,65 @@ public class SortManager {
         return manager;
     }
 
-    public SortDirection sortItemsBy(SortCriteria criteria) {
+    public List<Item> sortItemsBy(SortCriteria criteria) {
+        List<Item> itemCache = CacheManager.getManager().getItemCache().getValue();
+        if (itemCache == null) {
+            return null;
+        }
+        ItemSorter sorter = new ItemSorter();
         SortDirection direction = itemSortStateMemory.getOrDefault(criteria, SortDirection.NONE);
         switch (direction) {
             case NONE:
-                direction = SortDirection.ASCENDING;
                 itemSortStateMemory.replace(criteria, SortDirection.ASCENDING);
-                break;
+                return sorter.sortAscending(criteria, SortDirection.NONE, itemCache);
             case ASCENDING:
-                direction = SortDirection.DESCENDING;
                 itemSortStateMemory.replace(criteria, SortDirection.DESCENDING);
-                break;
+                return sorter.sortAscending(criteria, SortDirection.ASCENDING, itemCache);
             case DESCENDING:
             default:
-                direction = SortDirection.NONE;
                 itemSortStateMemory.replace(criteria, SortDirection.NONE);
-                break;
+                return itemCache;
         }
-        sorter.sort(criteria, direction);
-        return direction;
     }
 
-    public SortDirection sortStorageLocationsBy(SortCriteria criteria) {
+    public List<StorageLocation> sortStorageLocationsBy(SortCriteria criteria) {
+        List<StorageLocation> storageLocations = CacheManager.getManager().getStorageLocationCache().getValue();
+        if (storageLocations == null) {
+            return null;
+        }
         SortDirection direction = storageLocationStateMemory.getOrDefault(criteria, SortDirection.NONE);
+        StorageLocationSorter sorter = new StorageLocationSorter();
         switch (direction) {
             case NONE:
-                direction = SortDirection.ASCENDING;
                 storageLocationStateMemory.replace(criteria, SortDirection.ASCENDING);
-                break;
+                return storageLocations;
             case ASCENDING:
-                direction = SortDirection.DESCENDING;
                 storageLocationStateMemory.replace(criteria, SortDirection.DESCENDING);
-                break;
+                return sorter.sortAscending(criteria, SortDirection.ASCENDING, storageLocations);
             case DESCENDING:
             default:
-                direction = SortDirection.NONE;
                 storageLocationStateMemory.replace(criteria, SortDirection.NONE);
-                break;
+                return sorter.sortDescending(criteria, direction, storageLocations);
         }
-        sorter.sort(criteria, direction);
-        return direction;
     }
 
-    public SortDirection sortCollectionsBy(SortCriteria criteria) {
-        SortDirection direction = collectionSortStateMemory.getOrDefault(criteria, SortDirection.NONE);
-        assert direction != null;
-        switch (direction) {
-            case NONE:
-                direction = SortDirection.ASCENDING;
-                collectionSortStateMemory.replace(criteria, SortDirection.ASCENDING);
-                break;
-            case ASCENDING:
-                direction = SortDirection.DESCENDING;
-                collectionSortStateMemory.replace(criteria, SortDirection.DESCENDING);
-                break;
-            case DESCENDING:
-            default:
-                direction = SortDirection.NONE;
-                collectionSortStateMemory.replace(criteria, SortDirection.NONE);
-                break;
+    public List<Collection> sortCollectionsBy(@NonNull SortCriteria criteria) {
+        List<Collection> collections = CacheManager.getManager().getCollectionCache().getValue();
+        if (collections == null) {
+            return null;
         }
-        collectionSortStateMemory.replace(criteria, direction);
-        return direction;
+        SortDirection direction = collectionSortStateMemory.getOrDefault(criteria, SortDirection.NONE);
+        CollectionSorter sorter = new CollectionSorter();
+        switch (direction) {
+            case ASCENDING:
+                collectionSortStateMemory.replace(criteria, SortDirection.DESCENDING);
+                sorter.sortAscending(criteria, direction, collections);
+            case DESCENDING:
+                sorter.sortDescending(criteria, direction, collections);
+            case NONE:
+            default:
+                collectionSortStateMemory.replace(criteria, SortDirection.ASCENDING);
+                return collections;
+        }
     }
 }

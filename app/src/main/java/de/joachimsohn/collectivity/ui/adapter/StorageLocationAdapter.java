@@ -19,6 +19,8 @@ import java.util.List;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
+import de.joachimsohn.collectivity.manager.impl.SortManager;
+import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
@@ -55,7 +57,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             holder.bind(data.get(position));
             storageLocationView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId()));
             holder.addDeleteAndEditListener(data.get(position), e -> {
-                CacheManager.getManager().setCurrentCollectionId(data.get(position).getId());
+                CacheManager.getManager().setIdForCacheLevel(de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION, data.get(position).getId());
                 NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
             });
         } else {
@@ -78,6 +80,14 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
         data.clear();
         data.addAll(newData);
         notifyDataSetChanged();
+    }
+
+    public void sortBy(SortCriteria sortCriteria) {
+        List<StorageLocation> storageLocations = SortManager.getManager().sortStorageLocationsBy(sortCriteria);
+        if (storageLocations != null) {
+            data = storageLocations;
+            notifyDataSetChanged();
+        }
     }
 
     public static class StorageLocationViewHolder extends RecyclerView.ViewHolder {

@@ -26,18 +26,18 @@ public class SearchManager {
 
     public @NonNull
     List<Collection> searchForCollection(String searchValue) {
-        List<Collection> collections = CacheManager.getManager().getCollections().getValue();
-        List<Collection> filteredCollections = new ArrayList<Collection>();
+        List<Collection> collections = CacheManager.getManager().getCollectionCache().getValue();
         if (collections != null) {
-            filteredCollections = collections.parallelStream().filter(c -> c.getName().contains(searchValue) || c.getDescription() != null && c.getDescription().contains(searchValue)).collect(Collectors.toList());
+            return collections.parallelStream().filter(c -> c.getName().contains(searchValue) || c.getDescription() != null && c.getDescription().contains(searchValue)).collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
         }
-        return filteredCollections;
     }
 
     public @NonNull
     MediatorLiveData<List<StorageLocation>> searchForStorageLocation() {
         MediatorLiveData<List<StorageLocation>> liveDataMerger = new MediatorLiveData<>();
-        List<Collection> collections = CacheManager.getManager().getCollections().getValue();
+        List<Collection> collections = CacheManager.getManager().getCollectionCache().getValue();
         if (collections != null) {
             for (Collection c : collections) {
                 liveDataMerger.addSource(DataBaseConnector.getInstance().getAllStorageLocationsForID(c.getId()), liveDataMerger::setValue);
@@ -48,7 +48,7 @@ public class SearchManager {
 
     public @NonNull
     List<Item> searchForItem(String searchValue) {
-        List<Item> items = CacheManager.getManager().getItems().getValue();
+        List<Item> items = CacheManager.getManager().getItemCache().getValue();
         List<Item> filteredItems = new ArrayList<>();
         if (items != null) {
             filteredItems = items.parallelStream().filter(i -> i.getAllAttributes().contains(searchValue)).collect(Collectors.toList());

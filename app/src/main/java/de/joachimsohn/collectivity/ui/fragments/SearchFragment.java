@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
-import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.SearchTextWatcher;
 import de.joachimsohn.collectivity.ui.adapter.MixedAdapter;
 
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.STORAGELOCATION;
 import static de.joachimsohn.collectivity.manager.impl.CacheManager.getManager;
 import static de.joachimsohn.collectivity.ui.activities.NavigationHelper.navigateDown;
 
@@ -49,9 +50,9 @@ public class SearchFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (getManager().getCurrentCacheLevel() == SearchType.COLLECTION) {
+            if (getManager().getCurrentCacheLevel() == COLLECTION) {
                 navigateDown(getActivity(), new CollectionFragment(), true);
-            } else if (getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+            } else if (getManager().getCurrentCacheLevel() == STORAGELOCATION) {
                 navigateDown(getActivity(), new StorageLocationFragment(), false);
             } else {
                 navigateDown(getActivity(), new ItemFragment(), false);

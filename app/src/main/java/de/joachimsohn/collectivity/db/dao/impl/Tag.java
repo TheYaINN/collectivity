@@ -51,4 +51,5 @@ public class Tag {
     public String getSearchString() {
         return content;
     }
+
 }

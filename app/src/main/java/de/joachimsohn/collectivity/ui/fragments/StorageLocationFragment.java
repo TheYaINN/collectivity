@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,9 +19,13 @@ import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.StorageLocationAdapter;
 
+import static de.joachimsohn.collectivity.manager.sort.SortCriteria.DESCRIPTION;
+import static de.joachimsohn.collectivity.manager.sort.SortCriteria.NAME;
+
 public class StorageLocationFragment extends Fragment {
 
-    private SubMenu subMenu;
+    private @NonNull
+    StorageLocationAdapter adapter;
 
     @Nullable
     @Override
@@ -35,8 +38,8 @@ public class StorageLocationFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        StorageLocationAdapter adapter = new StorageLocationAdapter(getActivity());
-        CacheManager.getManager().getStorageLocations().observe(requireActivity(), adapter::setData);
+        adapter = new StorageLocationAdapter(getActivity());
+        CacheManager.getManager().getStorageLocationCache().observe(requireActivity(), adapter::setData);
         recyclerView.setAdapter(adapter);
         return view;
     }
@@ -44,14 +47,19 @@ public class StorageLocationFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.collection_search_sort, menu);
-        subMenu = menu.getItem(1).getSubMenu();
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            NavigationHelper.navigateLeft(getActivity(), new CollectionFragment(), -1);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                return NavigationHelper.navigateLeft(getActivity(), new CollectionFragment(), -1);
+            case R.id.action_dropdown_name:
+                adapter.sortBy(NAME);
+            case R.id.action_dropdown_description:
+                adapter.sortBy(DESCRIPTION);
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -16,6 +16,8 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.manager.impl.SortManager;
+import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddItemFragment;
 import lombok.NoArgsConstructor;
@@ -70,6 +72,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             data = newData;
         }
         notifyDataSetChanged();
+    }
+
+    public void sortBy(SortCriteria sortCriteria) {
+        List<Item> storageLocations = SortManager.getManager().sortItemsBy(sortCriteria);
+        if (storageLocations != null) {
+            data = storageLocations;
+            notifyDataSetChanged();
+        }
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {

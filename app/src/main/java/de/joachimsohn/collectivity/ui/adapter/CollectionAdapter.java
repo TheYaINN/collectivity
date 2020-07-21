@@ -17,18 +17,20 @@ import java.util.List;
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
+import de.joachimsohn.collectivity.manager.impl.SortManager;
+import de.joachimsohn.collectivity.manager.sort.SortCriteria;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
 import de.joachimsohn.collectivity.ui.fragments.StorageLocationFragment;
 
 import static de.joachimsohn.collectivity.dbconnector.DataBaseConnector.getInstance;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
 
 public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionViewHolder> {
 
     private List<Collection> data;
     private Activity activity;
-    private View.OnClickListener listener;
     private CardView collectionView;
 
     public CollectionAdapter(Activity activity) {
@@ -54,7 +56,7 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             holder.bind(data.get(position));
             collectionView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new StorageLocationFragment(), data.get(position).getId()));
             holder.addDeleteAndEditListener(data.get(position), e -> {
-                CacheManager.getManager().setCurrentCollectionId(data.get(position).getId());
+                CacheManager.getManager().setIdForCacheLevel(COLLECTION, data.get(position).getId());
                 NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
             });
         } else {
@@ -80,6 +82,14 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
             data = newData;
         }
         notifyDataSetChanged();
+    }
+
+    public void sortBy(SortCriteria sortCriteria) {
+        List<Collection> collections = SortManager.getManager().sortCollectionsBy(sortCriteria);
+        if (collections != null) {
+            data = collections;
+            notifyDataSetChanged();
+        }
     }
 
     public static class CollectionViewHolder extends RecyclerView.ViewHolder {

@@ -24,8 +24,10 @@ import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
+
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.STORAGELOCATION;
 
 public class EditCollectionOrStorageLocationFragment extends Fragment {
 
@@ -45,10 +47,10 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
         tfName = view.findViewById(R.id.textfield_name);
         tfDescription = view.findViewById(R.id.textfield_description);
         tfTags = view.findViewById(R.id.textfield_tags);
-        if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+        if (CacheManager.getManager().getCurrentCacheLevel() == STORAGELOCATION) {
             tfTags.setVisibility(View.VISIBLE);
-            CacheManager.getManager().getStorageLocations().observe(requireActivity(), stl -> {
-                currentStorageLocation = stl.stream().filter(s -> s.getId() == CacheManager.getManager().getCurrentCollectionId()).findFirst();
+            CacheManager.getManager().getStorageLocationCache().observe(requireActivity(), stl -> {
+                currentStorageLocation = stl.stream().filter(s -> s.getId() == CacheManager.getManager().getIdForCacheLevel(COLLECTION)).findFirst();
                 if (currentStorageLocation.isPresent()) {
                     tfName.setText(currentStorageLocation.get().getName());
                     tfDescription.setText(currentStorageLocation.get().getDescription());
@@ -60,8 +62,8 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
                             .map(Tag::toString)
                             .collect(Collectors.joining(", "))));
         } else {
-            CacheManager.getManager().getCollections().observe(requireActivity(), cl -> {
-                currentCollection = cl.stream().filter(c -> c.getId() == CacheManager.getManager().getCurrentCollectionId()).findFirst();
+            CacheManager.getManager().getCollectionCache().observe(requireActivity(), cl -> {
+                currentCollection = cl.stream().filter(c -> c.getId() == CacheManager.getManager().getIdForCacheLevel(COLLECTION)).findFirst();
                 if (currentCollection.isPresent()) {
                     tfName.setText(currentCollection.get().getName());
                     tfDescription.setText(currentCollection.get().getDescription());
@@ -95,7 +97,7 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
     private boolean isValidData() {
         String name = tfName.getText().toString().trim();
         if (!name.isEmpty()) {
-            if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+            if (CacheManager.getManager().getCurrentCacheLevel() == STORAGELOCATION) {
                 if (currentStorageLocation.isPresent()) {
                     currentStorageLocation.get().setName(name);
                     currentStorageLocation.get().setDescription(tfDescription.getText().toString().trim());
@@ -114,7 +116,7 @@ public class EditCollectionOrStorageLocationFragment extends Fragment {
     }
 
     private boolean goBack() {
-        if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+        if (CacheManager.getManager().getCurrentCacheLevel() == STORAGELOCATION) {
             return NavigationHelper.navigateUp(getActivity(), new StorageLocationFragment(), false);
         } else {
             return NavigationHelper.navigateUp(getActivity(), new CollectionFragment(), true);

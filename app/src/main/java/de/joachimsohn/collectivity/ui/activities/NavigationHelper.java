@@ -8,7 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.manager.search.SearchType;
+
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheDirection.DOWN;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheDirection.UP;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
 
 public class NavigationHelper {
 
@@ -47,19 +50,19 @@ public class NavigationHelper {
     }
 
     public static boolean navigateRight(Activity activity, Fragment newFragment, long id) {
-        CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 1, id);
+        CacheManager.getManager().setCacheLevel(DOWN, id);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public static boolean navigateLeft(Activity activity, Fragment newFragment, long id) {
-        CacheManager.getManager().setLevel(CacheManager.Direction.UP, 1, id);
+        CacheManager.getManager().setCacheLevel(UP, id);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     private static void updateToolbar(Activity activity) {
-        if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.COLLECTION) {
+        if (CacheManager.getManager().getCurrentCacheLevel() == COLLECTION) {
             ((MainActivity) activity).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_home);
         } else {
             ((MainActivity) activity).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_left);

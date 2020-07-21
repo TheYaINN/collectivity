@@ -1,26 +1,29 @@
 package de.joachimsohn.collectivity.manager.impl;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MediatorLiveData;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
-import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import static de.joachimsohn.collectivity.dbconnector.DataBaseConnector.getInstance;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheDirection.DOWN;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.ITEM;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.STORAGELOCATION;
 
 @Getter
-@Setter
-public class CacheManager {
+public class CacheManager implements de.joachimsohn.collectivity.manager.CacheManager {
 
     @Setter(AccessLevel.NONE)
     private static CacheManager manager;
@@ -30,55 +33,52 @@ public class CacheManager {
     }
 
     private @NonNull
-    MediatorLiveData<List<Collection>> collections = new MediatorLiveData<>();
+    MediatorLiveData<List<Collection>> collectionCache = new MediatorLiveData<>();
 
     private @NonNull
-    MediatorLiveData<List<StorageLocation>> storageLocations = new MediatorLiveData<>();
+    MediatorLiveData<List<StorageLocation>> storageLocationCache = new MediatorLiveData<>();
 
     private @NonNull
     MediatorLiveData<List<Tag>> tags = new MediatorLiveData<>();
 
     private @NonNull
-    MediatorLiveData<List<Item>> items = new MediatorLiveData<>();
+    MediatorLiveData<List<Item>> itemCache = new MediatorLiveData<>();
 
     private @NonNull
-    SearchType currentCacheLevel = SearchType.COLLECTION;
+    CacheLevel currentCacheLevel = COLLECTION;
 
-    private @Nullable
-    long currentCollectionId;
-
-    private @Nullable
-    long currentStorageLocationId;
-
-    private @Nullable
-    long itemId;
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private @NonNull
+    Map<CacheLevel, Long> idMapper = new HashMap<>();
 
     @NonNull
     public static CacheManager getManager() {
         return manager;
     }
 
-    public synchronized void setLevel(Direction direction, int amount, long id) {
-        SearchType newCacheLevel = SearchType.COLLECTION;
-        if (direction == Direction.DOWN) {
+    @Override
+    public void setCacheLevel(CacheDirection direction, long id) {
+        CacheLevel newCacheLevel = COLLECTION;
+        if (direction == DOWN) {
             switch (currentCacheLevel) {
                 case COLLECTION:
-                    newCacheLevel = SearchType.STORAGELOCATION;
-                    currentCollectionId = id;
+                    newCacheLevel = STORAGELOCATION;
+                    setIdForCacheLevel(COLLECTION, id);
                     updateStorageLocations();
-                    updateTags();
+                    //updateTags();
                     break;
                 case STORAGELOCATION:
-                    newCacheLevel = SearchType.ITEM;
-                    currentStorageLocationId = id;
+                    newCacheLevel = ITEM;
+                    idMapper.put(STORAGELOCATION, id);
                     updateItems();
-                    updateTags();
+                    // updateTags();
                     break;
                 case ITEM:
-                    itemId = id;
+                    idMapper.put(ITEM, id);
                     break;
                 default:
-                    newCacheLevel = SearchType.COLLECTION;
+                    newCacheLevel = COLLECTION;
                     break;
             }
         } else {
@@ -86,56 +86,68 @@ public class CacheManager {
                 case COLLECTION:
                     break;
                 case ITEM:
-                    newCacheLevel = SearchType.STORAGELOCATION;
-                    storageLocations = new MediatorLiveData<>();
+                    newCacheLevel = STORAGELOCATION;
                     updateStorageLocations();
-                    updateTags();
+                    //updateTags();
                     break;
                 case STORAGELOCATION:
                 default:
-                    newCacheLevel = SearchType.COLLECTION;
+                    newCacheLevel = COLLECTION;
                     break;
             }
         }
-        Logger.log(Logger.Priority.DEBUG, Logger.Marker.CACHEMANAGER, String.format("Current Cachelevel is: %s, setting Cachelevel to: %s", currentCacheLevel, newCacheLevel));
+        Logger.log(Logger.Priority.DEBUG, Logger.Marker.CACHEMANAGER, String.format("Current Cache level is: %s, setting Cache level to: %s", currentCacheLevel, newCacheLevel));
         currentCacheLevel = newCacheLevel;
-        if (amount > 1) {
-            setLevel(direction, amount - 1, id);
-        }
+    }
+
+    @Override
+    public long getCurrentCacheLevelId() {
+        return idMapper.get(currentCacheLevel);
+    }
+
+    @Override
+    public void setCurrentCacheLevelId(long id) {
+        idMapper.replace(currentCacheLevel, id);
+    }
+
+    @Override
+    public long getIdForCacheLevel(CacheLevel level) {
+        return idMapper.get(level);
+    }
+
+    @Override
+    public void setIdForCacheLevel(CacheLevel level, long id) {
+        idMapper.put(level, id);
     }
 
     public void loadCollectionsOnStartup() {
-        collections.addSource(getInstance().getAllCollections(), collections::postValue);
+        collectionCache.addSource(getInstance().getAllCollections(), collectionCache::postValue);
     }
 
     public void loadDataForSearch() {
-        storageLocations.addSource(getInstance().getAllStorageLocations(), storageLocations::postValue);
+        storageLocationCache.addSource(getInstance().getAllStorageLocations(), storageLocationCache::postValue);
         tags.addSource(getInstance().getAllTags(), tags::postValue);
-        items.addSource(getInstance().getAllItems(), items::postValue);
+        itemCache.addSource(getInstance().getAllItems(), itemCache::postValue);
     }
 
     private void updateStorageLocations() {
-        if (currentCacheLevel == SearchType.ITEM) {
-            storageLocations.addSource(getInstance().getAllStorageLocationsForID(getInstance().getCollectionIdFromItemId(itemId)), storageLocations::postValue);
+        if (currentCacheLevel == CacheLevel.ITEM) {
+            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(idMapper.get(ITEM)), storageLocationCache::postValue);
         } else {
-            storageLocations.addSource(getInstance().getAllStorageLocationsForID(getCurrentCollectionId()), storageLocations::postValue);
+            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(idMapper.get(COLLECTION)), storageLocationCache::postValue);
         }
     }
 
     private void updateTags() {
-        if (currentCacheLevel == SearchType.COLLECTION) {
-            tags.addSource(getInstance().getAllTagsForID(getCurrentCollectionId()), tags::postValue);
+        if (currentCacheLevel == CacheLevel.COLLECTION) {
+            tags.addSource(getInstance().getAllTagsForID(idMapper.get(STORAGELOCATION)), tags::postValue);
         } else {
-            tags.addSource(getInstance().getAllTagsForID(getCurrentStorageLocationId()), tags::postValue);
+            tags.addSource(getInstance().getAllTagsForID(idMapper.get(ITEM)), tags::postValue);
         }
     }
 
     private void updateItems() {
-        items.addSource(getInstance().getAllItemsForID(getCurrentStorageLocationId()), items::postValue);
-    }
-
-    public enum Direction {
-        UP, DOWN
+        itemCache.addSource(getInstance().getAllItemsForID(idMapper.get(STORAGELOCATION)), itemCache::postValue);
     }
 
 }

@@ -19,8 +19,10 @@ import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
+
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.STORAGELOCATION;
 
 public class AddCollectionOrStorageLocationFragment extends Fragment {
 
@@ -36,7 +38,7 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
         tfName = view.findViewById(R.id.textfield_name);
         tfDescription = view.findViewById(R.id.textfield_description);
         tfTags = view.findViewById(R.id.textfield_tags);
-        if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+        if (CacheManager.getManager().getCurrentCacheLevel() == STORAGELOCATION) {
             tfTags.setVisibility(View.VISIBLE);
         }
         return view;
@@ -70,9 +72,9 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
             if (description.isEmpty()) {
                 description = null;
             }
-            if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+            if (CacheManager.getManager().getCurrentCacheLevel() == STORAGELOCATION) {
                 StorageLocation storageLocation = new StorageLocation(name, description);
-                storageLocation.setCollectionId(CacheManager.getManager().getCurrentCollectionId());
+                storageLocation.setCollectionId(CacheManager.getManager().getIdForCacheLevel(COLLECTION));
                 return DataBaseConnector.getInstance().insert(storageLocation);
             } else {
                 return DataBaseConnector.getInstance().insert(new Collection(name, description));
@@ -82,7 +84,7 @@ public class AddCollectionOrStorageLocationFragment extends Fragment {
     }
 
     private boolean goBack() {
-        if (CacheManager.getManager().getCurrentCacheLevel() == SearchType.STORAGELOCATION) {
+        if (CacheManager.getManager().getCurrentCacheLevel() == STORAGELOCATION) {
             return NavigationHelper.navigateUp(getActivity(), new StorageLocationFragment(), false);
         } else {
             return NavigationHelper.navigateUp(getActivity(), new CollectionFragment(), true);

@@ -27,6 +27,8 @@ import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.ItemBuilder;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+
 public class AddItemFragment extends Fragment {
 
     private EditText tfName;
@@ -89,7 +91,7 @@ public class AddItemFragment extends Fragment {
             return false;
         }
         DataBaseConnector.getInstance().insert(
-                new ItemBuilder(name, condition, position, CacheManager.getManager().getCurrentCollectionId())
+                new ItemBuilder(name, condition, position, CacheManager.getManager().getIdForCacheLevel(COLLECTION))
                         .addAmount((String) spinnerAmount.getSelectedItem())
                         .addDescription(tfDescription.getText().toString().trim())
                         .addEAN(ean)

@@ -27,6 +27,8 @@ import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddItemFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
 
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheDirection.DOWN;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
 import static de.joachimsohn.collectivity.manager.impl.CacheManager.getManager;
 
 public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHolder> {
@@ -59,7 +61,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 Collection collection = collectionData.get(position);
                 holder.bind(collection);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCurrentCollectionId(collection.getId());
+                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, collection.getId());
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
@@ -68,7 +70,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 StorageLocation storageLocation = storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0));
                 holder.bind(storageLocation);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 1, storageLocation.getId());
+                    CacheManager.getManager().setCacheLevel(DOWN, storageLocation.getId());
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
@@ -78,7 +80,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 Item item = itemData.get(position - subtract);
                 holder.bind(item);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setLevel(CacheManager.Direction.DOWN, 2, item.getId());
+                    CacheManager.getManager().setCacheLevel(DOWN, item.getId());
                     NavigationHelper.navigateDown(activity, new AddItemFragment(), false);
                 });
             }
@@ -150,7 +152,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     }
 
     private void addCollectionDataObserver(String searchValue) {
-        CacheManager.getManager().getCollections().observe(activity, c -> {
+        CacheManager.getManager().getCollectionCache().observe(activity, c -> {
             setCollectionData(c);
             filterData(searchValue);
         });
@@ -158,7 +160,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     }
 
     private void addStorageLocationObserver(String searchValue) {
-        CacheManager.getManager().getStorageLocations().observe(activity, st -> {
+        CacheManager.getManager().getStorageLocationCache().observe(activity, st -> {
             setStorageLocationData(st);
             filterData(searchValue);
         });
@@ -166,7 +168,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
     }
 
     private void addItemObserver(String searchValue) {
-        CacheManager.getManager().getItems().observe(activity, i -> {
+        CacheManager.getManager().getItemCache().observe(activity, i -> {
             setItemData(i);
             filterData(searchValue);
         });
