@@ -14,7 +14,7 @@ public class ItemSorter implements Sorter<Item> {
 
     @Override
     @NonNull
-    public List<Item> sortAscending(SortType sortType, SortDirection direction, List<Item> items) {
+    public List<Item> sortAscending(SortType sortType, List<Item> items) {
         switch (sortType) {
             case NAME:
                 return items.stream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).collect(Collectors.toList());
@@ -63,8 +63,8 @@ public class ItemSorter implements Sorter<Item> {
 
     @NonNull
     @Override
-    public List<Item> sortDescending(SortType sortType, SortDirection direction, List<Item> items) {
-        List<Item> list = sortAscending(sortType, direction, items);
+    public List<Item> sortDescending(SortType sortType, List<Item> items) {
+        List<Item> list = sortAscending(sortType, items);
         Collections.reverse(list);
         return list;
     }

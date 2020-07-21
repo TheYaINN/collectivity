@@ -31,8 +31,6 @@ public class DataBaseConnector {
         INSTANCE = new DataBaseConnector();
     }
 
-
-    /*   CONNECTIONS  */
     private StorageLocationDAO storageLocationDAO;
     private TagDAO tagDAO;
     private ItemDAO itemDAO;
@@ -199,16 +197,6 @@ public class DataBaseConnector {
         return null;
     }
 
-    public LiveData<Long> getStorageLocationIdFromItemId(long id) {
-        Logger.log(Logger.Priority.DEBUG, Logger.Marker.DB, "getting parent of ID");
-        try {
-            return new GetStorageLocationFromItemId(itemDAO).execute(id).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public long getCollectionIdFromItemId(long id) {
         try {
             return new CIdFromIId(collectionDAO).execute(id).get();
@@ -217,7 +205,6 @@ public class DataBaseConnector {
         }
         return -1L;
     }
-
 
     private static class UpdateCollectionsAsyncTask extends AsyncTask<Collection, Void, Boolean> {
 
@@ -433,23 +420,6 @@ public class DataBaseConnector {
         @Override
         protected LiveData<List<Item>> doInBackground(Long... longs) {
             return itemDAO.getAllItems();
-        }
-    }
-
-    private static class GetStorageLocationFromItemId extends AsyncTask<Long, Void, LiveData<Long>> {
-        private ItemDAO itemDAO;
-
-        public GetStorageLocationFromItemId(ItemDAO itemDAO) {
-            this.itemDAO = itemDAO;
-        }
-
-        @Override
-        protected LiveData<Long> doInBackground(Long... ids) {
-            if (ids.length == 1) {
-                Long id = Arrays.stream(ids).collect(Collectors.toList()).get(0);
-                return itemDAO.getStorageLocationIdFromItemId(id);
-            }
-            return null;
         }
     }
 

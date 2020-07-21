@@ -19,15 +19,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.Condition;
+import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.ItemBuilder;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 
 import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.ITEM;
 
 public class EditItemFragment extends Fragment {
 
@@ -53,8 +56,18 @@ public class EditItemFragment extends Fragment {
         spinnerCondition.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, Condition.values()));
         tfPosition = view.findViewById(R.id.textfield_position);
 
-        //TODO: bind data
-
+        CacheManager.getManager().getItemCache().observe(requireActivity(), stl -> {
+            Optional<Item> currentItem = stl.stream().filter(i -> i.getId() == CacheManager.getManager().getIdForCacheLevel(ITEM)).findFirst();
+            if (currentItem.isPresent()) {
+                tfName.setText(currentItem.get().getName());
+                spinnerAmount.setSelection(currentItem.get().getAmount());
+                tfDescription.setText(currentItem.get().getDescription());
+                tfValue.setText(String.valueOf(currentItem.get().getValue()));
+                cvCalendarBuyDate.setDate(currentItem.get().getBuyDate().getTimeInMillis());
+                spinnerCondition.setSelection(currentItem.get().getCondition().ordinal());
+                tfPosition.setText(currentItem.get().getDescription());
+            }
+        });
         return view;
     }
 

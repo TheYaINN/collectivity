@@ -50,7 +50,11 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private @NonNull
-    Map<CacheLevel, Long> idMapper = new HashMap<>();
+    Map<CacheLevel, Long> idMapper = new HashMap<CacheLevel, Long>() {{
+        put(COLLECTION, -1L);
+        put(STORAGELOCATION, -1L);
+        put(ITEM, -1L);
+    }};
 
     @NonNull
     public static CacheManager getManager() {
@@ -58,25 +62,23 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
     }
 
     @Override
-    public void setCacheLevel(CacheDirection direction, long id, int amount) {
+    public void setCacheLevel(CacheDirection direction, int amount) {
         CacheLevel newCacheLevel = COLLECTION;
         if (direction == DOWN) {
             switch (currentCacheLevel) {
                 case COLLECTION:
                     newCacheLevel = STORAGELOCATION;
-                    setIdForCacheLevel(COLLECTION, id);
-                    break;
-                case STORAGELOCATION:
                     updateStorageLocations();
                     updateTags();
                     break;
-                case ITEM:
+                case STORAGELOCATION:
                     newCacheLevel = ITEM;
                     if (amount == 1) {
-                        idMapper.put(STORAGELOCATION, id);
                         updateItems();
                         updateTags();
                     }
+                    break;
+                case ITEM:
                     break;
                 default:
                     newCacheLevel = COLLECTION;
@@ -87,7 +89,6 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
                 case COLLECTION:
                     break;
                 case ITEM:
-                    idMapper.put(ITEM, id);
                     newCacheLevel = STORAGELOCATION;
                     updateStorageLocations();
                     updateTags();
@@ -101,7 +102,7 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
         Logger.log(Logger.Priority.DEBUG, Logger.Marker.CACHEMANAGER, String.format("Current Cache level is: %s, setting Cache level to: %s", currentCacheLevel, newCacheLevel));
         currentCacheLevel = newCacheLevel;
         if (amount > 1) {
-            setCacheLevel(direction, id, amount - 1);
+            setCacheLevel(direction, amount - 1);
         }
     }
 
@@ -116,29 +117,30 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
     }
 
     public void loadCollectionsOnStartup() {
-        collectionCache.addSource(getInstance().getAllCollections(), collectionCache::postValue);
+        collectionCache.addSource(getInstance().getAllCollections(), collectionCache::setValue);
     }
 
     public void loadDataForSearch() {
-        storageLocationCache.addSource(getInstance().getAllStorageLocations(), storageLocationCache::postValue);
-        tags.addSource(getInstance().getAllTags(), tags::postValue);
-        itemCache.addSource(getInstance().getAllItems(), itemCache::postValue);
+        storageLocationCache.addSource(getInstance().getAllStorageLocations(), storageLocationCache::setValue);
+        tags.addSource(getInstance().getAllTags(), tags::setValue);
+        itemCache.addSource(getInstance().getAllItems(), itemCache::setValue);
     }
 
     private void updateStorageLocations() {
-        if (currentCacheLevel == ITEM) {
-            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(getInstance().getCollectionIdFromItemId(idMapper.get(ITEM))), storageLocationCache::postValue);
+        if (currentCacheLevel == ITEM && idMapper.get(ITEM) != -1L) {
+            long collectionId = getInstance().getCollectionIdFromItemId(idMapper.get(ITEM));
+            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(collectionId), storageLocationCache::setValue);
         } else {
-            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(getInstance().getCollectionIdFromItemId(idMapper.get(COLLECTION))), storageLocationCache::postValue);
+            storageLocationCache.addSource(getInstance().getAllStorageLocationsForID(idMapper.get(COLLECTION)), storageLocationCache::setValue);
         }
     }
 
     private void updateTags() {
-        tags.addSource(getInstance().getAllTags(), tags::postValue);
+        tags.addSource(getInstance().getAllTags(), tags::setValue);
     }
 
     private void updateItems() {
-        itemCache.addSource(getInstance().getAllItemsForID(idMapper.get(STORAGELOCATION)), itemCache::postValue);
+        itemCache.addSource(getInstance().getAllItemsForID(idMapper.get(STORAGELOCATION)), itemCache::setValue);
     }
 
 }

@@ -24,11 +24,13 @@ import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
-import de.joachimsohn.collectivity.ui.fragments.AddItemFragment;
 import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationFragment;
+import de.joachimsohn.collectivity.ui.fragments.EditItemFragment;
 
 import static de.joachimsohn.collectivity.manager.CacheManager.CacheDirection.DOWN;
 import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.ITEM;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.STORAGELOCATION;
 import static de.joachimsohn.collectivity.manager.impl.CacheManager.getManager;
 
 public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHolder> {
@@ -70,7 +72,9 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 StorageLocation storageLocation = storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0));
                 holder.bind(storageLocation);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCacheLevel(DOWN, storageLocation.getId(), 1);
+                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, colleciton.getId());
+                    CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, storageLocation.getId());
+                    CacheManager.getManager().setCacheLevel(DOWN, 1);
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
                 });
             }
@@ -80,8 +84,11 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 Item item = itemData.get(position - subtract);
                 holder.bind(item);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setCacheLevel(DOWN, item.getId(), 2);
-                    NavigationHelper.navigateDown(activity, new AddItemFragment(), false);
+                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, collection.getId());
+                    CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, storageLocation.getId());
+                    CacheManager.getManager().setIdForCacheLevel(ITEM, item.getId());
+                    CacheManager.getManager().setCacheLevel(DOWN, 1);
+                    NavigationHelper.navigateDown(activity, new EditItemFragment(), false);
                 });
             }
         }

@@ -1,5 +1,6 @@
 package de.joachimsohn.collectivity.ui.fragments;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +40,6 @@ public class CollectionFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
         adapter = new CollectionAdapter(getActivity());
         CacheManager.getManager().getCollectionCache().observe(requireActivity(), adapter::setData);
         recyclerView.setAdapter(adapter);
@@ -61,16 +61,18 @@ public class CollectionFragment extends Fragment {
                 switch (directionName) {
                     case ASCENDING:
                         subMenu.getItem(0).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(0).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
                         break;
                     case DESCENDING:
                         subMenu.getItem(0).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(0).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
                         break;
                     case NONE:
                     default:
                         subMenu.getItem(0).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(0).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
                         break;
                 }
-                SortManager.getManager().getCollectionSortStateMemory().get(NAME);
                 return true;
             case R.id.action_dropdown_description:
                 adapter.sortBy(DESCRIPTION);
@@ -78,13 +80,16 @@ public class CollectionFragment extends Fragment {
                 switch (directionDesc) {
                     case ASCENDING:
                         subMenu.getItem(1).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(1).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
                         break;
                     case DESCENDING:
                         subMenu.getItem(1).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(1).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
                         break;
                     case NONE:
                     default:
                         subMenu.getItem(1).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(1).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
                         break;
                 }
                 return true;

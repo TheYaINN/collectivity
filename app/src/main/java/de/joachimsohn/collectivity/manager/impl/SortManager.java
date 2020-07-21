@@ -17,42 +17,44 @@ import de.joachimsohn.collectivity.manager.sort.SortType;
 import de.joachimsohn.collectivity.manager.sort.StorageLocationSorter;
 import lombok.Getter;
 
+import static de.joachimsohn.collectivity.manager.sort.SortDirection.ASCENDING;
+import static de.joachimsohn.collectivity.manager.sort.SortDirection.DESCENDING;
+import static de.joachimsohn.collectivity.manager.sort.SortDirection.NONE;
+
 @Getter
 public class SortManager implements Manager<SortManager> {
 
     private static SortManager manager;
 
-    @NonNull
-    private Map<SortType, SortDirection> itemSortStateMemory =
-            new HashMap<SortType, SortDirection>() {{
-                put(SortType.NAME, SortDirection.NONE);
-                put(SortType.AMOUNT, SortDirection.NONE);
-                put(SortType.DESCRIPTION, SortDirection.NONE);
-                put(SortType.VALUE, SortDirection.NONE);
-                put(SortType.INSERTION_DATE, SortDirection.NONE);
-                put(SortType.BUY_DATE, SortDirection.NONE);
-                put(SortType.CONDITION, SortDirection.NONE);
-                put(SortType.POSITION, SortDirection.NONE);
-            }};
-
-    @NonNull
-    private Map<SortType, SortDirection> collectionSortStateMemory =
-            new HashMap<SortType, SortDirection>() {{
-                put(SortType.NAME, SortDirection.NONE);
-                put(SortType.DESCRIPTION, SortDirection.NONE);
-            }};
-
-    @NonNull
-    private Map<SortType, SortDirection> storageLocationStateMemory =
-            new HashMap<SortType, SortDirection>() {{
-                put(SortType.NAME, SortDirection.NONE);
-                put(SortType.TAG, SortDirection.NONE);
-                put(SortType.DESCRIPTION, SortDirection.NONE);
-            }};
-
     static {
         manager = new SortManager();
     }
+
+    @NonNull
+    private Map<SortType, SortDirection> itemSortStateMemory =
+            new HashMap<SortType, SortDirection>() {{
+                put(SortType.NAME, ASCENDING);
+                put(SortType.AMOUNT, ASCENDING);
+                put(SortType.DESCRIPTION, ASCENDING);
+                put(SortType.VALUE, ASCENDING);
+                put(SortType.INSERTION_DATE, ASCENDING);
+                put(SortType.BUY_DATE, ASCENDING);
+                put(SortType.CONDITION, ASCENDING);
+                put(SortType.POSITION, ASCENDING);
+            }};
+    @NonNull
+    private Map<SortType, SortDirection> collectionSortStateMemory =
+            new HashMap<SortType, SortDirection>() {{
+                put(SortType.NAME, ASCENDING);
+                put(SortType.DESCRIPTION, ASCENDING);
+            }};
+    @NonNull
+    private Map<SortType, SortDirection> storageLocationStateMemory =
+            new HashMap<SortType, SortDirection>() {{
+                put(SortType.NAME, ASCENDING);
+                put(SortType.TAG, ASCENDING);
+                put(SortType.DESCRIPTION, ASCENDING);
+            }};
 
     public static SortManager getManager() {
         return manager;
@@ -64,17 +66,17 @@ public class SortManager implements Manager<SortManager> {
             return null;
         }
         ItemSorter sorter = new ItemSorter();
-        SortDirection direction = itemSortStateMemory.getOrDefault(criteria, SortDirection.NONE);
+        SortDirection direction = itemSortStateMemory.getOrDefault(criteria, NONE);
         switch (direction) {
             case NONE:
-                itemSortStateMemory.replace(criteria, SortDirection.ASCENDING);
-                return sorter.sortAscending(criteria, SortDirection.NONE, itemCache);
+                itemSortStateMemory.replace(criteria, ASCENDING);
+                return sorter.sortAscending(criteria, itemCache);
             case ASCENDING:
-                itemSortStateMemory.replace(criteria, SortDirection.DESCENDING);
-                return sorter.sortAscending(criteria, SortDirection.ASCENDING, itemCache);
+                itemSortStateMemory.replace(criteria, DESCENDING);
+                return sorter.sortAscending(criteria, itemCache);
             case DESCENDING:
             default:
-                itemSortStateMemory.replace(criteria, SortDirection.NONE);
+                itemSortStateMemory.replace(criteria, NONE);
                 return itemCache;
         }
     }
@@ -84,19 +86,19 @@ public class SortManager implements Manager<SortManager> {
         if (storageLocations == null) {
             return null;
         }
-        SortDirection direction = storageLocationStateMemory.getOrDefault(criteria, SortDirection.NONE);
+        SortDirection direction = storageLocationStateMemory.getOrDefault(criteria, NONE);
         StorageLocationSorter sorter = new StorageLocationSorter();
         switch (direction) {
-            case NONE:
-                storageLocationStateMemory.replace(criteria, SortDirection.ASCENDING);
-                return storageLocations;
             case ASCENDING:
-                storageLocationStateMemory.replace(criteria, SortDirection.DESCENDING);
-                return sorter.sortAscending(criteria, SortDirection.ASCENDING, storageLocations);
+                storageLocationStateMemory.replace(criteria, DESCENDING);
+                return sorter.sortAscending(criteria, storageLocations);
             case DESCENDING:
+                storageLocationStateMemory.replace(criteria, NONE);
+                return sorter.sortDescending(criteria, storageLocations);
+            case NONE:
             default:
-                storageLocationStateMemory.replace(criteria, SortDirection.NONE);
-                return sorter.sortDescending(criteria, direction, storageLocations);
+                storageLocationStateMemory.replace(criteria, ASCENDING);
+                return storageLocations;
         }
     }
 
@@ -105,18 +107,18 @@ public class SortManager implements Manager<SortManager> {
         if (collections == null) {
             return null;
         }
-        SortDirection direction = collectionSortStateMemory.getOrDefault(criteria, SortDirection.NONE);
+        SortDirection direction = collectionSortStateMemory.getOrDefault(criteria, NONE);
         CollectionSorter sorter = new CollectionSorter();
         switch (direction) {
             case ASCENDING:
-                collectionSortStateMemory.replace(criteria, SortDirection.DESCENDING);
-                return sorter.sortAscending(criteria, direction, collections);
+                collectionSortStateMemory.replace(criteria, DESCENDING);
+                return sorter.sortAscending(criteria, collections);
             case DESCENDING:
-                collectionSortStateMemory.replace(criteria, SortDirection.NONE);
-                return sorter.sortDescending(criteria, direction, collections);
+                collectionSortStateMemory.replace(criteria, NONE);
+                return sorter.sortDescending(criteria, collections);
             case NONE:
             default:
-                collectionSortStateMemory.replace(criteria, SortDirection.ASCENDING);
+                collectionSortStateMemory.replace(criteria, ASCENDING);
                 return collections;
         }
     }

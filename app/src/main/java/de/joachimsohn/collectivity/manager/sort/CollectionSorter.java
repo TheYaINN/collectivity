@@ -11,7 +11,7 @@ import de.joachimsohn.collectivity.db.dao.impl.Collection;
 public class CollectionSorter implements Sorter<Collection> {
     @NonNull
     @Override
-    public List<Collection> sortAscending(SortType sortType, SortDirection direction, List<Collection> collections) {
+    public List<Collection> sortAscending(SortType sortType, List<Collection> collections) {
         switch (sortType) {
             case NAME:
                 return collections.stream().sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).collect(Collectors.toList());
@@ -32,9 +32,8 @@ public class CollectionSorter implements Sorter<Collection> {
 
     @NonNull
     @Override
-    public List<Collection> sortDescending(SortType sortType, SortDirection
-            direction, List<Collection> collections) {
-        List<Collection> list = sortAscending(sortType, direction, collections);
+    public List<Collection> sortDescending(SortType sortType, List<Collection> collections) {
+        List<Collection> list = sortAscending(sortType, collections);
         Collections.reverse(list);
         return list;
     }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
@@ -27,6 +28,8 @@ import de.joachimsohn.collectivity.ui.fragments.EditCollectionOrStorageLocationF
 import de.joachimsohn.collectivity.ui.fragments.ItemFragment;
 
 import static de.joachimsohn.collectivity.dbconnector.DataBaseConnector.getInstance;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.STORAGELOCATION;
 
 public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocationAdapter.StorageLocationViewHolder> {
 
@@ -57,7 +60,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
             holder.bind(data.get(position));
             storageLocationView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId()));
             holder.addDeleteAndEditListener(data.get(position), e -> {
-                CacheManager.getManager().setIdForCacheLevel(de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION, data.get(position).getId());
+                CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, data.get(position).getId());
                 NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
             });
         } else {
@@ -78,7 +81,10 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
 
     public void setData(List<StorageLocation> newData) {
         data.clear();
-        data.addAll(newData);
+        data.addAll(newData
+                .stream()
+                .filter(s -> s.getCollectionId() == CacheManager.getManager().getIdForCacheLevel(COLLECTION))
+                .collect(Collectors.toList()));
         notifyDataSetChanged();
     }
 
@@ -91,7 +97,10 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
     }
 
     public long getParent() {
-        return data.get(0).getCollectionId();
+        if (data.size() > 0) {
+            return data.get(0).getCollectionId();
+        }
+        return -1L;
     }
 
     public static class StorageLocationViewHolder extends RecyclerView.ViewHolder {

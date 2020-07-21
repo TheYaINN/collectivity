@@ -1,5 +1,6 @@
 package de.joachimsohn.collectivity.db.dao.impl;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
@@ -8,10 +9,6 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,6 +40,7 @@ public class StorageLocation {
 
     private String name;
 
+    @Nullable
     private String description;
 
     @Ignore
@@ -68,11 +66,6 @@ public class StorageLocation {
             value += tags.toString();
         }
         return value;
-    }
-
-    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Set<Object> seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(keyExtractor.apply(t));
     }
 
     public StorageLocation addTag(Tag t) {

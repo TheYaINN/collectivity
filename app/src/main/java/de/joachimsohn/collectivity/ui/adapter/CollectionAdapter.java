@@ -37,7 +37,6 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Co
         this.activity = activity;
     }
 
-
     @NonNull
     @Override
     public CollectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
