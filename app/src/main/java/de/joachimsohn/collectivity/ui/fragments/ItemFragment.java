@@ -62,22 +62,37 @@ public class ItemFragment extends Fragment {
             case android.R.id.home:
                 return NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), ITEM, adapter.getParent());
             case R.id.action_dropdown_name:
+
+
                 return adapter.sortBy(NAME);
             case R.id.action_dropdown_amount:
+
+
                 return adapter.sortBy(AMOUNT);
             case R.id.action_dropdown_description:
+
+
                 return adapter.sortBy(DESCRIPTION);
             case R.id.action_dropdown_value:
+
+
                 return adapter.sortBy(VALUE);
             case R.id.action_dropdown_insertiondate:
+
+
                 return adapter.sortBy(INSERTION_DATE);
             case R.id.action_dropdown_buydate:
+
+
                 return adapter.sortBy(BUY_DATE);
             case R.id.action_dropdown_condition:
+
+
                 return adapter.sortBy(CONDITION);
             case R.id.action_dropdown_position:
-                return adapter.sortBy(POSITION);
 
+
+                return adapter.sortBy(POSITION);
             default:
                 return super.onOptionsItemSelected(item);
         }
