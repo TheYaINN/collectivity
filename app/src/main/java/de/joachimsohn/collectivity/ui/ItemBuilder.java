@@ -1,7 +1,5 @@
 package de.joachimsohn.collectivity.ui;
 
-import android.graphics.Bitmap;
-
 import java.math.BigDecimal;
 import java.util.Calendar;
 
@@ -16,10 +14,8 @@ public class ItemBuilder {
         item = new Item(name, Calendar.getInstance(), condition, position, storageLocationId);
     }
 
-    public ItemBuilder addAmount(String amount) {
-        if (!amount.isEmpty()) {
-            item.setAmount(Integer.parseInt(amount));
-        }
+    public ItemBuilder addAmount(int amount) {
+        item.setAmount(amount);
         return this;
     }
 
@@ -30,20 +26,6 @@ public class ItemBuilder {
     public ItemBuilder addDescription(String description) {
         if (!description.isEmpty()) {
             item.setDescription(description);
-        }
-        return this;
-    }
-
-    public ItemBuilder addEAN(String ean) {
-        if (!ean.isEmpty()) {
-            item.setEan(ean);
-        }
-        return this;
-    }
-
-    public ItemBuilder addIcon(Bitmap icon) {
-        if (icon != null) {
-            item.setIcon(icon);
         }
         return this;
     }

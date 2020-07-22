@@ -21,6 +21,7 @@ import de.joachimsohn.collectivity.db.dao.impl.Collection;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
 import de.joachimsohn.collectivity.db.dao.impl.StorageLocation;
 import de.joachimsohn.collectivity.db.dao.impl.Tag;
+import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.search.SearchType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
@@ -72,7 +73,7 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 StorageLocation storageLocation = storageLocationData.get(position - (collectionData != null ? collectionData.size() : 0));
                 holder.bind(storageLocation);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, colleciton.getId());
+                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, storageLocation.getCollectionId());
                     CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, storageLocation.getId());
                     CacheManager.getManager().setCacheLevel(DOWN, 1);
                     NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);
@@ -84,10 +85,10 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
                 Item item = itemData.get(position - subtract);
                 holder.bind(item);
                 view.setOnClickListener(e -> {
-                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, collection.getId());
-                    CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, storageLocation.getId());
+                    CacheManager.getManager().setIdForCacheLevel(COLLECTION, DataBaseConnector.getInstance().getCollectionIdFromItemId(item.getId()));
+                    CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, item.getStorageLocationId());
                     CacheManager.getManager().setIdForCacheLevel(ITEM, item.getId());
-                    CacheManager.getManager().setCacheLevel(DOWN, 1);
+                    CacheManager.getManager().setDestination(ITEM);
                     NavigationHelper.navigateDown(activity, new EditItemFragment(), false);
                 });
             }
@@ -226,9 +227,6 @@ public class MixedAdapter extends RecyclerView.Adapter<MixedAdapter.MixedViewHol
         }
 
         public void bind(@NonNull Item item) {
-            if (itemIcon != null) {
-                itemIcon.setImageBitmap(item.getIcon());
-            }
             if (itemTitle != null) {
                 itemTitle.setText(item.getName());
             }

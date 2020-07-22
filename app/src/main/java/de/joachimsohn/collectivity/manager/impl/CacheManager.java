@@ -77,6 +77,8 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
                         updateItems();
                         updateTags();
                     }
+                    updateItems();
+                    updateTags();
                     break;
                 case ITEM:
                     break;
@@ -143,4 +145,7 @@ public class CacheManager implements de.joachimsohn.collectivity.manager.CacheMa
         itemCache.addSource(getInstance().getAllItemsForID(idMapper.get(STORAGELOCATION)), itemCache::setValue);
     }
 
+    public void setDestination(CacheLevel level) {
+        currentCacheLevel = level;
+    }
 }

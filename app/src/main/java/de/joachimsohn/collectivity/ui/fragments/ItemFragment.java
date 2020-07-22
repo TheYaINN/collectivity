@@ -19,6 +19,7 @@ import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.ItemAdapter;
 
+import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.ITEM;
 import static de.joachimsohn.collectivity.manager.sort.SortType.DESCRIPTION;
 import static de.joachimsohn.collectivity.manager.sort.SortType.NAME;
 
@@ -53,7 +54,7 @@ public class ItemFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                return NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), adapter.getParent());
+                return NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), ITEM, adapter.getParent());
             case R.id.action_dropdown_name:
                 adapter.sortBy(NAME);
             case R.id.action_dropdown_description:

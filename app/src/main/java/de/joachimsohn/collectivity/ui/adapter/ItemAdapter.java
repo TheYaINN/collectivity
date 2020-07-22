@@ -16,10 +16,12 @@ import java.util.List;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.manager.impl.CacheManager;
 import de.joachimsohn.collectivity.manager.impl.SortManager;
 import de.joachimsohn.collectivity.manager.sort.SortType;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.fragments.AddItemFragment;
+import de.joachimsohn.collectivity.ui.fragments.EditItemFragment;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -27,6 +29,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private List<Item> data;
     private Activity activity;
+
+    private CardView itemView;
 
     public ItemAdapter(Activity activity) {
         this.activity = activity;
@@ -36,7 +40,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        CardView itemView;
         if (viewType == R.layout.recyclerview_item) {
             itemView = (CardView) inflater.inflate(R.layout.recyclerview_item, parent, false);
         } else {
@@ -49,6 +52,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
+            itemView.setOnClickListener(e -> {
+                CacheManager.getManager().setIdForCacheLevel(de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.ITEM, data.get(position).getId());
+                NavigationHelper.navigateDown(activity, new EditItemFragment(), false);
+            });
         } else {
             holder.addNewItemActionListener(e -> NavigationHelper.navigateDown(activity, new AddItemFragment(), false));
         }
@@ -109,9 +116,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         }
 
         public void bind(Item item) {
-            if (itemImgView != null) {
-                itemImgView.setImageBitmap(item.getIcon());
-            }
             if (itemTitleText != null) {
                 itemTitleText.setText(item.getName());
             }

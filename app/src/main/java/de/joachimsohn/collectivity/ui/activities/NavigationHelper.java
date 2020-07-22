@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import de.joachimsohn.collectivity.R;
+import de.joachimsohn.collectivity.manager.CacheManager.CacheLevel;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
 
 import static de.joachimsohn.collectivity.manager.CacheManager.CacheDirection.DOWN;
@@ -49,13 +50,15 @@ public class NavigationHelper {
         return navigateToFragment(activity, newFragment, R.anim.slide_in_bottom, R.anim.slide_out_top);
     }
 
-    public static boolean navigateRight(Activity activity, Fragment newFragment, long id) {
+    public static boolean navigateRight(Activity activity, Fragment newFragment, CacheLevel level, long id) {
+        CacheManager.getManager().setIdForCacheLevel(level, id);
         CacheManager.getManager().setCacheLevel(DOWN, 1);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    public static boolean navigateLeft(Activity activity, Fragment newFragment, long id) {
+    public static boolean navigateLeft(Activity activity, Fragment newFragment, CacheLevel level, long id) {
+        CacheManager.getManager().setIdForCacheLevel(level, id);
         CacheManager.getManager().setCacheLevel(UP, 1);
         updateToolbar(activity);
         return navigateToFragment(activity, newFragment, R.anim.slide_in_left, R.anim.slide_out_right);

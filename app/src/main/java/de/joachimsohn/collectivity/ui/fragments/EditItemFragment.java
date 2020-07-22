@@ -1,6 +1,5 @@
 package de.joachimsohn.collectivity.ui.fragments;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,18 +17,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.db.dao.Condition;
 import de.joachimsohn.collectivity.db.dao.impl.Item;
+import de.joachimsohn.collectivity.db.dao.impl.Tag;
 import de.joachimsohn.collectivity.dbconnector.DataBaseConnector;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
-import de.joachimsohn.collectivity.ui.ItemBuilder;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 
-import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.COLLECTION;
 import static de.joachimsohn.collectivity.manager.CacheManager.CacheLevel.ITEM;
 
 public class EditItemFragment extends Fragment {
@@ -41,6 +42,7 @@ public class EditItemFragment extends Fragment {
     private Spinner spinnerCondition;
     private CalendarView cvCalendarBuyDate;
     private EditText tfPosition;
+    private EditText tfTags;
 
     @Nullable
     @Override
@@ -55,17 +57,18 @@ public class EditItemFragment extends Fragment {
         spinnerCondition = view.findViewById(R.id.spinner_condition);
         spinnerCondition.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, Condition.values()));
         tfPosition = view.findViewById(R.id.textfield_position);
+        tfTags = view.findViewById(R.id.textfield_tags);
 
         CacheManager.getManager().getItemCache().observe(requireActivity(), stl -> {
             Optional<Item> currentItem = stl.stream().filter(i -> i.getId() == CacheManager.getManager().getIdForCacheLevel(ITEM)).findFirst();
             if (currentItem.isPresent()) {
                 tfName.setText(currentItem.get().getName());
-                spinnerAmount.setSelection(currentItem.get().getAmount());
+                spinnerAmount.setSelection(currentItem.get().getAmount() - 1);
                 tfDescription.setText(currentItem.get().getDescription());
-                tfValue.setText(String.valueOf(currentItem.get().getValue()));
+                tfValue.setText((currentItem.get().getValue() != null ? String.valueOf(currentItem.get().getValue()) : ""));
                 cvCalendarBuyDate.setDate(currentItem.get().getBuyDate().getTimeInMillis());
                 spinnerCondition.setSelection(currentItem.get().getCondition().ordinal());
-                tfPosition.setText(currentItem.get().getDescription());
+                tfPosition.setText(currentItem.get().getPosition());
             }
         });
         return view;
@@ -92,8 +95,6 @@ public class EditItemFragment extends Fragment {
 
     private boolean hasInsertedData() {
         String name = tfName.getText().toString().trim();
-        String ean = ""; //TODO
-        Bitmap icon = null; //TODO
         Condition condition = (Condition) spinnerCondition.getSelectedItem();
         Calendar buyDate = Calendar.getInstance();
         buyDate.setTimeInMillis(cvCalendarBuyDate.getDate());
@@ -106,15 +107,16 @@ public class EditItemFragment extends Fragment {
             Toast.makeText(getContext(), R.string.missing_position, Toast.LENGTH_LONG).show();
             return false;
         }
-        DataBaseConnector.getInstance().insert(
-                new ItemBuilder(name, condition, position, CacheManager.getManager().getIdForCacheLevel(COLLECTION))
-                        .addAmount((String) spinnerAmount.getSelectedItem())
-                        .addDescription(tfDescription.getText().toString().trim())
-                        .addEAN(ean)
-                        .addIcon(icon)
-                        .addValue(tfValue.getText().toString().trim())
-                        .addBuyDate(buyDate)
-                        .build());
+        Item item = CacheManager.getManager().getItemCache().getValue().stream().filter(i -> i.getId() == CacheManager.getManager().getIdForCacheLevel(ITEM)).findFirst().get();
+        item.setName(name);
+        item.setCondition(condition);
+        item.setPosition(position);
+        item.setBuyDate(buyDate);
+        item.setAmount(spinnerAmount.getSelectedItemPosition() + 1);
+        item.setDescription(tfDescription.getText().toString());
+        item.setValue(!tfValue.getText().toString().isEmpty() ? BigDecimal.valueOf(Double.parseDouble(String.format("%s", tfValue.getText().toString()))) : BigDecimal.ZERO);
+        item.setTags(Arrays.stream(tfTags.getText().toString().split(",")).map(Tag::new).collect(Collectors.toList()));
+        DataBaseConnector.getInstance().update(item);
         return true;
     }
 

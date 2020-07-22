@@ -55,13 +55,6 @@ public class Item {
     private String description;
 
     @Nullable
-    private String ean;
-
-    @Nullable
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    private Bitmap icon;
-
-    @Nullable
     private BigDecimal value;
 
     @NonNull
@@ -99,9 +92,6 @@ public class Item {
         if (description != null) {
             sb.append("Beschreibung: ").append(getDescription()).append(", ");
         }
-        if (ean != null) {
-            sb.append("EAN: ").append(getEan()).append(", ");
-        }
         if (value != null) {
             sb.append("Wert: ").append(getValue()).append(", ");
         }
@@ -122,9 +112,6 @@ public class Item {
         sb.append(getAmount());
         if (description != null) {
             sb.append(getDescription());
-        }
-        if (ean != null) {
-            sb.append(getEan());
         }
         if (value != null) {
             sb.append(getValue());

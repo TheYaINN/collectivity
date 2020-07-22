@@ -58,7 +58,7 @@ public class StorageLocationAdapter extends RecyclerView.Adapter<StorageLocation
     public void onBindViewHolder(@NonNull StorageLocationViewHolder holder, int position) {
         if (data != null && position < data.size()) {
             holder.bind(data.get(position));
-            storageLocationView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new ItemFragment(), data.get(position).getId()));
+            storageLocationView.setOnClickListener(e -> NavigationHelper.navigateRight(activity, new ItemFragment(), STORAGELOCATION, data.get(position).getId()));
             holder.addDeleteAndEditListener(data.get(position), e -> {
                 CacheManager.getManager().setIdForCacheLevel(STORAGELOCATION, data.get(position).getId());
                 NavigationHelper.navigateDown(activity, new EditCollectionOrStorageLocationFragment(), false);

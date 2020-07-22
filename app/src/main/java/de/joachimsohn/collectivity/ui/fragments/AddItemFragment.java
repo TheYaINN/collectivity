@@ -92,10 +92,8 @@ public class AddItemFragment extends Fragment {
         }
         DataBaseConnector.getInstance().insert(
                 new ItemBuilder(name, condition, position, CacheManager.getManager().getIdForCacheLevel(COLLECTION))
-                        .addAmount((String) spinnerAmount.getSelectedItem())
+                        .addAmount(spinnerAmount.getSelectedItemPosition())
                         .addDescription(tfDescription.getText().toString().trim())
-                        .addEAN(ean)
-                        .addIcon(icon)
                         .addValue(tfValue.getText().toString().trim())
                         .addBuyDate(buyDate)
                         .build());
