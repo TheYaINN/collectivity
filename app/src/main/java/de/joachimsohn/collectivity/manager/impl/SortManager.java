@@ -68,15 +68,15 @@ public class SortManager implements Manager<SortManager> {
         ItemSorter sorter = new ItemSorter();
         SortDirection direction = itemSortStateMemory.getOrDefault(criteria, NONE);
         switch (direction) {
-            case NONE:
-                itemSortStateMemory.replace(criteria, ASCENDING);
-                return sorter.sortAscending(criteria, itemCache);
             case ASCENDING:
                 itemSortStateMemory.replace(criteria, DESCENDING);
                 return sorter.sortAscending(criteria, itemCache);
             case DESCENDING:
-            default:
                 itemSortStateMemory.replace(criteria, NONE);
+                return sorter.sortAscending(criteria, itemCache);
+            case NONE:
+            default:
+                itemSortStateMemory.replace(criteria, ASCENDING);
                 return itemCache;
         }
     }

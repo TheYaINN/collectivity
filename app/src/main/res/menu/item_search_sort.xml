@@ -34,12 +34,6 @@
                 android:icon="@drawable/empty_icon"
                 android:iconTint="@color/accentDark"
                 android:title="@string/action_dropdown_description" />
-            <!--      EAN      -->
-            <item
-                android:id="@+id/action_dropdown_ean"
-                android:icon="@drawable/empty_icon"
-                android:iconTint="@color/accentDark"
-                android:title="@string/action_dropdown_ean" />
             <!--     VALUE       -->
             <item
                 android:id="@+id/action_dropdown_value"

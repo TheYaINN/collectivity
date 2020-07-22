@@ -81,12 +81,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         notifyDataSetChanged();
     }
 
-    public void sortBy(SortType sortType) {
+    public boolean sortBy(SortType sortType) {
         List<Item> storageLocations = SortManager.getManager().sortItemsBy(sortType);
         if (storageLocations != null) {
             data = storageLocations;
             notifyDataSetChanged();
         }
+        return true;
     }
 
     public long getParent() {
