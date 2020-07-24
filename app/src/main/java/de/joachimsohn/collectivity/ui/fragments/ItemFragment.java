@@ -1,10 +1,12 @@
 package de.joachimsohn.collectivity.ui.fragments;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import de.joachimsohn.collectivity.R;
 import de.joachimsohn.collectivity.manager.impl.CacheManager;
+import de.joachimsohn.collectivity.manager.impl.SortManager;
+import de.joachimsohn.collectivity.manager.sort.SortDirection;
 import de.joachimsohn.collectivity.ui.activities.NavigationHelper;
 import de.joachimsohn.collectivity.ui.adapter.ItemAdapter;
 
@@ -33,6 +37,7 @@ public class ItemFragment extends Fragment {
 
     private @NonNull
     ItemAdapter adapter;
+    private SubMenu subMenu;
 
     @Nullable
     @Override
@@ -54,6 +59,7 @@ public class ItemFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.item_search_sort, menu);
+        subMenu = menu.getItem(1).getSubMenu();
     }
 
     @Override
@@ -62,36 +68,149 @@ public class ItemFragment extends Fragment {
             case android.R.id.home:
                 return NavigationHelper.navigateLeft(getActivity(), new StorageLocationFragment(), ITEM, adapter.getParent());
             case R.id.action_dropdown_name:
-
-
+                adapter.sortBy(NAME);
+                SortDirection directionName = SortManager.getManager().getStorageLocationStateMemory().get(NAME);
+                switch (directionName) {
+                    case ASCENDING:
+                        subMenu.getItem(0).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(0).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(0).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(0).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(0).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(0).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(NAME);
             case R.id.action_dropdown_amount:
-
-
+                SortDirection directionAmount = SortManager.getManager().getStorageLocationStateMemory().get(AMOUNT);
+                switch (directionAmount) {
+                    case ASCENDING:
+                        subMenu.getItem(1).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(1).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(1).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(1).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(1).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(1).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(AMOUNT);
             case R.id.action_dropdown_description:
-
-
+                SortDirection directionDesc = SortManager.getManager().getStorageLocationStateMemory().get(DESCRIPTION);
+                switch (directionDesc) {
+                    case ASCENDING:
+                        subMenu.getItem(2).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(2).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(2).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(2).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(2).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(2).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(DESCRIPTION);
             case R.id.action_dropdown_value:
-
-
+                SortDirection directionValue = SortManager.getManager().getStorageLocationStateMemory().get(VALUE);
+                switch (directionValue) {
+                    case ASCENDING:
+                        subMenu.getItem(3).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(3).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(3).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(3).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(3).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(3).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(VALUE);
             case R.id.action_dropdown_insertiondate:
-
-
+                SortDirection directionInsertionDate = SortManager.getManager().getStorageLocationStateMemory().get(INSERTION_DATE);
+                switch (directionInsertionDate) {
+                    case ASCENDING:
+                        subMenu.getItem(4).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(4).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(4).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(4).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(4).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(4).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(INSERTION_DATE);
             case R.id.action_dropdown_buydate:
-
-
+                SortDirection directionBuyDate = SortManager.getManager().getStorageLocationStateMemory().get(BUY_DATE);
+                switch (directionBuyDate) {
+                    case ASCENDING:
+                        subMenu.getItem(5).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(5).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(5).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(5).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(6).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(6).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(BUY_DATE);
             case R.id.action_dropdown_condition:
-
-
+                SortDirection directionCondition = SortManager.getManager().getStorageLocationStateMemory().get(CONDITION);
+                switch (directionCondition) {
+                    case ASCENDING:
+                        subMenu.getItem(7).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(7).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(7).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(7).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(7).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(7).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(CONDITION);
             case R.id.action_dropdown_position:
-
-
+                SortDirection directionPosition = SortManager.getManager().getStorageLocationStateMemory().get(POSITION);
+                switch (directionPosition) {
+                    case ASCENDING:
+                        subMenu.getItem(8).setIcon(R.drawable.ic_arrow_up);
+                        subMenu.getItem(8).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case DESCENDING:
+                        subMenu.getItem(8).setIcon(R.drawable.ic_arrow_down);
+                        subMenu.getItem(8).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                    case NONE:
+                    default:
+                        subMenu.getItem(8).setIcon(R.drawable.empty_icon);
+                        subMenu.getItem(8).getIcon().setColorFilter(getResources().getColor(R.color.primary), PorterDuff.Mode.SRC_ATOP);
+                        break;
+                }
                 return adapter.sortBy(POSITION);
             default:
                 return super.onOptionsItemSelected(item);
